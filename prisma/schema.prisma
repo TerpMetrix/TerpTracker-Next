@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+//////////////////////////////////////////
+// Prisma Configuration
+//////////////////////////////////////////
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
@@ -15,6 +18,11 @@ datasource db {
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
+//////////////////////////////////////////
+// NextAuth Models
+// We don't need to touch these often.
+//////////////////////////////////////////
 
 model Example {
   id        String   @id @default(cuid())
@@ -57,6 +65,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Profile       Profile?
 }
 
 model VerificationToken {
@@ -65,4 +74,58 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+//////////////////////////////////////////
+// Application Models
+//////////////////////////////////////////
+
+// 1:1 relationship with User
+// Profile containing any user generated data like:
+// bio, location, taste-preferences, reviews, etc.
+model Profile {
+  id String @id @default(cuid())
+
+  // relations
+  userId  String   @unique
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reviews Review[]
+}
+
+model Producer {
+  id       Int    @id @default(autoincrement())
+  name     String
+  location String @default("")
+  website  String @default("")
+
+  // relations
+  strains Strain[]
+}
+
+model Strain {
+  // values
+  id          Int      @id @default(autoincrement())
+  name        String
+  batchDate   DateTime @default(now())
+  productType String // flower or concentrate
+  THC         Float    @default(0)
+
+  // relations
+  reviews    Review[]
+  producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
+  producerId Int
+}
+
+model Review {
+  // values
+  id      Int    @id @default(autoincrement())
+  rating  Float  @default(0)
+  comment String @default("")
+
+  // relations
+  strainId Int
+  strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
+
+  profileId String?
+  Profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
