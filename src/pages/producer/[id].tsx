@@ -1,6 +1,19 @@
 import type { GetServerSideProps } from "next";
-import type { Producer } from "@prisma/client";
+
 import { prisma } from "@/server/db";
+
+type Producer = {
+  id: number;
+  name: string;
+  location: string;
+  website: string;
+  strains: Strain[];
+};
+type Strain = {
+  id: number;
+  name: string;
+  batchDate: string;
+};
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -16,6 +29,17 @@ export default function Producer({ producer }: ProducerProps) {
       <p>{producer.location}</p>
       <p>{producer.website}</p>
       <p>{producer.name}</p>
+      <ul>
+        {producer.strains.map((strain) => {
+          return (
+            <li key={strain.id}>
+              <a href={"/strain/" + String(strain.id)}>
+                {strain.name} - {strain.batchDate}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -30,6 +54,9 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     where: {
       id: Number(context.params?.id) || -1,
     },
+    include: {
+      strains: true,
+    },
   });
 
   if (!producer) {
@@ -43,6 +70,11 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
         location: producer.location,
         name: producer.name,
         website: producer.website,
+        strains: producer.strains.map((strain) => ({
+          id: strain.id,
+          name: strain.name,
+          batchDate: strain.batchDate.toDateString(),
+        })),
       },
     },
   };

@@ -32,7 +32,7 @@ export default function Strain({ strain }: StrainProps) {
       <h1>{strain.name}</h1>
       <p>{strain.THC}</p>
       <p>{strain.batchDate}</p>
-      <Link href={producerLink(strain.id)}>{strain.name}</Link>
+      <Link href={producerLink(strain.producerId)}>{strain.name}</Link>
       <p>{strain.productType}</p>
       <ul>
         {strain.reviews.map((review) => {
@@ -49,6 +49,7 @@ export default function Strain({ strain }: StrainProps) {
 }
 
 function producerLink(id: number) {
+  console.log(id);
   return "/producer/" + String(id);
 }
 
