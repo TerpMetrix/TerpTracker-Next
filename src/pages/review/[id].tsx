@@ -7,7 +7,7 @@ type ReviewProps = {
     id: number;
     comment: string;
     rating: number;
-    profileId: string | null;
+    profileId: string;
     strainId: number;
   };
   notFound?: boolean;

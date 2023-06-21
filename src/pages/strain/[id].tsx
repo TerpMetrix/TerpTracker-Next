@@ -16,7 +16,7 @@ export type Review = {
   id: number;
   rating: number;
   comment: string;
-  profileId: string | null;
+  profileId: string;
 };
 
 // The props this component receives from getServerSideProps

@@ -65,7 +65,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Profile       Profile?
+  Profile       Profile? // Our application specific user data
 }
 
 model VerificationToken {
@@ -126,6 +126,6 @@ model Review {
   strainId Int
   strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
 
-  profileId String?
-  Profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+  Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
