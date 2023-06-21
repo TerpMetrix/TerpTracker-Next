@@ -20,7 +20,7 @@ export default function Home() {
           </h1>
           <ul className="flex gap-2">
             <li>
-              <Link href="/strains">Strains</Link>
+              <Link href="/strain">Strains</Link>
             </li>
             <li>
               <Link href="/producer">Producers</Link>

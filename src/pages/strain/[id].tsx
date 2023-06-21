@@ -2,16 +2,26 @@ import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
 
+export type Strain = {
+  id: number;
+  name: string;
+  batchDate: string;
+  THC: number;
+  productType: string;
+  producerId: number;
+  reviews: Review[];
+};
+
+export type Review = {
+  id: number;
+  rating: number;
+  comment: string;
+  profileId: string | null;
+};
+
 // The props this component receives from getServerSideProps
 export type StrainProps = {
-  strain: {
-    id: number;
-    name: string;
-    batchDate: string;
-    THC: number;
-    productType: string;
-    producerId: number;
-  };
+  strain: Strain;
   notFound?: boolean;
 };
 
@@ -19,10 +29,21 @@ export type StrainProps = {
 export default function Strain({ strain }: StrainProps) {
   return (
     <div>
+      <h1>{strain.name}</h1>
       <p>{strain.THC}</p>
       <p>{strain.batchDate}</p>
       <Link href={producerLink(strain.id)}>{strain.name}</Link>
       <p>{strain.productType}</p>
+      <ul>
+        {strain.reviews.map((review) => {
+          return (
+            <li key={review.id}>
+              <p>{review.comment}</p>
+              <p>{review.rating}</p>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -42,6 +63,9 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
     where: {
       id: Number(context.params?.id) || -1,
     },
+    include: {
+      reviews: true,
+    },
   });
 
   if (!strain) {
@@ -57,6 +81,12 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         THC: strain.THC,
         productType: strain.productType,
         producerId: strain.producerId,
+        reviews: strain.reviews.map((review) => ({
+          id: review.id,
+          rating: review.rating,
+          comment: review.comment,
+          profileId: review.profileId,
+        })),
       },
     },
   };
