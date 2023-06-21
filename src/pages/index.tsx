@@ -1,6 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import { api } from "@/utils/api";
 
 export default function Home() {
@@ -18,17 +17,7 @@ export default function Home() {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             <span className="text-[hsl(0,0%,0%)]">Terp</span>Metrix
           </h1>
-          <ul className="flex gap-2">
-            <li>
-              <Link href="/strain">Strains</Link>
-            </li>
-            <li>
-              <Link href="/producer">Producers</Link>
-            </li>
-            <li>
-              <Link href="/profile">Profile</Link>
-            </li>
-          </ul>
+
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
