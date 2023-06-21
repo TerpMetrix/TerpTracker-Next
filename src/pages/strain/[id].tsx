@@ -28,7 +28,7 @@ export default function Strain({ strain }: StrainProps) {
 }
 
 function producerLink(id: number) {
-  return "/producer/" + id;
+  return "/producer/" + String(id);
 }
 
 // getServerSideProps only runs on the server.
