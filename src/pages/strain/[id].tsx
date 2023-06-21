@@ -49,7 +49,6 @@ export default function Strain({ strain }: StrainProps) {
 }
 
 function producerLink(id: number) {
-  console.log(id);
   return "/producer/" + String(id);
 }
 
