@@ -23,7 +23,7 @@ export default function Home() {
               <Link href="/strains">Strains</Link>
             </li>
             <li>
-              <Link href="/growers">Growers</Link>
+              <Link href="/producer">Producers</Link>
             </li>
             <li>
               <Link href="/profile">Profile</Link>
