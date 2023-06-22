@@ -1,7 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
-import { ArrowUp, ArrowUpLeft, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Star } from "lucide-react";
 
 export type Strain = {
   id: number;
@@ -33,7 +33,7 @@ export default function Strain({ strain }: StrainProps) {
       <div className="flex h-96 flex-col items-center justify-center gap-10">
         <div className="flex flex-col items-center">
           <h1 className="text-4xl">{strain.name}</h1>
-          <p className="italic text-gray-700">
+          <p className="italic text-gray-400">
             Quick description of this strain.
           </p>
         </div>
@@ -73,17 +73,30 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
   const { rating, comment } = review;
 
   return (
-    <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-gray-100">
-      <div className="mb-2 flex items-center">
-        <div className="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 font-bold text-white">
-          {rating}
-        </div>
-        <h3 className="text-lg font-medium">{comment}</h3>
-      </div>
-      <p className="text-gray-600">{comment}</p>
+    <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-neutral ">
+      <h3 className="mb-1 text-lg font-medium">{comment}</h3>
+      <RatingStars rating={rating} />
+      <p className="text-gray-200">{comment}</p>
     </div>
   );
 };
+
+function RatingStars({ rating }: { rating: number }) {
+  //  if we somehow get a rating over 5, just cap it at 5
+  rating %= 5;
+  const stars = [];
+
+  while (rating > 0) {
+    rating -= 1;
+    stars.push(<Star className="h-4" fill="currentColor" />);
+  }
+  while (stars.length < 5) {
+    stars.push(<Star className="h-4" stroke="gray" />);
+    rating += 1;
+  }
+
+  return <div className="mb-4 flex">{stars}</div>;
+}
 
 function producerLink(id: number) {
   return "/producer/" + String(id);
