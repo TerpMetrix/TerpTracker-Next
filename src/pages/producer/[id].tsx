@@ -1,6 +1,7 @@
 import type { GetServerSideProps } from "next";
 
 import { prisma } from "@/server/db";
+import Hero from "@/components/hero";
 
 type Producer = {
   id: number;
@@ -25,11 +26,16 @@ export type ProducerProps = {
 export default function Producer({ producer }: ProducerProps) {
   return (
     <div>
-      <p>{producer.id}</p>
-      <p>{producer.location}</p>
-      <p>{producer.website}</p>
-      <p>{producer.name}</p>
-      <ul>
+      <Hero
+        title={producer.name}
+        description="Generic default description of this producer. Should add a database column for an about."
+        link={producer.website}
+        tag="#strains"
+      />
+      <div className="h-screen">aa</div>
+      <div className="h-screen">a</div>
+      <div className="h-screen"></div>
+      <ul id="#strains">
         {producer.strains.map((strain) => {
           return (
             <li key={strain.id}>

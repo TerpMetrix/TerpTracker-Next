@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b ">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
             <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
               Terp
             </span>
@@ -22,7 +22,7 @@ export default function Home() {
           </h1>
 
           <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
+            <p className="text-2xl">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
             </p>
           </div>

@@ -1,0 +1,22 @@
+export type HeroProps = {
+  title: string;
+  description: string;
+  link: string;
+  tag: string;
+};
+
+export default function Hero({ title, description, tag }: HeroProps) {
+  return (
+    <div className="hero min-h-screen bg-base-200">
+      <div className="hero-content text-center">
+        <div className="max-w-md">
+          <h1 className="text-5xl font-bold">{title}</h1>
+          <p className="py-6">{description}</p>
+          <a href={tag} className="btn-primary btn">
+            Explore Strains
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
