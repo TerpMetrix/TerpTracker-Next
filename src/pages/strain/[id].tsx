@@ -33,7 +33,7 @@ export type StrainProps = {
 // The main producer component exported in this file
 export default function Strain({ strain }: StrainProps) {
   return (
-    <div className="min-h-screen">
+    <div className="mb-10 min-h-screen">
       <div className="flex h-96 flex-col items-center justify-center gap-10">
         <div className="flex flex-col items-center">
           <h1 className="text-4xl">{strain.name}</h1>
@@ -64,7 +64,7 @@ export default function Strain({ strain }: StrainProps) {
             );
           })}
         </ul>
-        <NewReviewModal />
+        <NewReviewModal strainId={strain.id} />
       </div>
     </div>
   );
@@ -90,7 +90,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 function RatingStars({ rating }: { rating: number }) {
   //  if we somehow get a rating over 5, just cap it at 5
   const MAX_STARS = 5;
-  rating %= MAX_STARS;
+  rating %= MAX_STARS + 1;
 
   const filledStars = [];
   const emptyStars = [];
