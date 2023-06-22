@@ -1,5 +1,3 @@
-import { Leaf } from "lucide-react";
-
 export function Footer() {
   return (
     <footer className="footer items-center bg-neutral p-4 text-neutral-content">

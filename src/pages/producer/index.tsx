@@ -1,6 +1,7 @@
-import { GetServerSideProps } from "next";
+import { type GetServerSideProps } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
+import Image from "next/image";
 
 type Producer = {
   id: number;
@@ -31,9 +32,11 @@ function Producer({ producer }: { producer: Producer }) {
     <Link href={`/producer/${producer.id}`}>
       <div className="card w-96 bg-base-100 shadow-xl">
         <figure>
-          <img
+          <Image
             className="h-48 w-full overflow-hidden object-cover object-center"
-            src={producer.bannerImage}
+            src={producer.bannerImage || ""}
+            width={400}
+            height={200}
             alt={"banner image of " + producer.name}
           />
         </figure>
