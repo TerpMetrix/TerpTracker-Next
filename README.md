@@ -1,4 +1,47 @@
-# Create T3 App
+# TerpTacker Next
+
+## Tech Stack
+
+This project is created using the [T3 Stack](https://create.t3.gg/). Which is a collection of open source technologies centering around NextJS and typescript.
+
+It includes the following:
+
+1. Frontend and backend server via [NextJS](https://nextjs.org/)
+2. Authentication via [NextAuth](https://next-auth.js.org/)
+3. Database via [Prisma](https://prisma.io/)
+4. API via [tRPC](https://trpc.io/)
+5. Styling via [TailwindCSS](https://tailwindcss.com/)
+6. Language via [Typescript](https://www.typescriptlang.org/)
+
+---
+
+## Deployment and Hosting
+
+### [Vercel](https://vercel.com/)
+
+This handles deployment of this NextJS application. On push to the master branch a new deployment is shipped automatically.
+
+The vercel organization page can be found here: https://vercel.com/terpmetrix/
+
+### [Planetscale](https://planetscale.com/)
+
+This is a hosted MySQL database. It is used to store all of the data for the application.
+
+Super easy to use. Super good UI.
+
+Dashboard for current database: https://app.planetscale.com/terpmetrix
+
+---
+
+## User Interface Kits
+
+I used [DaisyUI](https://daisyui.com/) to create the UI for this project. It is a tailwindcss plugin that adds a bunch of components and utilities to make it easier to create a UI.
+
+---
+
+# Create T3 App default read me section
+
+## Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
