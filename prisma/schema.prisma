@@ -84,11 +84,13 @@ model VerificationToken {
 // Profile containing any user generated data like:
 // bio, location, taste-preferences, reviews, etc.
 model Profile {
-  id String @id @default(cuid())
+  id       String  @id @default(cuid())
+  userName String? @unique
 
   // relations
-  userId  String   @unique
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   reviews Review[]
 }
 
@@ -119,9 +121,11 @@ model Strain {
 
 model Review {
   // values
-  id      Int    @id @default(autoincrement())
-  rating  Float  @default(0)
-  comment String @default("")
+  id        Int      @id @default(autoincrement())
+  rating    Float    @default(0)
+  comment   String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   // relations
   strainId Int
