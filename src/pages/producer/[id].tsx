@@ -1,8 +1,7 @@
 import type { GetServerSideProps } from "next";
-
+import Link from "next/link";
 import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
-import Link from "next/link";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -44,14 +43,14 @@ export default function Producer({ producer }: ProducerProps) {
 function StrainItem({ strain }: { strain: Strain }) {
   return (
     <Link href={"/strain/" + String(strain.id)}>
-      <div className="card w-96 bg-primary text-primary-content">
+      <div className="card w-96 bg-neutral text-neutral-content">
         <div className="card-body">
           <h2 className="card-title">{strain.name}</h2>
           <div className="flex">
             <div className="badge badge-outline">Dank</div>
             <div className="badge badge-outline ml-2">Gassy</div>
           </div>
-          <div className="text-gray-400">{strain.batchDate}</div>
+          <div className="text-gray-40 mb-3">{strain.batchDate}</div>
           <button className="btn">Available Dispensaries</button>
         </div>
       </div>

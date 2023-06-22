@@ -9,7 +9,7 @@ export type HeroProps = {
 
 export default function Hero({ title, description, tag }: HeroProps) {
   return (
-    <div className="hero min-h-screen bg-base-200">
+    <div className="hero h-96 bg-base-200">
       <div className="hero-content text-center">
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">{title}</h1>
