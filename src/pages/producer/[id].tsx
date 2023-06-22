@@ -2,7 +2,13 @@ import type { GetServerSideProps } from "next";
 
 import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
+import Link from "next/link";
 
+// The props this component receives from getServerSideProps
+export type ProducerProps = {
+  producer: Producer;
+  notFound?: boolean;
+};
 type Producer = {
   id: number;
   name: string;
@@ -16,37 +22,40 @@ type Strain = {
   batchDate: string;
 };
 
-// The props this component receives from getServerSideProps
-export type ProducerProps = {
-  producer: Producer;
-  notFound?: boolean;
-};
-
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
   return (
-    <div>
+    <div className="mb-10">
       <Hero
         title={producer.name}
         description="Generic default description of this producer. Should add a database column for an about."
         link={producer.website}
         tag="#strains"
       />
-      <div className="h-screen">aa</div>
-      <div className="h-screen">a</div>
-      <div className="h-screen"></div>
-      <ul id="#strains">
+      <ul id="#strains" className="flex flex-col items-center gap-5">
         {producer.strains.map((strain) => {
-          return (
-            <li key={strain.id}>
-              <a href={"/strain/" + String(strain.id)}>
-                {strain.name} - {strain.batchDate}
-              </a>
-            </li>
-          );
+          return <StrainItem key={strain.id} strain={strain}></StrainItem>;
         })}
       </ul>
     </div>
+  );
+}
+
+function StrainItem({ strain }: { strain: Strain }) {
+  return (
+    <Link href={"/strain/" + String(strain.id)}>
+      <div className="card w-96 bg-primary text-primary-content">
+        <div className="card-body">
+          <h2 className="card-title">{strain.name}</h2>
+          <div className="flex">
+            <div className="badge badge-outline">Dank</div>
+            <div className="badge badge-outline ml-2">Gassy</div>
+          </div>
+          <div className="text-gray-400">{strain.batchDate}</div>
+          <button className="btn">Available Dispensaries</button>
+        </div>
+      </div>
+    </Link>
   );
 }
 

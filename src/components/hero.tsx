@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export type HeroProps = {
   title: string;
   description: string;
@@ -12,9 +14,9 @@ export default function Hero({ title, description, tag }: HeroProps) {
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">{title}</h1>
           <p className="py-6">{description}</p>
-          <a href={tag} className="btn-primary btn">
+          <Link href={tag} scroll={false} className="btn-primary btn">
             Explore Strains
-          </a>
+          </Link>
         </div>
       </div>
     </div>
