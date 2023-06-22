@@ -2,6 +2,7 @@ import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
+import NewReviewModal from "@/components/newReviewModal";
 
 export type Strain = {
   id: number;
@@ -53,7 +54,7 @@ export default function Strain({ strain }: StrainProps) {
         </Link>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center justify-center">
         <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
           {strain.reviews.map((review) => {
             return (
@@ -63,6 +64,7 @@ export default function Strain({ strain }: StrainProps) {
             );
           })}
         </ul>
+        <NewReviewModal />
       </div>
     </div>
   );
@@ -94,11 +96,9 @@ function RatingStars({ rating }: { rating: number }) {
   const emptyStars = [];
 
   for (let i = 0; i < rating; i++) {
-    console.log("adding filled star: ", i);
     filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
   }
   for (let i = rating; i < MAX_STARS; i++) {
-    console.log("adding empty star: ", i);
     emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
   }
   return (
