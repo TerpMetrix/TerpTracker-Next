@@ -84,8 +84,8 @@ model VerificationToken {
 // Profile containing any user generated data like:
 // bio, location, taste-preferences, reviews, etc.
 model Profile {
-  id       String  @id @default(cuid())
-  userName String? @unique
+  id          String  @id @default(cuid())
+  profileName String? @unique
 
   // relations
   userId String @unique
