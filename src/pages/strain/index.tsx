@@ -40,10 +40,10 @@ export default function Strains({ strains }: StrainsProps) {
 function StrainItem({ strain }: { strain: Strain }) {
   return (
     <li>
-      <a key={strain.id} href={"/strain/" + String(strain.id)}>
-        <div className="rounded-lg bg-white p-4 shadow-md transition-all hover:-translate-y-2 hover:bg-gray-100">
-          <p className="text-lg font-medium text-gray-800">{strain.name}</p>
-          <p className="text-gray-500">{strain.productType}</p>
+      <a href={"/strain/" + String(strain.id)}>
+        <div className="rounded-lg bg-zinc-900 p-4 shadow-md transition-all hover:-translate-y-2 hover:bg-neutral">
+          <p className="mb-2 text-lg font-medium">{strain.name}</p>
+          <p className="badge badge-accent  mb-2">{strain.productType}</p>
           <p className="text-gray-500">{strain.batchDate}</p>
           <p className="text-gray-500">{strain.THC}% THC</p>
         </div>

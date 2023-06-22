@@ -24,18 +24,23 @@ type Strain = {
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
   return (
-    <div className="mb-10">
+    <div className="mb-10 flex flex-col items-center">
       <Hero
         title={producer.name}
         description="Generic default description of this producer. Should add a database column for an about."
         link={producer.website}
         tag="#strains"
       />
-      <ul id="#strains" className="flex flex-col items-center gap-5">
-        {producer.strains.map((strain) => {
-          return <StrainItem key={strain.id} strain={strain}></StrainItem>;
-        })}
-      </ul>
+      <div className="flex w-full justify-center">
+        <ul
+          id="#strains"
+          className="flex flex-wrap items-center justify-center gap-5"
+        >
+          {producer.strains.map((strain) => {
+            return <StrainItem key={strain.id} strain={strain}></StrainItem>;
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function Strain({ strain }: StrainProps) {
         <div className="flex flex-wrap justify-center gap-4">
           <p className="badge">{Math.floor(strain.THC * 100)}% TCH</p>
           <p className="badge">{strain.batchDate}</p>
-          <p className="badge">{strain.productType}</p>
+          <p className="badge badge-primary">{strain.productType}</p>
         </div>
         <Link
           className="btn-outline btn"
@@ -83,19 +83,26 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 
 function RatingStars({ rating }: { rating: number }) {
   //  if we somehow get a rating over 5, just cap it at 5
-  rating %= 5;
-  const stars = [];
+  const MAX_STARS = 5;
+  rating %= MAX_STARS;
 
-  while (rating > 0) {
-    rating -= 1;
-    stars.push(<Star className="h-4" fill="currentColor" />);
-  }
-  while (stars.length < 5) {
-    stars.push(<Star className="h-4" stroke="gray" />);
-    rating += 1;
-  }
+  const filledStars = [];
+  const emptyStars = [];
 
-  return <div className="mb-4 flex">{stars}</div>;
+  for (let i = 0; i < rating; i++) {
+    console.log("adding filled star: ", i);
+    filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
+  }
+  for (let i = rating; i < MAX_STARS; i++) {
+    console.log("adding empty star: ", i);
+    emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
+  }
+  return (
+    <div className="mb-4 flex">
+      {filledStars}
+      {emptyStars}
+    </div>
+  );
 }
 
 function producerLink(id: number) {
