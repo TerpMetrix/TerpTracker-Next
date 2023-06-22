@@ -18,6 +18,9 @@ export type Review = {
   rating: number;
   comment: string;
   profileId: string;
+  userName?: string;
+  createdAt?: string;
+  profileName: string | null;
 };
 
 // The props this component receives from getServerSideProps
@@ -74,8 +77,9 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 
   return (
     <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-neutral ">
-      <h3 className="mb-1 text-lg font-medium">{comment}</h3>
+      <h3 className="mb-1 text-lg font-medium">{review.profileName}</h3>
       <RatingStars rating={rating} />
+      <p className="text-gray-400">{review.createdAt}</p>
       <p className="text-gray-200">{comment}</p>
     </div>
   );
@@ -120,8 +124,27 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
     where: {
       id: Number(context.params?.id) || -1,
     },
-    include: {
-      reviews: true,
+    select: {
+      id: true,
+      name: true,
+      batchDate: true,
+      THC: true,
+      productType: true,
+      producerId: true,
+      reviews: {
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
+          createdAt: true,
+          profileId: true,
+          Profile: {
+            select: {
+              profileName: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -143,6 +166,8 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           rating: review.rating,
           comment: review.comment,
           profileId: review.profileId,
+          profileName: review.Profile?.profileName,
+          createdAt: review.createdAt.toDateString(),
         })),
       },
     },
