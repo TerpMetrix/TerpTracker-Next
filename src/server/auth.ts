@@ -61,6 +61,12 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  events: {
+    createUser: (message) => {
+      // TODO: create user Profile in the database
+      console.log("createUser: ", message);
+    },
+  },
 };
 
 /**
