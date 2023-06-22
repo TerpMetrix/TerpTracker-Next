@@ -14,7 +14,7 @@ type NewReviewModalProps = {
 
 export default function NewReviewModal({ strainId }: NewReviewModalProps) {
   const { data: sessionData } = useSession();
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(1);
   const [comment, setComment] = useState("");
 
   const mutation = api.reviews.newReview.useMutation();
