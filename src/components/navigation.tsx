@@ -61,7 +61,7 @@ export default function Navigation() {
 
 function logIn() {
   return (
-    <button className="btn" onClick={() => signIn()}>
+    <button className="btn" onClick={() => void signIn()}>
       Login <LogIn></LogIn>
     </button>
   );
@@ -69,7 +69,7 @@ function logIn() {
 
 function logOut() {
   return (
-    <button className="btn" onClick={() => signOut()}>
+    <button className="btn" onClick={() => void signOut()}>
       Logout <LogOut></LogOut>
     </button>
   );
