@@ -1,6 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
+import { ArrowUp, ArrowUpLeft, ArrowUpRight } from "lucide-react";
 
 export type Strain = {
   id: number;
@@ -28,25 +29,61 @@ export type StrainProps = {
 // The main producer component exported in this file
 export default function Strain({ strain }: StrainProps) {
   return (
-    <div>
-      <h1>{strain.name}</h1>
-      <p>{strain.THC}</p>
-      <p>{strain.batchDate}</p>
-      <Link href={producerLink(strain.producerId)}>{strain.name}</Link>
-      <p>{strain.productType}</p>
-      <ul>
-        {strain.reviews.map((review) => {
-          return (
-            <li key={review.id}>
-              <p>{review.comment}</p>
-              <p>{review.rating}</p>
-            </li>
-          );
-        })}
-      </ul>
+    <div className="min-h-screen">
+      <div className="flex h-96 flex-col items-center justify-center gap-10">
+        <div className="flex flex-col items-center">
+          <h1 className="text-4xl">{strain.name}</h1>
+          <p className="italic text-gray-700">
+            Quick description of this strain.
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-4">
+          <p className="badge">{Math.floor(strain.THC * 100)}% TCH</p>
+          <p className="badge">{strain.batchDate}</p>
+          <p className="badge">{strain.productType}</p>
+        </div>
+        <Link
+          className="btn-outline btn"
+          href={producerLink(strain.producerId)}
+        >
+          {strain.name} <ArrowUpRight />
+        </Link>
+      </div>
+
+      <div className="flex justify-center">
+        <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
+          {strain.reviews.map((review) => {
+            return (
+              <li key={review.id}>
+                <ReviewCard review={review} />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
+
+type ReviewCardProps = {
+  review: Review;
+};
+
+const ReviewCard = ({ review }: ReviewCardProps) => {
+  const { rating, comment } = review;
+
+  return (
+    <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-gray-100">
+      <div className="mb-2 flex items-center">
+        <div className="mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 font-bold text-white">
+          {rating}
+        </div>
+        <h3 className="text-lg font-medium">{comment}</h3>
+      </div>
+      <p className="text-gray-600">{comment}</p>
+    </div>
+  );
+};
 
 function producerLink(id: number) {
   return "/producer/" + String(id);
