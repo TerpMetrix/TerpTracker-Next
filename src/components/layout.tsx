@@ -7,7 +7,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <Navigation />
-      <main>{children}</main>
+      <main className="selection:bg-accent selection:text-accent">
+        {children}
+      </main>
       <Footer></Footer>
     </>
   );
