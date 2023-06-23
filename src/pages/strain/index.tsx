@@ -20,14 +20,14 @@ export default function Strains({ strains }: StrainsProps) {
   return (
     <div className="flex flex-col items-center">
       <div className="w-screen md:w-2/3">
-        <div className="flex h-60 flex-col items-center justify-center gap-1">
+      <div className="flex pt-10 flex-col items-center justify-center">
           <h1 className="text-4xl">Strains</h1>
           <p className="italic text-gray-700">
             What the best producers are making.
           </p>
         </div>
 
-        <ul className="mb-10 flex flex-col gap-4 px-4">
+        <ul className="mb-10 flex flex-col gap-4 px-4 py-10">
           {strains.map((strain) => (
             <StrainItem key={strain.id} strain={strain} />
           ))}
@@ -45,7 +45,7 @@ function StrainItem({ strain }: { strain: Strain }) {
           <p className="mb-2 text-lg font-medium">{strain.name}</p>
           <p className="badge badge-accent  mb-2">{strain.productType}</p>
           <p className="text-gray-500">{strain.batchDate}</p>
-          <p className="text-gray-500">{strain.THC}% THC</p>
+          <p className="text-gray-500">{Math.floor(strain.THC * 100)}% THC</p>
         </div>
       </a>
     </li>

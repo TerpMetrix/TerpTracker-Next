@@ -42,7 +42,7 @@ export default function Strain({ strain }: StrainProps) {
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-4">
-          <p className="badge">{Math.floor(strain.THC * 100)}% TCH</p>
+          <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
           <p className="badge">{strain.batchDate}</p>
           <p className="badge badge-primary">{strain.productType}</p>
         </div>
@@ -50,7 +50,7 @@ export default function Strain({ strain }: StrainProps) {
           className="btn-outline btn"
           href={producerLink(strain.producerId)}
         >
-          {strain.name} <ArrowUpRight />
+          {strain.producerId} <ArrowUpRight /> {/*need to make this link to prod name */}
         </Link>
       </div>
 

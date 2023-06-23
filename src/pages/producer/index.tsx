@@ -19,10 +19,20 @@ type ProducersProps = {
 // Main exported component for Producer page
 export default function Producers({ producers }: ProducersProps) {
   return (
-    <div className="flex flex-wrap justify-center gap-10 py-20">
-      {producers.map((producer) => (
-        <Producer key={producer.id} producer={producer} />
-      ))}
+    <div className="flex flex-col items-center">
+      <div className="w-screen">
+        <div className="flex pt-10 flex-col items-center justify-center">
+          <h1 className="text-4xl">Producers</h1>
+          <p className="italic text-gray-700">
+            The most popular producers in the state.
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-8 py-10">
+          {producers.map((producer) => (
+            <Producer key={producer.id} producer={producer} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
