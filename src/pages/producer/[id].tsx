@@ -27,7 +27,7 @@ export default function Producer({ producer }: ProducerProps) {
   return (
     <>
       <Head>
-        <title>{producer.name} | Terpmetrix</title>
+        <title>{producer.name} | TerpTracker</title>
       </Head>
       <div className="mb-10 flex flex-col items-center">
         <Hero

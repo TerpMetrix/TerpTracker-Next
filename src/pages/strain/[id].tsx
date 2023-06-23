@@ -36,7 +36,7 @@ export default function Strain({ strain }: StrainProps) {
   return (
     <>
       <Head>
-        <title>{strain.name} | Terpmetrix</title>
+        <title>{strain.name} | TerpTracker</title>
       </Head>
       <div className="mb-10 min-h-screen">
         <div className="flex h-96 flex-col items-center justify-center gap-10">

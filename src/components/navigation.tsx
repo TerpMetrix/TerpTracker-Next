@@ -46,7 +46,7 @@ export default function Navigation() {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">{sessionData ? logOut() : logIn()}</div>
+      <div className="navbar-end p-4">{sessionData ? logOut() : logIn()}</div>
     </div>
   );
 }
