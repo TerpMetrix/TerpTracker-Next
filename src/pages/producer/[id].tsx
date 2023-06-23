@@ -2,6 +2,7 @@ import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
+import Head from "next/head";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -24,24 +25,29 @@ type Strain = {
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
   return (
-    <div className="mb-10 flex flex-col items-center">
-      <Hero
-        title={producer.name}
-        description="Generic default description of this producer. Should add a database column for an about."
-        link={producer.website}
-        tag="#strains"
-      />
-      <div className="flex w-full justify-center">
-        <ul
-          id="#strains"
-          className="flex flex-wrap items-center justify-center gap-5"
-        >
-          {producer.strains.map((strain) => {
-            return <StrainItem key={strain.id} strain={strain}></StrainItem>;
-          })}
-        </ul>
+    <>
+      <Head>
+        <title>{producer.name} | Terpmetrix</title>
+      </Head>
+      <div className="mb-10 flex flex-col items-center">
+        <Hero
+          title={producer.name}
+          description="Generic default description of this producer. Should add a database column for an about."
+          link={producer.website}
+          tag="#strains"
+        />
+        <div className="flex w-full justify-center">
+          <ul
+            id="#strains"
+            className="flex flex-wrap items-center justify-center gap-5"
+          >
+            {producer.strains.map((strain) => {
+              return <StrainItem key={strain.id} strain={strain}></StrainItem>;
+            })}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -52,8 +58,8 @@ function StrainItem({ strain }: { strain: Strain }) {
         <div className="card-body">
           <h2 className="card-title">{strain.name}</h2>
           <div className="flex">
-            <div className="badge badge-outline">Dank</div>
-            <div className="badge badge-outline ml-2">Gassy</div>
+            <div className="badge badge-warning">Dank</div>
+            <div className="badge badge-success ml-2">Gassy</div>
           </div>
           <div className="text-gray-40 mb-3">{strain.batchDate}</div>
           <button className="btn">Available Dispensaries</button>

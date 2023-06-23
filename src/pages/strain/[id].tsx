@@ -3,6 +3,7 @@ import { prisma } from "@/server/db";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
+import Head from "next/head";
 
 export type Strain = {
   id: number;
@@ -33,40 +34,45 @@ export type StrainProps = {
 // The main producer component exported in this file
 export default function Strain({ strain }: StrainProps) {
   return (
-    <div className="mb-10 min-h-screen">
-      <div className="flex h-96 flex-col items-center justify-center gap-10">
-        <div className="flex flex-col items-center">
-          <h1 className="text-4xl">{strain.name}</h1>
-          <p className="italic text-gray-400">
-            Quick description of this strain.
-          </p>
+    <>
+      <Head>
+        <title>{strain.name} | Terpmetrix</title>
+      </Head>
+      <div className="mb-10 min-h-screen">
+        <div className="flex h-96 flex-col items-center justify-center gap-10">
+          <div className="flex flex-col items-center">
+            <h1 className="text-4xl">{strain.name}</h1>
+            <p className="italic text-gray-400">
+              Quick description of this strain.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
+            <p className="badge">{strain.batchDate}</p>
+            <p className="badge badge-primary">{strain.productType}</p>
+          </div>
+          <Link
+            className="btn-outline btn"
+            href={producerLink(strain.producerId)}
+          >
+            {strain.producerId} <ArrowUpRight /> {/*need to make this link to prod name */}
+          </Link>
         </div>
-        <div className="flex flex-wrap justify-center gap-4">
-          <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
-          <p className="badge">{strain.batchDate}</p>
-          <p className="badge badge-primary">{strain.productType}</p>
-        </div>
-        <Link
-          className="btn-outline btn"
-          href={producerLink(strain.producerId)}
-        >
-          {strain.producerId} <ArrowUpRight /> {/*need to make this link to prod name */}
-        </Link>
-      </div>
 
-      <div className="flex flex-col items-center justify-center">
-        <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-          {strain.reviews.map((review) => {
-            return (
-              <li key={review.id}>
-                <ReviewCard review={review} />
-              </li>
-            );
-          })}
-        </ul>
-        <NewReviewModal strainId={strain.id} />
+        <div className="flex flex-col items-center justify-center">
+          <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
+            {strain.reviews.map((review) => {
+              return (
+                <li key={review.id}>
+                  <ReviewCard review={review} />
+                </li>
+              );
+            })}
+          </ul>
+          <NewReviewModal strainId={strain.id} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

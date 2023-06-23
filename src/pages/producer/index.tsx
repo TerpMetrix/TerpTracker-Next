@@ -2,6 +2,7 @@ import { type GetServerSideProps } from "next";
 import { prisma } from "@/server/db";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 
 type Producer = {
   id: number;
@@ -19,28 +20,33 @@ type ProducersProps = {
 // Main exported component for Producer page
 export default function Producers({ producers }: ProducersProps) {
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-screen">
-        <div className="flex pt-10 flex-col items-center justify-center">
-          <h1 className="text-4xl">Producers</h1>
-          <p className="italic text-gray-700">
-            The most popular producers in the state.
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-center gap-8 py-10">
-          {producers.map((producer) => (
-            <Producer key={producer.id} producer={producer} />
-          ))}
+    <>
+      <Head>
+        <title>Producers | Terptracker</title>
+      </Head>
+      <div className="flex flex-col items-center">
+        <div className="w-screen">
+          <div className="flex pt-10 flex-col items-center justify-center">
+            <h1 className="text-4xl">Producers</h1>
+            <p className="italic text-gray-700">
+              The most popular producers in the state.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-8 py-10">
+            {producers.map((producer) => (
+              <Producer key={producer.id} producer={producer} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
 function Producer({ producer }: { producer: Producer }) {
   return (
     <Link href={`/producer/${producer.id}`}>
-      <div className="card w-96 bg-base-100 shadow-xl">
+      <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
         <figure>
           <Image
             className="h-48 w-full overflow-hidden object-cover object-center"
@@ -53,7 +59,7 @@ function Producer({ producer }: { producer: Producer }) {
         <div className="card-body">
           <h2 className="card-title capitalize">
             {producer.name}
-            <div className="badge badge-secondary">NEW</div>
+            <div className="badge badge-info">NEW</div>
           </h2>
           <p>{producer.location}</p>
           <div className="card-actions justify-end">

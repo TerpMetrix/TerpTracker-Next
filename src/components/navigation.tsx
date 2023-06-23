@@ -25,9 +25,9 @@ export default function Navigation() {
             </li>
           </ul>
         </div>
-        <div className="hidden lg:flex">
-          <Link href="/" className="btn-ghost btn gap-1 text-2xl normal-case">
-            <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={50} height={50}/>
+        <div className="hidden lg:flex p-4">
+          <Link href="/" className="btn-ghost btn h-24 w-24 normal-case">
+            <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70}/>
           </Link>
         </div>
       </div>
@@ -39,10 +39,10 @@ export default function Navigation() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 pt-3 text-xl">
           <li tabIndex={0}>
-            <Link href="/strain">🔥 Strains</Link>
+            <Link href="/strain">Strains</Link>
           </li>
           <li>
-            <Link href="/producer">🔥 Producers</Link>
+            <Link href="/producer">Producers</Link>
           </li>
         </ul>
       </div>
