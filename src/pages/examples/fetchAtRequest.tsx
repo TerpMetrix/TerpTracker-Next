@@ -4,10 +4,10 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 // The props of this component.
 // We will fetch the values from the database using prisma.
 type FetchAtRequestProps = {
-  name: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
+  name?: string;
+  message?: string;
+  createdAt?: string;
+  updatedAt?: string;
   notFound?: boolean;
 };
 
@@ -27,8 +27,8 @@ export default function FetchAtRequest({
     <div>
       <h1>{name}</h1>
       <p>{message}</p>
-      <p>Created at: {createdAt.toString()}</p>
-      <p>Updated at: {updatedAt.toString()}</p>
+      <p>Created at: {createdAt?.toString()}</p>
+      <p>Updated at: {updatedAt?.toString()}</p>
     </div>
   );
 }
