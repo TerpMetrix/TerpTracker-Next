@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 
 // The props of this component.
 // We will fetch the values from the database using prisma.

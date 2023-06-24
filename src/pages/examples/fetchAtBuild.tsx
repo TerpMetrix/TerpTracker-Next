@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db";
-import { GetStaticProps } from "next";
+import type { GetStaticProps } from "next";
 
 // The props of this component.
 // We will fetch the values from the database using prisma.
