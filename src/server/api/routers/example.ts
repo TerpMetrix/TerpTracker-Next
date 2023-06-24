@@ -6,19 +6,33 @@ import {
 } from "@/server/api/trpc";
 
 export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Find what's next in ${input.text}...`,
-      };
+  // This is a public query, meaning it can be accessed by anyone.
+  // It queries the database for a single example by name.
+  getExample: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .query(({ input, ctx }) => {
+      try {
+        const example = ctx.prisma.example.findFirst({
+          where: {
+            name: input.name,
+          },
+        });
+
+        return example;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
     }),
 
-  getAll: publicProcedure.query(({ ctx }) => {
+  // This is a public query, meaning it can be accessed by anyone.
+  // It just gets all of the examples in the database.
+  getAllExamples: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
+  // This is a protected query, meaning it can only be accessed by logged in users.
+  getProtectedData: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
 });
