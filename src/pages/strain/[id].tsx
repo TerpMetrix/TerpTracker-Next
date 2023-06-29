@@ -151,6 +151,12 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           },
         },
       },
+      tags: {
+        select: {
+          name: true,
+          
+
+
     },
   });
 
