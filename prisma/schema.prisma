@@ -114,11 +114,13 @@ model Strain {
   batchDate   DateTime @default(now())
   productType String // flower or concentrate
   THC         Float    @default(0)
+  image  String   @default("")
 
   // relations
   reviews    Review[]
   producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
   producerId Int
+  tags       TagOnStrain[]
 }
 
 model Review {
@@ -135,4 +137,26 @@ model Review {
 
   profileId String
   Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model TerpTag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  lean Float @default(0)
+  color String @default("000000")
+
+  // relations
+  strains TagOnStrain[]
+}
+
+model TagOnStrain {
+  strain       Strain     @relation(fields: [strainId], references: [id])
+  strainId     Int // relation scalar field (used in the `@relation` attribute above)
+  tag   TerpTag @relation(fields: [tagId], references: [id])
+  tagId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String 
+  weight Float @default(0)
+
+  @@id([strainId, tagId])
 }

@@ -9,6 +9,7 @@ type Strain = {
   productType: string;
   THC: number;
   producerId: number;
+  tags: string[];
 };
 
 type StrainsProps = {
@@ -73,6 +74,7 @@ export const getServerSideProps: GetServerSideProps<
           productType: strain.productType,
           THC: strain.THC,
           producerId: strain.producerId,
+          tags: strain.tags,
         })),
       },
     };

@@ -1,4 +1,4 @@
-# TerpTacker Next 
+# TerpTacker Next
 
 ## Tech Stack
 
