@@ -18,6 +18,7 @@ const Tag: React.FC<TagProps> = ({ tag }) => {
         'blue': 'bg-blue-500',
         'green': 'bg-green-500',
         'yellow': 'bg-yellow-500',
+        'brown': 'bg-orange-500',
         'default': 'bg-black',  // default color if no match is found
     };
 

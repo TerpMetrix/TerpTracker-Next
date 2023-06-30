@@ -2,6 +2,8 @@ import { type GetServerSideProps } from "next";
 import { prisma } from "@/server/db";
 import Head from "next/head";
 import Tag from "@/components/tag";
+import Image from "next/image";
+import Link from "next/link";
 
 export type Strain = {
   id: number;
@@ -11,6 +13,7 @@ export type Strain = {
   productType: string;
   producerId: number;
   producerName: string;
+  image: string;
   tags: Tags[];
 };
 
@@ -42,11 +45,18 @@ export default function Strains({ strains }: StrainsProps) {
               What the best producers are making.
             </p>
           </div>
-          <ul className="mb-10 flex flex-col gap-4 px-4">
+          
+          
+          <div className="flex w-full justify-center">
+          <ul
+            id="#strains"
+            className="flex flex-wrap items-center justify-center gap-5"
+          >
             {strains.map((strain) => (
               <StrainItem key={strain.id} strain={strain} />
             ))}
           </ul>
+          </div>
         </div>
       </div>
     </>
@@ -55,23 +65,31 @@ export default function Strains({ strains }: StrainsProps) {
 
 function StrainItem({ strain }: { strain: Strain }) {
   return (
-    <li>
-      <a href={"/strain/" + String(strain.id)}>
-        <div className="card p-4 transition-all hover:-translate-y-2 bg-base-100 hover:bg-secondary shadow-lg shadow-gray-100/5">
-          <p className="mb-2 text-lg font-medium">{strain.name}</p>
-          <p className="badge badge-info  mb-2">{strain.productType}</p>
-          <p className="text-gray-500">{strain.batchDate}</p>
+    <Link href={`/producer/${strain.id}`}>
+      <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
+        <figure>
+          <Image
+            className="h-48 w-full overflow-hidden object-cover object-center"
+            src={strain.image || ""}
+            width={400}
+            height={200}
+            alt={"image of " + strain.name}
+          />
+        </figure>
 
-          <div className="flex flex-row gap-4 my-2">
+        <p className="mb-2 text-lg font-medium">{strain.name}</p>
+        <p className="badge badge-info  mb-2">{strain.productType}</p>
+        <p className="text-gray-500">{strain.batchDate}</p>
+
+        <div className="flex flex-row gap-4 my-2">
           {strain.tags.map((tag) => {
             return <Tag tag={tag} />;
           })}
-          </div>
-
-          <p className="text-gray-500">{Math.floor(strain.THC * 100)}% THC</p>
         </div>
-      </a>
-    </li>
+
+        <p className="text-gray-500">{Math.floor(strain.THC * 100)}% THC</p>
+      </div>
+    </Link>
   );
 }
 
@@ -109,6 +127,7 @@ export const getServerSideProps: GetServerSideProps<
           THC: strain.THC,
           producerId: strain.producerId,
           producerName: strain.producer.name,
+          image: strain.image,
           tags: strain.tags.map((tag) => ({
             weight: tag.weight,
             color: tag.tag.color,
