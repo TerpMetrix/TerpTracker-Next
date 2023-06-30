@@ -65,6 +65,7 @@ export default function Strains({ strains }: StrainsProps) {
 
 function StrainItem({ strain }: { strain: Strain }) {
   return (
+    <>
     <Link href={`/producer/${strain.id}`}>
       <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
         <figure>
@@ -90,6 +91,7 @@ function StrainItem({ strain }: { strain: Strain }) {
         <p className="text-gray-500">{Math.floor(strain.THC * 100)}% THC</p>
       </div>
     </Link>
+    </>
   );
 }
 

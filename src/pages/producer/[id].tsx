@@ -67,6 +67,7 @@ export default function Producer({ producer }: ProducerProps) {
 
 function StrainItem({ strain }: { strain: Strain }) {
   return (
+    <>
     <Link href={"/strain/" + String(strain.id)}>
       <div className="card w-96 bg-neutral text-neutral-content">
         <div className="card-body">
@@ -85,6 +86,7 @@ function StrainItem({ strain }: { strain: Strain }) {
         </div>
       </div>
     </Link>
+    </>
   );
 }
 
