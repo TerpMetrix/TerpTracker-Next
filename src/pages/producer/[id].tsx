@@ -20,7 +20,6 @@ type Strain = {
   id: number;
   name: string;
   batchDate: string;
-  tags: string[];
 };
 
 // The main producer component exported in this file
@@ -82,7 +81,6 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     },
     include: {
       strains: true,
-      tags: true,
     },
   });
 
@@ -101,7 +99,6 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           id: strain.id,
           name: strain.name,
           batchDate: strain.batchDate.toDateString(),
-          tags: strain.tags,
         })),
       },
     },

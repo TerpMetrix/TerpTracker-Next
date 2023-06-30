@@ -49,6 +49,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -57,6 +58,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -121,6 +124,8 @@ model Strain {
   producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
   producerId Int
   tags       TagOnStrain[]
+
+  @@index([producerId])
 }
 
 model Review {
@@ -137,6 +142,9 @@ model Review {
 
   profileId String
   Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([strainId])
+  @@index([profileId])
 }
 
 model TerpTag {
@@ -159,4 +167,6 @@ model TagOnStrain {
   weight Float @default(0)
 
   @@id([strainId, tagId])
+  @@index([strainId])
+  @@index([tagId])
 }

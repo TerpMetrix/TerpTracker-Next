@@ -1,15 +1,24 @@
 import { type GetServerSideProps } from "next";
 import { prisma } from "@/server/db";
 import Head from "next/head";
+import Tag from "@/components/tag";
 
-type Strain = {
+export type Strain = {
   id: number;
   name: string;
   batchDate: string;
-  productType: string;
   THC: number;
+  productType: string;
   producerId: number;
-  tags: string[];
+  producerName: string;
+  tags: Tags[];
+};
+
+export type Tags = {
+  weight: number;
+  color: string;
+  lean: number;
+  name: string;
 };
 
 type StrainsProps = {
@@ -52,6 +61,13 @@ function StrainItem({ strain }: { strain: Strain }) {
           <p className="mb-2 text-lg font-medium">{strain.name}</p>
           <p className="badge badge-info  mb-2">{strain.productType}</p>
           <p className="text-gray-500">{strain.batchDate}</p>
+
+          <div className="flex flex-row gap-4 my-2">
+          {strain.tags.map((tag) => {
+            return <Tag tag={tag} />;
+          })}
+          </div>
+
           <p className="text-gray-500">{Math.floor(strain.THC * 100)}% THC</p>
         </div>
       </a>
@@ -63,7 +79,25 @@ export const getServerSideProps: GetServerSideProps<
   StrainsProps
 > = async () => {
   try {
-    const strains = await prisma.strain.findMany();
+    const strains = await prisma.strain.findMany(
+      {
+        include: {
+          producer: true,
+          tags: {
+            select: {
+              weight: true,
+              tag: {
+                select: {
+                  name: true,
+                  color: true,
+                  lean: true,
+                },
+              },
+            },
+          }
+        },
+      },
+    );
 
     return {
       props: {
@@ -74,7 +108,13 @@ export const getServerSideProps: GetServerSideProps<
           productType: strain.productType,
           THC: strain.THC,
           producerId: strain.producerId,
-          tags: strain.tags,
+          producerName: strain.producer.name,
+          tags: strain.tags.map((tag) => ({
+            weight: tag.weight,
+            color: tag.tag.color,
+            lean: tag.tag.lean,
+            name: tag.tag.name,
+          })),
         })),
       },
     };
