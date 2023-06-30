@@ -84,7 +84,7 @@ function StrainItem({ strain }: { strain: Strain }) {
 
         <div className="flex flex-row gap-4 my-2">
           {strain.tags.map((tag) => {
-            return <Tag tag={tag} />;
+            return <Tag tag={tag} key={tag.name}/>;
           })}
         </div>
 
