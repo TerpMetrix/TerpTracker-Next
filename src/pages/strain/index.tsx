@@ -67,7 +67,7 @@ export default function Strains({ strains }: StrainsProps) {
 function StrainItem({ strain }: { strain: Strain }) {
   return (
     <>
-    <Link href={`/producer/${strain.id}`}>
+    <Link href={`/strain/${strain.id}`}>
       <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
         <figure>
           <Image
