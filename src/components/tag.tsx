@@ -6,7 +6,7 @@ type Tags = {
     color: string;
     lean: number;
     name: string;
-  };
+};
 
 type TagProps = {
     tag: Tags;
@@ -27,13 +27,10 @@ const Tag: React.FC<TagProps> = ({ tag }) => {
         'default': 'bg-black',  // default color if no match is found
     };
 
-    if (!tag.color || typeof tag.color !== 'string') {
-        return null;
-    }
     const colorClass = colorClasses[tag.color] || colorClasses['default'];
 
     return (
-        <div className={`flex flex-row items-center justify-center space-x-2 p-2 h-5 rounded-xl ${colorClass}`}>
+        <div className={`flex flex-row items-center justify-center space-x-2 p-2 h-5 rounded-xl ${colorClass ? colorClass : ''}`}>
             <div className={`text-sm font-semibold text-white`}>{tag.name}</div>
         </div>
     );
