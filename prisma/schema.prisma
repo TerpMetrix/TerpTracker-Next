@@ -49,6 +49,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -57,6 +58,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -114,11 +117,15 @@ model Strain {
   batchDate   DateTime @default(now())
   productType String // flower or concentrate
   THC         Float    @default(0)
+  image  String   @default("")
 
   // relations
   reviews    Review[]
   producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
   producerId Int
+  tags       TagOnStrain[]
+
+  @@index([producerId])
 }
 
 model Review {
@@ -135,4 +142,31 @@ model Review {
 
   profileId String
   Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([strainId])
+  @@index([profileId])
+}
+
+model TerpTag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  lean Float @default(0)
+  color String @default("000000")
+
+  // relations
+  strains TagOnStrain[]
+}
+
+model TagOnStrain {
+  strain       Strain     @relation(fields: [strainId], references: [id])
+  strainId     Int // relation scalar field (used in the `@relation` attribute above)
+  tag   TerpTag @relation(fields: [tagId], references: [id])
+  tagId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String 
+  weight Float @default(0)
+
+  @@id([strainId, tagId])
+  @@index([strainId])
+  @@index([tagId])
 }

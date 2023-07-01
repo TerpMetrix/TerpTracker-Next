@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
 import Head from "next/head";
+import Tag from "@/components/tag";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -16,10 +17,24 @@ type Producer = {
   website: string;
   strains: Strain[];
 };
-type Strain = {
+
+export type Strain = {
   id: number;
   name: string;
   batchDate: string;
+  THC: number;
+  productType: string;
+  producerId: number;
+  producerName: string;
+  tags: Tags[];
+};
+
+export type Tags = {
+  weight: number;
+  color: string;
+  lean: number;
+  name: string;
+  id: number;
 };
 
 // The main producer component exported in this file
@@ -29,12 +44,11 @@ export default function Producer({ producer }: ProducerProps) {
       <Head>
         <title>{producer.name} | TerpTracker</title>
       </Head>
-      <div className="mb-10 flex flex-col items-center">
+      <div className="mb-4 flex flex-col items-center">
         <Hero
           title={producer.name}
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
-          tag="#strains"
         />
         <div className="flex w-full justify-center">
           <ul
@@ -53,19 +67,26 @@ export default function Producer({ producer }: ProducerProps) {
 
 function StrainItem({ strain }: { strain: Strain }) {
   return (
+    <>
     <Link href={"/strain/" + String(strain.id)}>
       <div className="card w-96 bg-neutral text-neutral-content">
         <div className="card-body">
           <h2 className="card-title">{strain.name}</h2>
           <div className="flex">
-            <div className="badge badge-warning">Dank</div>
-            <div className="badge badge-success ml-2">Gassy</div>
+
+          <div className="flex flex-row gap-4 my-2">
+          {strain.tags.map((tag) => {
+            return <Tag tag={tag} key={tag.id} />;
+          })}
+          </div>
+
           </div>
           <div className="text-gray-40 mb-3">{strain.batchDate}</div>
-          <button className="btn">Available Dispensaries</button>
+          <button className="btn w-20 bg-green-500 text-white border-0 hover:bg-green-600">10 💬</button>
         </div>
       </div>
     </Link>
+    </>
   );
 }
 
@@ -80,7 +101,34 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
       id: Number(context.params?.id) || -1,
     },
     include: {
-      strains: true,
+      strains: {
+        select: {
+          id: true,
+          name: true,
+          batchDate: true,
+          THC: true,
+          productType: true,
+          producerId: true,
+          producer: {
+            select: {
+              name: true,
+            },
+          },
+          tags: {
+            select: {
+              weight: true,
+              tag: {
+                select: {
+                  id: true,
+                  color: true,
+                  lean: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        }
+      },
     },
   });
 
@@ -99,6 +147,17 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           id: strain.id,
           name: strain.name,
           batchDate: strain.batchDate.toDateString(),
+          THC: strain.THC,
+          productType: strain.productType,
+          producerId: strain.producerId,
+          producerName: strain.producer.name,
+          tags: strain.tags.map((tag) => ({
+            weight: tag.weight,
+            id: tag.tag.id,
+            color: tag.tag.color,
+            lean: tag.tag.lean,
+            name: tag.tag.name,
+          })),
         })),
       },
     },

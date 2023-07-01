@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
+import Tag from "@/components/tag";
 
 export type Strain = {
   id: number;
@@ -12,7 +13,17 @@ export type Strain = {
   THC: number;
   productType: string;
   producerId: number;
+  producerName: string;
   reviews: Review[];
+  tags: Tags[];
+};
+
+export type Tags = {
+  id: number;
+  weight: number;
+  color: string;
+  lean: number;
+  name: string;
 };
 
 export type Review = {
@@ -51,12 +62,20 @@ export default function Strain({ strain }: StrainProps) {
             <p className="badge">{strain.batchDate}</p>
             <p className="badge badge-primary">{strain.productType}</p>
           </div>
+
+          <div className="flex flex-row items-center justify-center gap-4 my-2">
+          {strain.tags.map((tag) => {
+            return <Tag tag={tag} key={tag.id}/>;
+          })}
+          </div>
+
           <Link
             className="btn-outline btn"
             href={producerLink(strain.producerId)}
           >
-            {strain.producerId} <ArrowUpRight /> {/*need to make this link to prod name */}
+            {strain.producerName} <ArrowUpRight /> {/*need to make this link to prod name */}
           </Link>
+
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -137,6 +156,11 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
       THC: true,
       productType: true,
       producerId: true,
+      producer: {
+        select: {
+          name: true,
+        },
+      },
       reviews: {
         select: {
           id: true,
@@ -148,6 +172,19 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
             select: {
               profileName: true,
             },
+          },
+        },
+      },
+      tags: {
+        select: {
+          weight: true,
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              lean: true,
+              color: true,
+            }
           },
         },
       },
@@ -167,6 +204,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         THC: strain.THC,
         productType: strain.productType,
         producerId: strain.producerId,
+        producerName: strain.producer?.name,
         reviews: strain.reviews.map((review) => ({
           id: review.id,
           rating: review.rating,
@@ -174,6 +212,13 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           profileId: review.profileId,
           profileName: review.Profile?.profileName,
           createdAt: review.createdAt.toDateString(),
+        })),
+        tags: strain.tags.map((tag) => ({
+          weight: tag.weight,
+          id: tag.tag.id,
+          name: tag.tag.name,
+          lean: tag.tag.lean,
+          color: tag.tag.color,
         })),
       },
     },
