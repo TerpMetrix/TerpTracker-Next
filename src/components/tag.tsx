@@ -1,11 +1,16 @@
 import React from 'react';
-import { Tags } from '@/pages/strain/[id]';
+
+type Tags = {
+    id: number;
+    weight: number;
+    color: string;
+    lean: number;
+    name: string;
+  };
 
 type TagProps = {
     tag: Tags;
 };
-
-
 
 const Tag: React.FC<TagProps> = ({ tag }) => {
 
@@ -22,7 +27,9 @@ const Tag: React.FC<TagProps> = ({ tag }) => {
         'default': 'bg-black',  // default color if no match is found
     };
 
-
+    if (!tag.color || typeof tag.color !== 'string') {
+        return null;
+    }
     const colorClass = colorClasses[tag.color] || colorClasses['default'];
 
     return (

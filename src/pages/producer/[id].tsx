@@ -34,6 +34,7 @@ export type Tags = {
   color: string;
   lean: number;
   name: string;
+  id: number;
 };
 
 // The main producer component exported in this file
@@ -48,7 +49,6 @@ export default function Producer({ producer }: ProducerProps) {
           title={producer.name}
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
-          tag="#strains"
         />
         <div className="flex w-full justify-center">
           <ul
@@ -76,7 +76,7 @@ function StrainItem({ strain }: { strain: Strain }) {
 
           <div className="flex flex-row gap-4 my-2">
           {strain.tags.map((tag) => {
-            return <Tag tag={tag} key={tag.name} />;
+            return <Tag tag={tag} key={tag.id} />;
           })}
           </div>
 
@@ -119,6 +119,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
               weight: true,
               tag: {
                 select: {
+                  id: true,
                   color: true,
                   lean: true,
                   name: true,
@@ -152,6 +153,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           producerName: strain.producer.name,
           tags: strain.tags.map((tag) => ({
             weight: tag.weight,
+            id: tag.tag.id,
             color: tag.tag.color,
             lean: tag.tag.lean,
             name: tag.tag.name,

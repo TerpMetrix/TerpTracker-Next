@@ -5,7 +5,6 @@ import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
-import { TerpTag, TagOnStrain } from "@prisma/client";
 
 export type Strain = {
   id: number;
@@ -20,6 +19,7 @@ export type Strain = {
 };
 
 export type Tags = {
+  id: number;
   weight: number;
   color: string;
   lean: number;
@@ -65,7 +65,7 @@ export default function Strain({ strain }: StrainProps) {
 
           <div className="flex flex-row items-center justify-center gap-4 my-2">
           {strain.tags.map((tag) => {
-            return <Tag tag={tag} />;
+            return <Tag tag={tag} key={tag.id}/>;
           })}
           </div>
 
@@ -180,6 +180,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           weight: true,
           tag: {
             select: {
+              id: true,
               name: true,
               lean: true,
               color: true,
@@ -214,6 +215,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         })),
         tags: strain.tags.map((tag) => ({
           weight: tag.weight,
+          id: tag.tag.id,
           name: tag.tag.name,
           lean: tag.tag.lean,
           color: tag.tag.color,

@@ -18,6 +18,7 @@ export type Strain = {
 };
 
 export type Tags = {
+  id: number;
   weight: number;
   color: string;
   lean: number;
@@ -84,7 +85,7 @@ function StrainItem({ strain }: { strain: Strain }) {
 
         <div className="flex flex-row gap-4 my-2">
           {strain.tags.map((tag) => {
-            return <Tag tag={tag} key={tag.name}/>;
+            return <Tag tag={tag} key={tag.id}/>;
           })}
         </div>
 
@@ -108,6 +109,7 @@ export const getServerSideProps: GetServerSideProps<
               weight: true,
               tag: {
                 select: {
+                  id: true,
                   name: true,
                   color: true,
                   lean: true,
@@ -132,6 +134,7 @@ export const getServerSideProps: GetServerSideProps<
           image: strain.image,
           tags: strain.tags.map((tag) => ({
             weight: tag.weight,
+            id: tag.tag.id,
             color: tag.tag.color,
             lean: tag.tag.lean,
             name: tag.tag.name,

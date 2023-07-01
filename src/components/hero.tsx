@@ -1,13 +1,11 @@
-import Link from "next/link";
 
 export type HeroProps = {
   title: string;
   description: string;
   link: string;
-  tag: string;
 };
 
-export default function Hero({ title, description, tag }: HeroProps) {
+export default function Hero({ title, description }: HeroProps) {
   return (
     <div className="bg-base-20 my-10">
       <div className="text-center">
