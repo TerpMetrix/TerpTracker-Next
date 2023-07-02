@@ -84,7 +84,8 @@ export const authOptions: NextAuthOptions = {
         })
         .catch((error) => {
           console.log(
-            `error creating profile for user ${message.user.id}: ${error}`
+            "error creating profile for user ${message.user.id}: ",
+            error
           );
         });
     },
