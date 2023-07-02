@@ -61,10 +61,32 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+
+  // This function only executes once when user signs in for the first time.
+  // Next auth creates a User model. But we have to manually create our custom Profile model.
+  // This is where we do that.
   events: {
     createUser: (message) => {
-      // TODO: create user Profile in the database
-      console.log("createUser: ", message);
+      prisma.profile
+        .create({
+          data: {
+            user: {
+              connect: {
+                id: message.user.id,
+              },
+            },
+          },
+        })
+        .then((profile) => {
+          console.log(
+            `profile ${profile.id} successfully created for user ${message.user.id}`
+          );
+        })
+        .catch((error) => {
+          console.log(
+            `error creating profile for user ${message.user.id}: ${error}`
+          );
+        });
     },
   },
 };
