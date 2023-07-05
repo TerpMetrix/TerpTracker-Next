@@ -5,6 +5,7 @@ import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
+import BackButton from "@/components/BackButton";
 
 export type Strain = {
   id: number;
@@ -49,6 +50,7 @@ export default function Strain({ strain }: StrainProps) {
       <Head>
         <title>{strain.name} | TerpTracker</title>
       </Head>
+      <BackButton />
       <div className="mb-10 min-h-screen">
         <div className="flex h-96 flex-col items-center justify-center gap-10">
           <div className="flex flex-col items-center">
@@ -64,9 +66,9 @@ export default function Strain({ strain }: StrainProps) {
           </div>
 
           <div className="flex flex-row items-center justify-center gap-4 my-2">
-          {strain.tags.map((tag) => {
-            return <Tag tag={tag} key={tag.id}/>;
-          })}
+            {strain.tags.map((tag) => {
+              return <Tag tag={tag} key={tag.id} />;
+            })}
           </div>
 
           <Link

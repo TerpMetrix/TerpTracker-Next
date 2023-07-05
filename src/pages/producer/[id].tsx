@@ -4,6 +4,7 @@ import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
+import BackButton from "@/components/BackButton";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -44,6 +45,7 @@ export default function Producer({ producer }: ProducerProps) {
       <Head>
         <title>{producer.name} | TerpTracker</title>
       </Head>
+      <BackButton />
       <div className="mb-4 flex flex-col items-center">
         <Hero
           title={producer.name}
@@ -68,24 +70,24 @@ export default function Producer({ producer }: ProducerProps) {
 function StrainItem({ strain }: { strain: Strain }) {
   return (
     <>
-    <Link href={"/strain/" + String(strain.id)}>
-      <div className="card w-96 bg-neutral text-neutral-content">
-        <div className="card-body">
-          <h2 className="card-title">{strain.name}</h2>
-          <div className="flex">
+      <Link href={"/strain/" + String(strain.id)}>
+        <div className="card w-96 bg-neutral text-neutral-content">
+          <div className="card-body">
+            <h2 className="card-title">{strain.name}</h2>
+            <div className="flex">
 
-          <div className="flex flex-row gap-4 my-2">
-          {strain.tags.map((tag) => {
-            return <Tag tag={tag} key={tag.id} />;
-          })}
-          </div>
+              <div className="flex flex-row gap-4 my-2">
+                {strain.tags.map((tag) => {
+                  return <Tag tag={tag} key={tag.id} />;
+                })}
+              </div>
 
+            </div>
+            <div className="text-gray-40 mb-3">{strain.batchDate}</div>
+            <button className="btn w-20 bg-green-500 text-white border-0 hover:bg-green-600">10 💬</button>
           </div>
-          <div className="text-gray-40 mb-3">{strain.batchDate}</div>
-          <button className="btn w-20 bg-green-500 text-white border-0 hover:bg-green-600">10 💬</button>
         </div>
-      </div>
-    </Link>
+      </Link>
     </>
   );
 }

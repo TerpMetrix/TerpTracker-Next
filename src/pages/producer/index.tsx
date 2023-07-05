@@ -3,6 +3,7 @@ import { prisma } from "@/server/db";
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
+import BackButton from "@/components/BackButton";
 
 type Producer = {
   id: number;
@@ -24,6 +25,7 @@ export default function Producers({ producers }: ProducersProps) {
       <Head>
         <title>Producers | Terptracker</title>
       </Head>
+      <BackButton />
       <div className="flex flex-col items-center">
         <div className="w-screen">
           <div className="flex pt-10 flex-col items-center justify-center">
