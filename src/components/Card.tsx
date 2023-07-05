@@ -3,6 +3,7 @@ import React from 'react';
 import type { Strain, Producer } from '../pages/index'; // Import the Strain type from the strains page
 import Image from 'next/image';
 import Tag from '@/components/tag';
+import Link from 'next/link';
 
 type CardProps = {
     data: Strain | Producer;
@@ -30,6 +31,11 @@ const Card: React.FC<CardProps> = ({ data }) => {
                     </div>
                     <p className="text-gray-500">{Math.floor(data.THC * 100)}% THC</p>
                 </div>
+                <div className="absolute bottom-5 right-5">
+                    <Link href={`/strain/${data.id}`}>
+                        <button className="btn btn-primary text-xl">💬</button>
+                    </Link>
+                </div>
             </div>
         );
     } else if ('bannerImage' in data) {
@@ -46,7 +52,11 @@ const Card: React.FC<CardProps> = ({ data }) => {
                 <div className="flex flex-col justify-between px-4 py-2">
                     <p className="text-2xl mb-2 font-medium">{data.name}</p>
                     <p className="text-gray-500">{data.location}</p>
-                    {/* ...render other properties of Producer */}
+                </div>
+                <div className="absolute bottom-5 right-5">
+                    <Link href={`/strain/${data.id}`}>
+                        <button className="btn btn-primary text-md uppercase">See drops</button>
+                    </Link>
                 </div>
             </div>
         );
