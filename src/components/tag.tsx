@@ -2,7 +2,6 @@ import React from 'react';
 
 type Tags = {
     id: number;
-    weight: number;
     color: string;
     lean: number;
     name: string;
