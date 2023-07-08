@@ -54,7 +54,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
                     <p className="text-gray-500">{data.location}</p>
                 </div>
                 <div className="absolute bottom-5 right-5">
-                    <Link href={`/strain/${data.id}`}>
+                    <Link href={`/producer/${data.id}`}>
                         <button className="btn btn-primary text-md uppercase">See drops</button>
                     </Link>
                 </div>
