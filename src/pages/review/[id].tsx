@@ -1,28 +1,27 @@
 import type { GetServerSideProps } from "next";
-import { prisma } from "@/server/database/db";
 import Link from "next/link";
+import { getReviewById } from "@/server/database/reviews";
+import { Review } from "@/server/database/types";
 
 type ReviewProps = {
-  review: {
-    id: number;
-    comment: string;
-    rating: number;
-    profileId: string;
-    strainId: number;
-  };
-  notFound?: boolean;
+  review: Review | null;
 };
 
 // Main component
 export default function Review({ review }: ReviewProps) {
+  if (review === null) {
+    return <div>Review not found</div>;
+  }
+
   return (
     <div>
       <p>Review id: {review.id}</p>
       <p>{review.comment}</p>
-      <p>{review.profileId}</p>
+      <p>{review.profileName}</p>
       <Link href={"/strain/" + String(review.strainId)}>
-        Strain id: {review.strainId}
+        {review.strainName}
       </Link>
+      <p>{review.createdAt}</p>
     </div>
   );
 }
@@ -31,15 +30,13 @@ export default function Review({ review }: ReviewProps) {
 export const getServerSideProps: GetServerSideProps<ReviewProps> = async (
   context
 ) => {
-  const review = await prisma.review.findUnique({
-    where: {
-      id: Number(context.params?.id) || -1,
-    },
-  });
+  const review = await getReviewById(Number(context.params?.id));
 
   if (!review) {
     return {
-      notFound: true,
+      props: {
+        review: null,
+      },
     };
   }
 
@@ -47,10 +44,13 @@ export const getServerSideProps: GetServerSideProps<ReviewProps> = async (
     props: {
       review: {
         id: review.id,
-        comment: review.comment,
         rating: review.rating,
+        comment: review.comment,
         profileId: review.profileId,
+        profileName: review.Profile?.profileName ?? "",
         strainId: review.strainId,
+        strainName: review.strain.name,
+        createdAt: review.createdAt.toISOString(),
       },
     },
   };

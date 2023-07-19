@@ -39,7 +39,10 @@ export type Review = {
   rating: number;
   comment: string;
   profileId: string;
-  userName?: string;
+
+  // optional relation fields
   createdAt?: string;
-  profileName: string | null;
+  profileName?: string;
+  strainId?: number;
+  strainName?: string;
 };
