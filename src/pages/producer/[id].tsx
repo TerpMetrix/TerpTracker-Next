@@ -5,38 +5,33 @@ import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
+import { Producer, Strain } from "@/server/database/types";
+import { getProducerById } from "@/server/database/producers";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
   producer: Producer;
   notFound?: boolean;
 };
-type Producer = {
-  id: number;
-  name: string;
-  location: string;
-  website: string;
-  strains: Strain[];
-};
 
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  tags: Tags[];
-};
+// export type Strain = {
+//   id: number;
+//   name: string;
+//   batchDate: string;
+//   THC: number;
+//   productType: string;
+//   producerId: number;
+//   producerName: string;
+//   tags: Tags[];
+// };
 
-export type Tags = {
-  weight: number;
-  color: string;
-  lean: number;
-  name: string;
-  id: number;
-};
+// export type Tags = {
+//   weight: number;
+//   color: string;
+//   lean: number;
+//   name: string;
+//   id: number;
+// };
 
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
@@ -76,7 +71,7 @@ function StrainItem({ strain }: { strain: Strain }) {
             <h2 className="card-title">{strain.name}</h2>
             <div className="flex">
               <div className="my-2 flex flex-row gap-4">
-                {strain.tags.map((tag) => {
+                {strain.tags?.map((tag) => {
                   return <Tag tag={tag} key={tag.id} />;
                 })}
               </div>
@@ -98,41 +93,7 @@ function StrainItem({ strain }: { strain: Strain }) {
 export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   context
 ) => {
-  const producer = await prisma.producer.findUnique({
-    where: {
-      id: Number(context.params?.id) || -1,
-    },
-    include: {
-      strains: {
-        select: {
-          id: true,
-          name: true,
-          batchDate: true,
-          THC: true,
-          productType: true,
-          producerId: true,
-          producer: {
-            select: {
-              name: true,
-            },
-          },
-          tags: {
-            select: {
-              weight: true,
-              tag: {
-                select: {
-                  id: true,
-                  color: true,
-                  lean: true,
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
+  const producer = await getProducerById(Number(context.params?.id));
 
   if (!producer) {
     return { notFound: true };
@@ -142,10 +103,12 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     props: {
       producer: {
         id: producer.id,
+        bannerImage: producer.bannerImage,
         location: producer.location,
         name: producer.name,
         website: producer.website,
         strains: producer.strains.map((strain) => ({
+          image: strain.image,
           id: strain.id,
           name: strain.name,
           batchDate: strain.batchDate.toDateString(),
