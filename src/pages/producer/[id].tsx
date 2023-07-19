@@ -14,25 +14,6 @@ export type ProducerProps = {
   notFound?: boolean;
 };
 
-// export type Strain = {
-//   id: number;
-//   name: string;
-//   batchDate: string;
-//   THC: number;
-//   productType: string;
-//   producerId: number;
-//   producerName: string;
-//   tags: Tags[];
-// };
-
-// export type Tags = {
-//   weight: number;
-//   color: string;
-//   lean: number;
-//   name: string;
-//   id: number;
-// };
-
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
   return (
@@ -115,7 +96,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           THC: strain.THC,
           productType: strain.productType,
           producerId: strain.producerId,
-          producerName: strain.producer.name,
+          producerName: producer.name,
           tags: strain.tags.map((tag) => ({
             weight: tag.weight,
             id: tag.tag.id,

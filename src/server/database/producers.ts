@@ -7,30 +7,10 @@ export async function getProducerById(id: number) {
     },
     include: {
       strains: {
-        select: {
-          image: true,
-          id: true,
-          name: true,
-          batchDate: true,
-          THC: true,
-          productType: true,
-          producerId: true,
-          producer: {
-            select: {
-              name: true,
-            },
-          },
+        include: {
           tags: {
-            select: {
-              weight: true,
-              tag: {
-                select: {
-                  id: true,
-                  color: true,
-                  lean: true,
-                  name: true,
-                },
-              },
+            include: {
+              tag: true,
             },
           },
         },
