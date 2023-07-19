@@ -13,7 +13,7 @@ import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "@/server/auth";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 
 /**
  * 1. CONTEXT

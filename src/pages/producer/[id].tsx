@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
@@ -75,16 +75,16 @@ function StrainItem({ strain }: { strain: Strain }) {
           <div className="card-body">
             <h2 className="card-title">{strain.name}</h2>
             <div className="flex">
-
-              <div className="flex flex-row gap-4 my-2">
+              <div className="my-2 flex flex-row gap-4">
                 {strain.tags.map((tag) => {
                   return <Tag tag={tag} key={tag.id} />;
                 })}
               </div>
-
             </div>
             <div className="text-gray-40 mb-3">{strain.batchDate}</div>
-            <button className="btn w-20 bg-green-500 text-white border-0 hover:bg-green-600">10 💬</button>
+            <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
+              10 💬
+            </button>
           </div>
         </div>
       </Link>
@@ -129,7 +129,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
               },
             },
           },
-        }
+        },
       },
     },
   });

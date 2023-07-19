@@ -1,5 +1,5 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
@@ -65,7 +65,7 @@ export default function Strain({ strain }: StrainProps) {
             <p className="badge badge-primary">{strain.productType}</p>
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-4 my-2">
+          <div className="my-2 flex flex-row items-center justify-center gap-4">
             {strain.tags.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
@@ -75,9 +75,9 @@ export default function Strain({ strain }: StrainProps) {
             className="btn-outline btn"
             href={producerLink(strain.producerId)}
           >
-            {strain.producerName} <ArrowUpRight /> {/*need to make this link to prod name */}
+            {strain.producerName} <ArrowUpRight />{" "}
+            {/*need to make this link to prod name */}
           </Link>
-
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -186,7 +186,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
               name: true,
               lean: true,
               color: true,
-            }
+            },
           },
         },
       },

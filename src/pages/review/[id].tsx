@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import Link from "next/link";
 
 type ReviewProps = {

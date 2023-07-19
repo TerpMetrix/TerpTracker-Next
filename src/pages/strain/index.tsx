@@ -1,5 +1,5 @@
 import { type GetServerSideProps } from "next";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import Image from "next/image";
@@ -41,13 +41,12 @@ export default function Strains({ strains }: StrainsProps) {
       <BackButton />
       <div className="flex flex-col items-center">
         <div className="w-screen md:w-2/3">
-          <div className="flex py-8 flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center py-8">
             <h1 className="text-4xl">Strains</h1>
             <p className="italic text-gray-700">
               What the best producers are making.
             </p>
           </div>
-
 
           <div className="flex w-full justify-center">
             <ul
@@ -69,7 +68,7 @@ function StrainItem({ strain }: { strain: Strain }) {
   return (
     <>
       <Link href={`/strain/${strain.id}`}>
-        <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
+        <div className="card w-96 bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary">
           <figure>
             <Image
               className="h-48 w-full overflow-hidden object-cover object-center"
@@ -84,7 +83,7 @@ function StrainItem({ strain }: { strain: Strain }) {
           <p className="badge badge-info  mb-2">{strain.productType}</p>
           <p className="text-gray-500">{strain.batchDate}</p>
 
-          <div className="flex flex-row gap-4 my-2">
+          <div className="my-2 flex flex-row gap-4">
             {strain.tags.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
@@ -101,26 +100,24 @@ export const getServerSideProps: GetServerSideProps<
   StrainsProps
 > = async () => {
   try {
-    const strains = await prisma.strain.findMany(
-      {
-        include: {
-          producer: true,
-          tags: {
-            select: {
-              weight: true,
-              tag: {
-                select: {
-                  id: true,
-                  name: true,
-                  color: true,
-                  lean: true,
-                },
+    const strains = await prisma.strain.findMany({
+      include: {
+        producer: true,
+        tags: {
+          select: {
+            weight: true,
+            tag: {
+              select: {
+                id: true,
+                name: true,
+                color: true,
+                lean: true,
               },
             },
-          }
+          },
         },
       },
-    );
+    });
 
     return {
       props: {

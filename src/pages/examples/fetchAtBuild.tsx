@@ -1,4 +1,4 @@
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import type { GetStaticProps } from "next";
 
 // The props of this component.
