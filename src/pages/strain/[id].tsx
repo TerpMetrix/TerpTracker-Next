@@ -6,36 +6,8 @@ import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  reviews: Review[];
-  tags: Tags[];
-};
-
-export type Tags = {
-  id: number;
-  weight: number;
-  color: string;
-  lean: number;
-  name: string;
-};
-
-export type Review = {
-  id: number;
-  rating: number;
-  comment: string;
-  profileId: string;
-  userName?: string;
-  createdAt?: string;
-  profileName: string | null;
-};
+import { Review, Strain } from "@/server/database/types";
+import { getStrainById } from "@/server/database/strains";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -147,51 +119,10 @@ function producerLink(id: number) {
 export const getServerSideProps: GetServerSideProps<StrainProps> = async (
   context: GetServerSidePropsContext
 ) => {
-  const strain = await prisma.strain.findUnique({
-    where: {
-      id: Number(context.params?.id) || -1,
-    },
-    select: {
-      id: true,
-      name: true,
-      batchDate: true,
-      THC: true,
-      productType: true,
-      producerId: true,
-      producer: {
-        select: {
-          name: true,
-        },
-      },
-      reviews: {
-        select: {
-          id: true,
-          rating: true,
-          comment: true,
-          createdAt: true,
-          profileId: true,
-          Profile: {
-            select: {
-              profileName: true,
-            },
-          },
-        },
-      },
-      tags: {
-        select: {
-          weight: true,
-          tag: {
-            select: {
-              id: true,
-              name: true,
-              lean: true,
-              color: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const id = Number(context.params?.id) || -1;
+
+  const strain = await getStrainById(id);
+  console.log(strain);
 
   if (!strain) {
     return { notFound: true };
@@ -207,7 +138,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         productType: strain.productType,
         producerId: strain.producerId,
         producerName: strain.producer?.name,
-        reviews: strain.reviews.map((review) => ({
+        reviews: strain.reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
@@ -217,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         })),
         tags: strain.tags.map((tag) => ({
           weight: tag.weight,
-          id: tag.tag.id,
+          id: tag.tagId,
           name: tag.tag.name,
           lean: tag.tag.lean,
           color: tag.tag.color,

@@ -1,30 +1,11 @@
 import { type GetServerSideProps } from "next";
-import { prisma } from "@/server/database/db";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import Image from "next/image";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
-
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  image: string;
-  tags: Tags[];
-};
-
-export type Tags = {
-  id: number;
-  weight: number;
-  color: string;
-  lean: number;
-  name: string;
-};
+import { Strain } from "@/server/database/types";
+import { getAllStrainsWithRelations } from "@/server/database/strains";
 
 type StrainsProps = {
   strains: Strain[];
@@ -84,7 +65,7 @@ function StrainItem({ strain }: { strain: Strain }) {
           <p className="text-gray-500">{strain.batchDate}</p>
 
           <div className="my-2 flex flex-row gap-4">
-            {strain.tags.map((tag) => {
+            {strain.tags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -100,24 +81,7 @@ export const getServerSideProps: GetServerSideProps<
   StrainsProps
 > = async () => {
   try {
-    const strains = await prisma.strain.findMany({
-      include: {
-        producer: true,
-        tags: {
-          select: {
-            weight: true,
-            tag: {
-              select: {
-                id: true,
-                name: true,
-                color: true,
-                lean: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const strains = await getAllStrainsWithRelations();
 
     return {
       props: {
