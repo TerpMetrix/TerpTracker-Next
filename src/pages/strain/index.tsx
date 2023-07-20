@@ -4,7 +4,7 @@ import Tag from "@/components/tag";
 import Image from "next/image";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
-import { Strain } from "@/server/database/types";
+import type { Strain } from "@/server/database/types";
 import { getAllStrainsWithRelations } from "@/server/database/strains";
 
 type StrainsProps = {

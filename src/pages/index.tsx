@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { Search } from "lucide-react";
 import Carousel from "@/components/Carousel";
-import { prisma } from "@/server/database/db";
 import type { GetServerSideProps } from "next";
 import { getFeaturedProducers } from "@/server/database/producers";
 import { getFeaturedStrains } from "@/server/database/strains";

@@ -4,7 +4,7 @@ import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import { Producer, Strain } from "@/server/database/types";
+import type { Producer, Strain } from "@/server/database/types";
 import { getProducerById } from "@/server/database/producers";
 
 // The props this component receives from getServerSideProps

@@ -1,5 +1,5 @@
 import { prisma } from "@/server/database/db";
-import { Prisma, Producer } from "@prisma/client";
+import type { Prisma, Producer } from "@prisma/client";
 
 type ProducerWithRelations = Prisma.ProducerGetPayload<{
   include: {

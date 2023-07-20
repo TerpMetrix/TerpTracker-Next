@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { getReviewById } from "@/server/database/reviews";
-import { Review } from "@/server/database/types";
+import type { Review } from "@/server/database/types";
 
 type ReviewProps = {
   review: Review | null;

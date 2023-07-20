@@ -1,5 +1,5 @@
 import { prisma } from "@/server/database/db";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 /**
  * The StrainWithRelations type represents a strain with its related data, including reviews, tags, and producer.

@@ -1,12 +1,11 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { prisma } from "@/server/database/db";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import { Review, Strain } from "@/server/database/types";
+import type { Review, Strain } from "@/server/database/types";
 import { getStrainById } from "@/server/database/strains";
 
 // The props this component receives from getServerSideProps
