@@ -38,7 +38,7 @@ export default function Strain({ strain }: StrainProps) {
           </div>
 
           <div className="my-2 flex flex-row items-center justify-center gap-4">
-            {strain.tags.map((tag) => {
+            {strain.tags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -54,7 +54,7 @@ export default function Strain({ strain }: StrainProps) {
 
         <div className="flex flex-col items-center justify-center">
           <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-            {strain.reviews.map((review) => {
+            {strain.reviews?.map((review) => {
               return (
                 <li key={review.id}>
                   <ReviewCard review={review} />
@@ -135,15 +135,16 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         name: strain.name,
         batchDate: strain.batchDate.toDateString(),
         THC: strain.THC,
+        image: strain.image,
         productType: strain.productType,
         producerId: strain.producerId,
-        producerName: strain.producer?.name,
+        producerName: strain.producer?.name || "",
         reviews: strain.reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
           profileId: review.profileId,
-          profileName: review.Profile?.profileName,
+          profileName: review.Profile?.profileName || "",
           createdAt: review.createdAt.toDateString(),
         })),
         tags: strain.tags.map((tag) => ({

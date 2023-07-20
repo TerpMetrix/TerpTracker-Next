@@ -1,6 +1,5 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { prisma } from "@/server/database/db";
 import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";

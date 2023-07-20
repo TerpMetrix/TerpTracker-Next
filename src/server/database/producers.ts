@@ -1,12 +1,28 @@
 import { prisma } from "@/server/database/db";
-import { Producer } from "@prisma/client";
+import { Prisma, Producer } from "@prisma/client";
+
+type ProducerWithRelations = Prisma.ProducerGetPayload<{
+  include: {
+    strains: {
+      include: {
+        tags: {
+          include: {
+            tag: true;
+          };
+        };
+      };
+    };
+  };
+}>;
 
 /**
- * Retrieves a producer from the database by ID, including all associated strains and tags.
+ * Retrieves a producer from the database by its ID, along with its related strains and tags.
  * @param {number} id - The ID of the producer to retrieve.
- * @returns {Promise<Producer | null>} A promise that resolves to the producer object, or null if not found.
+ * @returns {Promise<ProducerWithRelations | null>} A promise that resolves to the producer object with its related strains and tags, or null if no producer was found with the given ID.
  */
-export async function getProducerById(id: number): Promise<Producer | null> {
+export async function getProducerById(
+  id: number
+): Promise<ProducerWithRelations | null> {
   const producer = await prisma.producer.findUnique({
     where: {
       id: id,
