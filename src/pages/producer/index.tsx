@@ -1,5 +1,5 @@
 import { type GetServerSideProps } from "next";
-import { prisma } from "@/server/db";
+import { prisma } from "@/server/database/db";
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
@@ -28,7 +28,7 @@ export default function Producers({ producers }: ProducersProps) {
       <BackButton />
       <div className="flex flex-col items-center">
         <div className="w-screen">
-          <div className="flex pt-10 flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center pt-10">
             <h1 className="text-4xl">Producers</h1>
             <p className="italic text-gray-700">
               The most popular producers in the state.
@@ -48,7 +48,7 @@ export default function Producers({ producers }: ProducersProps) {
 function Producer({ producer }: { producer: Producer }) {
   return (
     <Link href={`/producer/${producer.id}`}>
-      <div className="card w-96 bg-base-100 transition-all hover:-translate-y-2 hover:bg-secondary shadow-lg shadow-gray-100/5">
+      <div className="card w-96 bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary">
         <figure>
           <Image
             className="h-48 w-full overflow-hidden object-cover object-center"

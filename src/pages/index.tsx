@@ -1,8 +1,9 @@
 import Head from "next/head";
 import { Search } from "lucide-react";
-import Carousel from '@/components/Carousel';
-import { prisma } from "@/server/db";
+import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
+import { getFeaturedProducers } from "@/server/database/producers";
+import { getFeaturedStrains } from "@/server/database/strains";
 
 export type Strain = {
   id: number;
@@ -42,8 +43,8 @@ export default function Home({ strains, producers }: HomeProps) {
         <title>TerpTracker</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col m-auto overflow-hidden space-y-8 w-11/12">
-        <div className="flex flex-row items-center gap-2 m-auto">
+      <main className="m-auto flex min-h-screen w-11/12 flex-col space-y-8 overflow-hidden">
+        <div className="m-auto flex flex-row items-center gap-2">
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
             <span className="bg-gradient-to-r from-red-600 via-green-600 to-blue-600 bg-clip-text px-1 tracking-tight text-transparent">
               Terp
@@ -51,7 +52,7 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="flex w-4/5 flex-row items-center gap-1 space-x-2 sm:w-1/2 mx-auto p-4">
+        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 p-4 sm:w-1/2">
           <input
             type="text"
             placeholder="Find what's next in weed..."
@@ -70,35 +71,8 @@ export default function Home({ strains, producers }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
-    const strains = await prisma.strain.findMany(
-      {
-        include: {
-          producer: {
-            select: {
-              id: true,
-              name: true,
-              bannerImage: true,
-              location: true,
-            },
-          },
-          tags: {
-            select: {
-              weight: true,
-              tag: {
-                select: {
-                  id: true,
-                  name: true,
-                  color: true,
-                  lean: true,
-                },
-              },
-            },
-          }
-        },
-      },
-    );
-
-    const producers = await prisma.producer.findMany();
+    const strains = await getFeaturedStrains();
+    const producers = await getFeaturedProducers();
 
     return {
       props: {

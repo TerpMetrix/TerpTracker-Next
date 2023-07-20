@@ -1,40 +1,13 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { prisma } from "@/server/db";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  reviews: Review[];
-  tags: Tags[];
-};
-
-export type Tags = {
-  id: number;
-  color: string;
-  lean: number;
-  name: string;
-};
-
-export type Review = {
-  id: number;
-  rating: number;
-  comment: string;
-  profileId: string;
-  userName?: string;
-  createdAt?: string;
-  profileName: string | null;
-};
+import type { Review, Strain, Tags } from "@/server/database/types";
+import {prisma} from "@/server/database/db";
+import { getStrainById } from "@/server/database/strains";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -65,8 +38,8 @@ export default function Strain({ strain, allTags }: StrainProps) {
             <p className="badge badge-primary">{strain.productType}</p>
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-4 my-2">
-            {strain.tags.map((tag) => {
+          <div className="my-2 flex flex-row items-center justify-center gap-4">
+            {strain.tags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -75,14 +48,14 @@ export default function Strain({ strain, allTags }: StrainProps) {
             className="btn-outline btn"
             href={producerLink(strain.producerId)}
           >
-            {strain.producerName} <ArrowUpRight /> {/*need to make this link to prod name */}
+            {strain.producerName} <ArrowUpRight />{" "}
+            {/*need to make this link to prod name */}
           </Link>
-
         </div>
 
         <div className="flex flex-col items-center justify-center">
           <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-            {strain.reviews.map((review) => {
+            {strain.reviews?.map((review) => {
               return (
                 <li key={review.id}>
                   <ReviewCard review={review} />
@@ -147,6 +120,8 @@ function producerLink(id: number) {
 export const getServerSideProps: GetServerSideProps<StrainProps> = async (
   context: GetServerSidePropsContext
 ) => {
+  const id = Number(context.params?.id) || -1;
+
   const allTags = await prisma.terpTag.findMany({
     select: {
       id: true,
@@ -155,51 +130,9 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
       color: true,
     },
   });
-  const strain = await prisma.strain.findUnique({
-    where: {
-      id: Number(context.params?.id) || -1,
-    },
-    select: {
-      id: true,
-      name: true,
-      batchDate: true,
-      THC: true,
-      productType: true,
-      producerId: true,
-      producer: {
-        select: {
-          name: true,
-        },
-      },
-      reviews: {
-        select: {
-          id: true,
-          rating: true,
-          comment: true,
-          createdAt: true,
-          profileId: true,
-          Profile: {
-            select: {
-              profileName: true,
-            },
-          },
-        },
-      },
-      tags: {
-        select: {
-          weight: true,
-          tag: {
-            select: {
-              id: true,
-              name: true,
-              lean: true,
-              color: true,
-            }
-          },
-        },
-      },
-    },
-  });
+
+  const strain = await getStrainById(id);
+  console.log(strain);
 
   if (!strain) {
     return { notFound: true };
@@ -216,20 +149,21 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         name: strain.name,
         batchDate: strain.batchDate.toDateString(),
         THC: strain.THC,
+        image: strain.image,
         productType: strain.productType,
         producerId: strain.producerId,
-        producerName: strain.producer?.name,
-        reviews: strain.reviews.map((review) => ({
+        producerName: strain.producer.name,
+        reviews: strain.reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
           profileId: review.profileId,
-          profileName: review.Profile?.profileName,
+          profileName: review.Profile?.profileName || "",
           createdAt: review.createdAt.toDateString(),
         })),
         tags: strain.tags.map((tag) => ({
           weight: tag.weight,
-          id: tag.tag.id,
+          id: tag.tagId,
           name: tag.tag.name,
           lean: tag.tag.lean,
           color: tag.tag.color,
