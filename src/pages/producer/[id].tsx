@@ -1,41 +1,16 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
-import { prisma } from "@/server/db";
 import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
+import type { Producer, Strain } from "@/server/database/types";
+import { getProducerById } from "@/server/database/producers";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
   producer: Producer;
   notFound?: boolean;
-};
-type Producer = {
-  id: number;
-  name: string;
-  location: string;
-  website: string;
-  strains: Strain[];
-};
-
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  tags: Tags[];
-};
-
-export type Tags = {
-  weight: number;
-  color: string;
-  lean: number;
-  name: string;
-  id: number;
 };
 
 // The main producer component exported in this file
@@ -43,7 +18,7 @@ export default function Producer({ producer }: ProducerProps) {
   return (
     <>
       <Head>
-        <title>{producer.name} | TerpTracker</title>
+        <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
       <BackButton />
       <div className="mb-4 flex flex-col items-center">
@@ -75,16 +50,16 @@ function StrainItem({ strain }: { strain: Strain }) {
           <div className="card-body">
             <h2 className="card-title">{strain.name}</h2>
             <div className="flex">
-
-              <div className="flex flex-row gap-4 my-2">
-                {strain.tags.map((tag) => {
+              <div className="my-2 flex flex-row gap-4">
+                {strain.tags?.map((tag) => {
                   return <Tag tag={tag} key={tag.id} />;
                 })}
               </div>
-
             </div>
             <div className="text-gray-40 mb-3">{strain.batchDate}</div>
-            <button className="btn w-20 bg-green-500 text-white border-0 hover:bg-green-600">10 💬</button>
+            <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
+              10 💬
+            </button>
           </div>
         </div>
       </Link>
@@ -98,41 +73,17 @@ function StrainItem({ strain }: { strain: Strain }) {
 export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   context
 ) => {
-  const producer = await prisma.producer.findUnique({
-    where: {
-      id: Number(context.params?.id) || -1,
-    },
-    include: {
-      strains: {
-        select: {
-          id: true,
-          name: true,
-          batchDate: true,
-          THC: true,
-          productType: true,
-          producerId: true,
-          producer: {
-            select: {
-              name: true,
-            },
-          },
-          tags: {
-            select: {
-              weight: true,
-              tag: {
-                select: {
-                  id: true,
-                  color: true,
-                  lean: true,
-                  name: true,
-                },
-              },
-            },
-          },
-        }
-      },
-    },
-  });
+  const id = context.params?.id;
+  if (!id) {
+    return { notFound: true };
+  }
+
+  const producerId = Number(id);
+  if (isNaN(producerId)) {
+    return { notFound: true };
+  }
+
+  const producer = await getProducerById(Number(1));
 
   if (!producer) {
     return { notFound: true };
@@ -142,17 +93,19 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     props: {
       producer: {
         id: producer.id,
+        bannerImage: producer.bannerImage,
         location: producer.location,
         name: producer.name,
         website: producer.website,
         strains: producer.strains.map((strain) => ({
+          image: strain.image,
           id: strain.id,
           name: strain.name,
           batchDate: strain.batchDate.toDateString(),
           THC: strain.THC,
           productType: strain.productType,
           producerId: strain.producerId,
-          producerName: strain.producer.name,
+          producerName: producer.name,
           tags: strain.tags.map((tag) => ({
             weight: tag.weight,
             id: tag.tag.id,
