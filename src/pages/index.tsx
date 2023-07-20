@@ -3,6 +3,8 @@ import { Search } from "lucide-react";
 import Carousel from "@/components/Carousel";
 import { prisma } from "@/server/database/db";
 import type { GetServerSideProps } from "next";
+import { getFeaturedProducers } from "@/server/database/producers";
+import { getFeaturedStrains } from "@/server/database/strains";
 
 export type Strain = {
   id: number;
@@ -70,33 +72,8 @@ export default function Home({ strains, producers }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
-    const strains = await prisma.strain.findMany({
-      include: {
-        producer: {
-          select: {
-            id: true,
-            name: true,
-            bannerImage: true,
-            location: true,
-          },
-        },
-        tags: {
-          select: {
-            weight: true,
-            tag: {
-              select: {
-                id: true,
-                name: true,
-                color: true,
-                lean: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const producers = await prisma.producer.findMany();
+    const strains = await getFeaturedStrains();
+    const producers = await getFeaturedProducers();
 
     return {
       props: {

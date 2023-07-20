@@ -4,13 +4,24 @@ import { Prisma } from "@prisma/client";
 /**
  * The StrainWithRelations type represents a strain with its related data, including reviews, tags, and producer.
  */
-type StrainWithRelations = Prisma.StrainGetPayload<{
+export type StrainWithRelations = Prisma.StrainGetPayload<{
   include: {
     reviews: {
       include: {
         Profile: true;
       };
     };
+    tags: {
+      include: {
+        tag: true;
+      };
+    };
+    producer: true;
+  };
+}>;
+
+type FeaturedStrain = Prisma.StrainGetPayload<{
+  include: {
     tags: {
       include: {
         tag: true;
@@ -70,6 +81,26 @@ export async function getAllStrainsWithRelations(): Promise<
         },
       },
       producer: true,
+    },
+  });
+  return strains;
+}
+
+/**
+ * Retrieves all featured strains, including their related producer and tags.
+ * @returns A Promise that resolves to an array of all featured strains with their related data.
+ */
+
+export async function getFeaturedStrains(): Promise<FeaturedStrain[]> {
+  const strains = await prisma.strain.findMany({
+    take: 10,
+    include: {
+      producer: true,
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
     },
   });
   return strains;
