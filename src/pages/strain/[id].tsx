@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         image: strain.image,
         productType: strain.productType,
         producerId: strain.producerId,
-        producerName: strain.producer?.name || "",
+        producerName: strain.producer.name,
         reviews: strain.reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
