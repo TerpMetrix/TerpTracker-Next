@@ -19,7 +19,7 @@ export default function Producer({ producer }: ProducerProps) {
   return (
     <>
       <Head>
-        <title>{producer.name} | TerpTracker</title>
+        <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
       <BackButton />
       <div className="mb-4 flex flex-col items-center">
@@ -74,7 +74,17 @@ function StrainItem({ strain }: { strain: Strain }) {
 export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   context
 ) => {
-  const producer = await getProducerById(Number(context.params?.id));
+  const id = context.params?.id;
+  if (!id) {
+    return { notFound: true };
+  }
+
+  const producerId = Number(id);
+  if (isNaN(producerId)) {
+    return { notFound: true };
+  }
+
+  const producer = await getProducerById(Number(1));
 
   if (!producer) {
     return { notFound: true };
