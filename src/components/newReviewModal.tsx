@@ -2,8 +2,6 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { X } from 'lucide-react'
-import { prisma } from "@/server/db";
-import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Tag from "./tag";
 
 
@@ -20,52 +18,16 @@ export type Tags = {
   name: string;
 };
 
-type TerpTagProps = {
-  tags: Tags[];
-  notFound?: boolean;
-};
-
-export const getServerSideProps: GetServerSideProps<TerpTagProps> = async (
-  context: GetServerSidePropsContext
-) => {
-
-  const tags = await prisma.terpTag.findMany({
-    select: {
-      id: true,
-      name: true,
-      lean: true,
-      color: true,
-    },
-  });
-
-  if (!tags) {
-    return { notFound: true };
-  }
-
-  return {
-    props: {
-      notFound: false,
-      tags: tags.map((tag) => ({
-        id: tag.id,
-        name: tag.name,
-        lean: tag.lean,
-        color: tag.color,
-      })),
-    },
-  };
-}
-
-
 type NewReviewModalProps = {
   strainId: number;
-  tagslist?: Tags[];
+  tagslist: Tags[];
 };
 
 export default function NewReviewModal({ strainId, tagslist }: NewReviewModalProps) {
   const { data: sessionData } = useSession();
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState("");
-  const [tags, setTags] = useState<Tags[]>([]); //should be an array of tag ids
+  const [selectedTags, setTags] = useState<Tags[]>([]); //should be an array of tag ids
 
   const mutation = api.reviews.newReview.useMutation();
 
@@ -119,19 +81,19 @@ export default function NewReviewModal({ strainId, tagslist }: NewReviewModalPro
 
             {/*TAG SELECTOR*/}
             <div className="flex flex-row items-center justify-center gap-4 my-2">
-              <select onChange={(e) => setTags([...tagslist, Number(e.target.value)])} className="select-primary select w-full max-w-xs">
+              <select onChange={(e) => setTags([...selectedTags])} className="select-primary select w-full max-w-xs">
                 {tagslist.map((tag) => {
-                  return <Tag tag={tag} key={tag.id} />;
+                  return <option key={tag.id}>{tag.name}</option>;
                 }
                 )}
               </select>
             </div>
 
             <div className="modal-action">
-              <div onClick={() => handleSubmit()} className="btn-primary btn">
-                Submit
+                <div onClick={() => handleSubmit()} className="btn-primary btn">
+                  Submit
+                </div>
               </div>
-            </div>
           </form>
         </div>
       </dialog>

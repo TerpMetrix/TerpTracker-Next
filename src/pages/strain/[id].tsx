@@ -20,7 +20,6 @@ export type Strain = {
 
 export type Tags = {
   id: number;
-  weight: number;
   color: string;
   lean: number;
   name: string;
@@ -39,11 +38,12 @@ export type Review = {
 // The props this component receives from getServerSideProps
 export type StrainProps = {
   strain: Strain;
+  allTags: Tags[];
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
-export default function Strain({ strain }: StrainProps) {
+export default function Strain({ strain, allTags }: StrainProps) {
   return (
     <>
       <Head>
@@ -64,9 +64,9 @@ export default function Strain({ strain }: StrainProps) {
           </div>
 
           <div className="flex flex-row items-center justify-center gap-4 my-2">
-          {strain.tags.map((tag) => {
-            return <Tag tag={tag} key={tag.id}/>;
-          })}
+            {strain.tags.map((tag) => {
+              return <Tag tag={tag} key={tag.id} />;
+            })}
           </div>
 
           <Link
@@ -88,7 +88,7 @@ export default function Strain({ strain }: StrainProps) {
               );
             })}
           </ul>
-          <NewReviewModal strainId={strain.id} />
+          <NewReviewModal strainId={strain.id} tagslist={allTags} />
         </div>
       </div>
     </>
@@ -145,6 +145,14 @@ function producerLink(id: number) {
 export const getServerSideProps: GetServerSideProps<StrainProps> = async (
   context: GetServerSidePropsContext
 ) => {
+  const allTags = await prisma.terpTag.findMany({
+    select: {
+      id: true,
+      name: true,
+      lean: true,
+      color: true,
+    },
+  });
   const strain = await prisma.strain.findUnique({
     where: {
       id: Number(context.params?.id) || -1,
@@ -195,6 +203,10 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
     return { notFound: true };
   }
 
+  if (!allTags) {
+    return { notFound: true };
+  }
+
   return {
     props: {
       strain: {
@@ -221,6 +233,12 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           color: tag.tag.color,
         })),
       },
+      allTags: allTags.map((tag) => ({
+        id: tag.id,
+        name: tag.name,
+        lean: tag.lean,
+        color: tag.color,
+      })),
     },
   };
 };
