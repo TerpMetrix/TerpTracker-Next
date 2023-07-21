@@ -6,7 +6,6 @@
 //////////////////////////////////////////
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -117,11 +116,11 @@ model Strain {
   batchDate   DateTime @default(now())
   productType String // flower or concentrate
   THC         Float    @default(0)
-  image  String   @default("")
+  image       String   @default("")
 
   // relations
   reviews    Review[]
-  producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
+  producer   Producer      @relation(fields: [producerId], references: [id], onDelete: Cascade)
   producerId Int
   tags       TagOnStrain[]
 
@@ -138,33 +137,39 @@ model Review {
 
   // relations
   strainId Int
-  strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
+  Strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
 
   profileId String
   Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
+  tosId       Int @unique// relation scalar field (used in the `@relation` attribute above)
+  TagOnStrain TagOnStrain @relation(fields: [tosId], references: [tosId])
+
+  @@unique([strainId, tosId])
   @@index([strainId])
   @@index([profileId])
+  @@index([tosId])
 }
 
 model TerpTag {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  lean Float @default(0)
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  lean  Float  @default(0)
   color String @default("000000")
 
   // relations
-  strains TagOnStrain[]
+  Strains TagOnStrain[]
 }
 
 model TagOnStrain {
-  strain       Strain     @relation(fields: [strainId], references: [id])
-  strainId     Int // relation scalar field (used in the `@relation` attribute above)
-  tag   TerpTag @relation(fields: [tagId], references: [id])
-  tagId Int // relation scalar field (used in the `@relation` attribute above)
+  tosId      Int      @unique @default(autoincrement())
+  strain     Strain   @relation(fields: [strainId], references: [id])
+  strainId   Int // relation scalar field (used in the `@relation` attribute above)
+  tag        TerpTag  @relation(fields: [tagId], references: [id])
+  tagId      Int // relation scalar field (used in the `@relation` attribute above)
   assignedAt DateTime @default(now())
-  assignedBy String 
-  weight Float @default(0)
+  assignedBy String
+  review     Review[]
 
   @@id([strainId, tagId])
   @@index([strainId])

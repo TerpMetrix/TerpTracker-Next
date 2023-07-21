@@ -8,6 +8,7 @@ import BackButton from "@/components/BackButton";
 import type { Review, Strain, Tags } from "@/server/database/types";
 import {prisma} from "@/server/database/db";
 import { getStrainById } from "@/server/database/strains";
+import { getAllTags } from "@/server/database/tags";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -122,14 +123,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 ) => {
   const id = Number(context.params?.id) || -1;
 
-  const allTags = await prisma.terpTag.findMany({
-    select: {
-      id: true,
-      name: true,
-      lean: true,
-      color: true,
-    },
-  });
+  const allTags = await getAllTags();
 
   const strain = await getStrainById(id);
   console.log(strain);
@@ -162,7 +156,6 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           createdAt: review.createdAt.toDateString(),
         })),
         tags: strain.tags.map((tag) => ({
-          weight: tag.weight,
           id: tag.tagId,
           name: tag.tag.name,
           lean: tag.tag.lean,

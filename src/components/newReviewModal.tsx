@@ -27,7 +27,7 @@ export default function NewReviewModal({ strainId, tagslist }: NewReviewModalPro
   const { data: sessionData } = useSession();
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState("");
-  const [selectedTags, setTags] = useState<Tags[]>([]); //should be an array of tag ids
+  const [selectedTag, setTag] = useState<Tags>(); //should be an array of tag ids
 
   const mutation = api.reviews.newReview.useMutation();
 
@@ -37,6 +37,7 @@ export default function NewReviewModal({ strainId, tagslist }: NewReviewModalPro
       comment: comment,
       strainId: strainId,
       profileId: sessionData?.user.id || "",
+      tagId: selectedTag?.id || 0,
     });
 
     console.log(res);
@@ -81,12 +82,17 @@ export default function NewReviewModal({ strainId, tagslist }: NewReviewModalPro
 
             {/*TAG SELECTOR*/}
             <div className="flex flex-row items-center justify-center gap-4 my-2">
-              <select onChange={(e) => setTags([...selectedTags])} className="select-primary select w-full max-w-xs">
+              <select onChange={(e) => setTag(tagslist.find(tag => tag.name === e.target.value))} className="select-primary select w-full max-w-xs">
                 {tagslist.map((tag) => {
                   return <option key={tag.id}>{tag.name}</option>;
                 }
                 )}
               </select>
+            </div>
+
+            {/* Selected TAG DISPLAY CHECK */}
+            <div className="flex flex-row items-center justify-center gap-4 my-2">
+              {selectedTag ? <Tag tag={selectedTag} /> : <></>}
             </div>
 
             <div className="modal-action">

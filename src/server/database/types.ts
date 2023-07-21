@@ -38,6 +38,7 @@ export type Review = {
   profileId: string;
 
   // optional relation fields
+  tag?: Tags;
   createdAt?: string;
   profileName?: string;
   strainId?: number;
