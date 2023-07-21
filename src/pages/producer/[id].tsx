@@ -83,7 +83,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     return { notFound: true };
   }
 
-  const producer = await getProducerById(Number(1));
+  const producer = await getProducerById(producerId);
 
   if (!producer) {
     return { notFound: true };
@@ -107,7 +107,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           producerId: strain.producerId,
           producerName: producer.name,
           tags: strain.tags.map((tag) => ({
-            weight: tag.weight,
+            weight: tag.tag.weight,
             id: tag.tag.id,
             color: tag.tag.color,
             lean: tag.tag.lean,

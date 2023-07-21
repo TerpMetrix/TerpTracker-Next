@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { X } from 'lucide-react'
 import Tag from "./tag";
+import type { Tags } from "@/server/database/types";
 
 
 declare global {
@@ -10,13 +11,6 @@ declare global {
     review_modal: HTMLDialogElement;
   }
 }
-
-export type Tags = {
-  id: number;
-  color: string;
-  lean: number;
-  name: string;
-};
 
 type NewReviewModalProps = {
   strainId: number;

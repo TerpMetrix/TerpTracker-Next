@@ -86,6 +86,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
           producerName: strain.producer.name,
           image: strain.image,
           tags: strain.tags.map((tag) => ({
+            weight: tag.weight,
             id: tag.tag.id,
             color: tag.tag.color,
             lean: tag.tag.lean,

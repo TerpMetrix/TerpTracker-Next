@@ -1,6 +1,5 @@
 import { prisma } from "@/server/database/db";
 import type { Prisma } from "@prisma/client";
-import { type } from "os";
 
 /**
  * The TagWithRelations type represents a tag with its related data, including strains.
@@ -17,7 +16,11 @@ export type TagWithRelations = Prisma.TerpTagGetPayload<{
  * This is useful for creating new tags and tag lists.
     */
 
-export type TagWithNoRelations = Prisma.TerpTagGetPayload<{}>;
+export type TagWithNoRelations = Prisma.TerpTagGetPayload<{
+    include: {
+        Strains: false;
+    };
+}>;
 
 // function to get all tags
 
@@ -25,4 +28,5 @@ export async function getAllTags(): Promise<TagWithNoRelations[]> {
 
     const tags = await prisma.terpTag.findMany();
     return tags;
+
 }

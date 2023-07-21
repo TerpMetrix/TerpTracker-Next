@@ -5,7 +5,7 @@
 // Prisma Configuration
 //////////////////////////////////////////
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -142,7 +142,7 @@ model Review {
   profileId String
   Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  tosId       Int @unique// relation scalar field (used in the `@relation` attribute above)
+  tosId       Int         @unique // relation scalar field (used in the `@relation` attribute above)
   TagOnStrain TagOnStrain @relation(fields: [tosId], references: [tosId])
 
   @@unique([strainId, tosId])
@@ -152,10 +152,11 @@ model Review {
 }
 
 model TerpTag {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  lean  Float  @default(0)
-  color String @default("000000")
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  lean   Float  @default(0)
+  color  String @default("000000")
+  weight Int    @default(0)
 
   // relations
   Strains TagOnStrain[]
@@ -170,6 +171,7 @@ model TagOnStrain {
   assignedAt DateTime @default(now())
   assignedBy String
   review     Review[]
+  weight     Int      @default(0)
 
   @@id([strainId, tagId])
   @@index([strainId])

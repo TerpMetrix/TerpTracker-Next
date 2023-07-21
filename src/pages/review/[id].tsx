@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps<ReviewProps> = async (
         profileId: review.profileId,
         profileName: review.Profile?.profileName ?? "",
         strainId: review.strainId,
-        strainName: review.strain.name,
+        strainName: review.Strain.name,
         createdAt: review.createdAt.toISOString(),
       },
     },
