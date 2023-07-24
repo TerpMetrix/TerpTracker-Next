@@ -21,6 +21,8 @@ export const reviewRouter = createTRPCRouter({
         //   },
         // });
 
+        console.log("input: ", input);
+
         //update strain to include new tags and create new review
         const newTagOnStrain = await ctx.prisma.strain.update({
           where: {
@@ -40,8 +42,8 @@ export const reviewRouter = createTRPCRouter({
               connect: { id: input.strainId },
             },
             Profile: {
-              connect: { userId: input.profileName },
-            }
+              connect: { profileName: input.profileName },
+            },
           },
         });
         console.log("created new review: ", newReview);
