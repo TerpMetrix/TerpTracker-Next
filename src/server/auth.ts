@@ -70,7 +70,8 @@ export const authOptions: NextAuthOptions = {
       prisma.profile
         .create({
           data: {
-            user: {
+            profileName: message.user.name,
+            User: {
               connect: {
                 id: message.user.id,
               },
