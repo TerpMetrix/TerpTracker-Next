@@ -5,14 +5,14 @@ import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import type { Review, Strain, Tags } from "@/server/database/types";
+import type { Review, Strain, TerpTag } from "@/server/database/types";
 import { getStrainById } from "@/server/database/strains";
 import { getAllTags } from "@/server/database/tags";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
   strain: Strain;
-  allTags: Tags[];
+  allTags: TerpTag[];
   notFound?: boolean;
 };
 
@@ -39,7 +39,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
           </div>
 
           <div className="my-2 flex flex-row items-center justify-center gap-4">
-            {strain.tags?.map((tag) => {
+            {strain.TerpTags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -55,7 +55,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
 
         <div className="flex flex-col items-center justify-center">
           <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-            {strain.reviews?.map((review) => {
+            {strain.Reviews?.map((review) => {
               return (
                 <li key={review.id}>
                   <ReviewCard review={review} />
@@ -145,21 +145,20 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         image: strain.image,
         productType: strain.productType,
         producerId: strain.producerId,
-        producerName: strain.producer.name,
-        reviews: strain.reviews?.map((review) => ({
+        producerName: strain.Producer.name,
+        Producer: strain.Producer,
+        Reviews: strain.Reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
-          profileId: review.profileId,
-          profileName: review.Profile?.profileName || "",
+          profileName: review.Profile.profileName || "",
           createdAt: review.createdAt.toDateString(),
         })),
-        tags: strain.tags.map((tag) => ({
-          weight: tag.tag.weight,
-          id: tag.tagId,
-          name: tag.tag.name,
-          lean: tag.tag.lean,
-          color: tag.tag.color,
+        TerpTags: strain.TerpTags.map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+          lean: tag.lean,
+          color: tag.color,
         })),
       },
       allTags: allTags.map((tag) => ({

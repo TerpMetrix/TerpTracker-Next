@@ -4,31 +4,7 @@ import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
 import { getFeaturedProducers } from "@/server/database/producers";
 import { getFeaturedStrains } from "@/server/database/strains";
-
-export type Strain = {
-  id: number;
-  name: string;
-  batchDate: string;
-  THC: number;
-  productType: string;
-  producerId: number;
-  producerName: string;
-  producerBannerImage: string;
-  image: string;
-  tags: {
-    id: number;
-    color: string;
-    lean: number;
-    name: string;
-  }[];
-};
-
-export type Producer = {
-  id: number;
-  name: string;
-  bannerImage: string;
-  location: string;
-};
+import type { Producer, Strain } from "@/server/database/types";
 
 type HomeProps = {
   strains: Strain[];
@@ -80,17 +56,16 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
           name: strain.name,
           batchDate: strain.batchDate.toDateString(),
           productType: strain.productType,
-          producerBannerImage: strain.producer.bannerImage,
+          producerBannerImage: strain.Producer.bannerImage,
           THC: strain.THC,
-          producerId: strain.producer.id,
-          producerName: strain.producer.name,
+          producerId: strain.Producer.id,
+          producerName: strain.Producer.name,
           image: strain.image,
-          tags: strain.tags.map((tag) => ({
-            weight: tag.weight,
-            id: tag.tag.id,
-            color: tag.tag.color,
-            lean: tag.tag.lean,
-            name: tag.tag.name,
+          TerpTags: strain.TerpTags.map((tag) => ({
+            id: tag.id,
+            color: tag.color,
+            lean: tag.lean,
+            name: tag.name,
           })),
         })),
         producers: producers.map((producer) => ({
@@ -98,6 +73,7 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
           name: producer.name,
           bannerImage: producer.bannerImage,
           location: producer.location,
+          website: producer.website,
         })),
       },
     };

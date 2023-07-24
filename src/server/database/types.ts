@@ -14,33 +14,44 @@ export type Strain = {
   batchDate: string;
   THC: number;
   productType: string;
-  producerId: number;
-  producerName: string;
   image: string;
 
+  producerId: number;
+  producerName: string;
+  Producer?: Producer;
+
   // optional relation fields
-  reviews?: Review[];
-  tags?: Tags[];
-  producer?: Producer;
+  Reviews?: Review[];
+  TerpTags?: TerpTag[];
 };
 
-export type Tags = {
+export type TerpTag = {
   id: number;
   color: string;
   lean: number;
   name: string;
 };
 
+export type Profile = {
+  id: number;
+  name: string;
+  image: string;
+  Reviews?: Review[];
+};
+
 export type Review = {
   id: number;
   rating: number;
   comment: string;
-  profileId: string;
 
   // optional relation fields
-  tag?: Tags;
+  TerpTag?: TerpTag;
+  TerpTagId?: number;
+
   createdAt?: string;
   profileName?: string;
+  Profile?: Profile;
+
   strainId?: number;
   strainName?: string;
 };
@@ -51,5 +62,6 @@ export type Producer = {
   location: string;
   website: string;
   bannerImage: string;
-  strains: Strain[];
+
+  Strains?: Strain[];
 };

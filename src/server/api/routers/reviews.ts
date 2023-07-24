@@ -8,29 +8,30 @@ export const reviewRouter = createTRPCRouter({
         strainId: z.number(),
         rating: z.number().max(5).min(1),
         comment: z.string().max(500),
-        profileId: z.string(),
+        profileName: z.string(),
         tagId: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const newTerpTag = await ctx.prisma.tagOnStrain.create({
-          data: {
-            assignedBy: "user", //placeholder
-            strain: {
-              connect: { id: input.strainId },
-            },
-            tag: {
-              connect: { id: input.tagId },
-            },
-          },
-        });
         // Need to find this tosId to connect to review
         // const tosId = await ctx.prisma.tagOnStrain.findUnique({
         //   where: {
         //     id: newTerpTag.id, ???
         //   },
         // });
+
+        //update strain to include new tags and create new review
+        const newTagOnStrain = await ctx.prisma.strain.update({
+          where: {
+            id: input.strainId,
+          },
+          data: {
+            TerpTags: {
+              connect: { id: input.tagId },
+            },
+          },
+        });
         const newReview = await ctx.prisma.review.create({
           data: {
             rating: input.rating,
@@ -39,14 +40,12 @@ export const reviewRouter = createTRPCRouter({
               connect: { id: input.strainId },
             },
             Profile: {
-              connect: { userId: input.profileId },
-            },
-            TagOnStrain: {
-              connect: { tosId: input.tagId },
-            },
+              connect: { userId: input.profileName },
+            }
           },
         });
         console.log("created new review: ", newReview);
+        console.log("updated strain: ", newTagOnStrain);
       } catch (e) {
         console.error(e);
       }

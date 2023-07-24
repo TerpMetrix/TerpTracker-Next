@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<ReviewProps> = async (
         id: review.id,
         rating: review.rating,
         comment: review.comment,
-        profileId: review.profileId,
+        profileId: review.profileName,
         profileName: review.Profile?.profileName ?? "",
         strainId: review.strainId,
         strainName: review.Strain.name,
