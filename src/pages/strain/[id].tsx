@@ -83,6 +83,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       <RatingStars rating={rating} />
       <p className="text-gray-400">{review.createdAt}</p>
       <p className="text-gray-200">{comment}</p>
+      <Tag tag={review.TerpTag} key={review.TerpTagId} />
     </div>
   );
 };
@@ -153,6 +154,8 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
           comment: review.comment,
           profileName: review.Profile.profileName || "",
           createdAt: review.createdAt.toDateString(),
+          TerpTag: review.TerpTag,
+          TerpTagId: review.terpTagId,
         })),
         TerpTags: strain.TerpTags.map((tag) => ({
           id: tag.id,

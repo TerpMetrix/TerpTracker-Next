@@ -44,6 +44,9 @@ export const reviewRouter = createTRPCRouter({
             Profile: {
               connect: { profileName: input.profileName },
             },
+            TerpTag: {
+              connect: { id: input.tagId },
+            },
           },
         });
         console.log("created new review: ", newReview);
