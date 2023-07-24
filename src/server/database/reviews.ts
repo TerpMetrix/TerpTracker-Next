@@ -31,6 +31,7 @@ export async function getReviewById(
         },
       },
       Strain: true,
+      TerpTag: true,
     },
   });
 
