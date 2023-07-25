@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-export type Tags = {
+export type Tag = {
   id: number;
   color: string;
   lean: number;
@@ -19,7 +19,7 @@ export type Tags = {
 
 type NewReviewModalProps = {
   strainId: number;
-  tagslist: Tags[];
+  tagslist: Tag[];
 };
 
 export default function NewReviewModal({
@@ -29,7 +29,7 @@ export default function NewReviewModal({
   const { data: sessionData } = useSession();
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState("");
-  const [selectedTag, setTag] = useState<Tags>(); //should be an array of tag ids
+  const [selectedTag, setTag] = useState<Tag>(); //should be an array of tag ids
 
   const mutation = api.reviews.newReview.useMutation();
 

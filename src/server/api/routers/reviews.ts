@@ -14,12 +14,6 @@ export const reviewRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        // Need to find this tosId to connect to review
-        // const tosId = await ctx.prisma.tagOnStrain.findUnique({
-        //   where: {
-        //     id: newTerpTag.id, ???
-        //   },
-        // });
 
         console.log("input: ", input);
 
