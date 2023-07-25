@@ -5,17 +5,19 @@ import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import type { Review, Strain } from "@/server/database/types";
+import type { Review, Strain, TerpTag } from "@/server/database/types";
 import { getStrainById } from "@/server/database/strains";
+import { getAllTags } from "@/server/database/tags";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
   strain: Strain;
+  allTags: TerpTag[];
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
-export default function Strain({ strain }: StrainProps) {
+export default function Strain({ strain, allTags }: StrainProps) {
   return (
     <>
       <Head>
@@ -37,7 +39,7 @@ export default function Strain({ strain }: StrainProps) {
           </div>
 
           <div className="my-2 flex flex-row items-center justify-center gap-4">
-            {strain.tags?.map((tag) => {
+            {strain.TerpTags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -53,7 +55,7 @@ export default function Strain({ strain }: StrainProps) {
 
         <div className="flex flex-col items-center justify-center">
           <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-            {strain.reviews?.map((review) => {
+            {strain.Reviews?.map((review) => {
               return (
                 <li key={review.id}>
                   <ReviewCard review={review} />
@@ -61,7 +63,7 @@ export default function Strain({ strain }: StrainProps) {
               );
             })}
           </ul>
-          <NewReviewModal strainId={strain.id} />
+          <NewReviewModal strainId={strain.id} tagslist={allTags} />
         </div>
       </div>
     </>
@@ -81,6 +83,12 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       <RatingStars rating={rating} />
       <p className="text-gray-400">{review.createdAt}</p>
       <p className="text-gray-200">{comment}</p>
+      {/* if tag, show it */}
+      {review.TerpTag &&
+        <div className="my-2 flex flex-row items-center justify-start gap-4">
+        <Tag tag={review.TerpTag} key={review.TerpTagId} />
+        </div>
+      }
     </div>
   );
 };
@@ -120,10 +128,16 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 ) => {
   const id = Number(context.params?.id) || -1;
 
+  const allTags = await getAllTags();
+
   const strain = await getStrainById(id);
   console.log(strain);
 
   if (!strain) {
+    return { notFound: true };
+  }
+
+  if (!allTags) {
     return { notFound: true };
   }
 
@@ -137,23 +151,30 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
         image: strain.image,
         productType: strain.productType,
         producerId: strain.producerId,
-        producerName: strain.producer.name,
-        reviews: strain.reviews?.map((review) => ({
+        producerName: strain.Producer.name,
+        Producer: strain.Producer,
+        Reviews: strain.Reviews?.map((review) => ({
           id: review.id,
           rating: review.rating,
           comment: review.comment,
-          profileId: review.profileId,
-          profileName: review.Profile?.profileName || "",
+          profileName: review.Profile.profileName || "",
           createdAt: review.createdAt.toDateString(),
+          TerpTag: review.TerpTag,
+          TerpTagId: review.terpTagId,
         })),
-        tags: strain.tags.map((tag) => ({
-          weight: tag.weight,
-          id: tag.tagId,
-          name: tag.tag.name,
-          lean: tag.tag.lean,
-          color: tag.tag.color,
+        TerpTags: strain.TerpTags.map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+          lean: tag.lean,
+          color: tag.color,
         })),
       },
+      allTags: allTags.map((tag) => ({
+        id: tag.id,
+        name: tag.name,
+        lean: tag.lean,
+        color: tag.color,
+      })),
     },
   };
 };

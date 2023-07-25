@@ -9,6 +9,15 @@ export const strainRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+        include: {
+          Reviews: {
+            include: {
+              TerpTag: true,
+            },
+          },
+          TerpTags: true,
+          Producer: true,
+        },
       });
 
       return { strain };

@@ -32,7 +32,7 @@ export default function Producer({ producer }: ProducerProps) {
             id="#strains"
             className="flex flex-wrap items-center justify-center gap-5"
           >
-            {producer.strains.map((strain) => {
+            {producer.Strains?.map((strain) => {
               return <StrainItem key={strain.id} strain={strain}></StrainItem>;
             })}
           </ul>
@@ -51,14 +51,14 @@ function StrainItem({ strain }: { strain: Strain }) {
             <h2 className="card-title">{strain.name}</h2>
             <div className="flex">
               <div className="my-2 flex flex-row gap-4">
-                {strain.tags?.map((tag) => {
+                {strain.TerpTags?.map((tag) => {
                   return <Tag tag={tag} key={tag.id} />;
                 })}
               </div>
             </div>
             <div className="text-gray-40 mb-3">{strain.batchDate}</div>
             <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
-              10 💬
+              💬
             </button>
           </div>
         </div>
@@ -83,7 +83,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     return { notFound: true };
   }
 
-  const producer = await getProducerById(Number(1));
+  const producer = await getProducerById(producerId);
 
   if (!producer) {
     return { notFound: true };
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
         location: producer.location,
         name: producer.name,
         website: producer.website,
-        strains: producer.strains.map((strain) => ({
+        Strains: producer.Strains.map((strain) => ({
           image: strain.image,
           id: strain.id,
           name: strain.name,
@@ -106,12 +106,11 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
           productType: strain.productType,
           producerId: strain.producerId,
           producerName: producer.name,
-          tags: strain.tags.map((tag) => ({
-            weight: tag.weight,
-            id: tag.tag.id,
-            color: tag.tag.color,
-            lean: tag.tag.lean,
-            name: tag.tag.name,
+          tags: strain.TerpTags.map((tag) => ({
+            id: tag.id,
+            color: tag.color,
+            lean: tag.lean,
+            name: tag.name,
           })),
         })),
       },

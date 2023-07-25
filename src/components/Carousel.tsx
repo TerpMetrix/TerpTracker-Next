@@ -1,6 +1,6 @@
 // /components/Carousel.tsx
 import React from 'react';
-import type { Strain, Producer } from '../pages/index'; // Import the Strain type from the strains page
+import type { Strain, Producer } from '@/server/database/types';
 import Card from './Card';
 
 

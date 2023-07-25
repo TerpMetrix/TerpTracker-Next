@@ -3,13 +3,9 @@ import type { Prisma, Producer } from "@prisma/client";
 
 type ProducerWithRelations = Prisma.ProducerGetPayload<{
   include: {
-    strains: {
+    Strains: {
       include: {
-        tags: {
-          include: {
-            tag: true;
-          };
-        };
+        TerpTags: true;
       };
     };
   };
@@ -28,17 +24,14 @@ export async function getProducerById(
       id: id,
     },
     include: {
-      strains: {
+      Strains: {
         include: {
-          tags: {
-            include: {
-              tag: true,
-            },
+          TerpTags: true,
           },
         },
       },
     },
-  });
+  );
 
   return producer;
 }
