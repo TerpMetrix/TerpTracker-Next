@@ -83,7 +83,12 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       <RatingStars rating={rating} />
       <p className="text-gray-400">{review.createdAt}</p>
       <p className="text-gray-200">{comment}</p>
-      <Tag tag={review.TerpTag} key={review.TerpTagId} />
+      {/* if tag, show it */}
+      {review.TerpTag &&
+        <div className="my-2 flex flex-row items-center justify-start gap-4">
+        <Tag tag={review.TerpTag} key={review.TerpTagId} />
+        </div>
+      }
     </div>
   );
 };

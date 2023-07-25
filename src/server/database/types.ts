@@ -45,7 +45,7 @@ export type Review = {
   comment: string;
 
   // optional relation fields
-  TerpTag: TerpTag;
+  TerpTag?: TerpTag | null;
   TerpTagId: number;
 
   createdAt?: string;
