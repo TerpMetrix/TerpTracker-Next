@@ -4,17 +4,26 @@ import Hero from "@/components/hero";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import type { Producer, Strain } from "@/server/database/types";
-import { getProducerById } from "@/server/database/producers";
+import {
+  type ProducerWithRelations,
+  getProducerById,
+} from "@/server/database/producers";
+import {
+  convertDatesToStrings,
+  convertStringsToDates,
+} from "@/utils/dateSerialization";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
-  producer: Producer;
+  producer: ProducerWithRelations;
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  producer = convertStringsToDates(producer);
+
   return (
     <>
       <Head>
@@ -33,7 +42,9 @@ export default function Producer({ producer }: ProducerProps) {
             className="flex flex-wrap items-center justify-center gap-5"
           >
             {producer.Strains?.map((strain) => {
-              return <StrainItem key={strain.id} strain={strain}></StrainItem>;
+              return (
+                <StrainItem key={strain.id} producer={producer}></StrainItem>
+              );
             })}
           </ul>
         </div>
@@ -42,29 +53,35 @@ export default function Producer({ producer }: ProducerProps) {
   );
 }
 
-function StrainItem({ strain }: { strain: Strain }) {
-  return (
-    <>
-      <Link href={"/strain/" + String(strain.id)}>
-        <div className="card w-96 bg-neutral text-neutral-content">
-          <div className="card-body">
-            <h2 className="card-title">{strain.name}</h2>
-            <div className="flex">
-              <div className="my-2 flex flex-row gap-4">
-                {strain.TerpTags?.map((tag) => {
-                  return <Tag tag={tag} key={tag.id} />;
-                })}
+function StrainItem({ producer }: { producer: ProducerWithRelations }) {
+  const items = producer.Strains?.map((strain) => {
+    return (
+      <>
+        <Link href={"/strain/" + String(strain.id)}>
+          <div className="card w-96 bg-neutral text-neutral-content">
+            <div className="card-body">
+              <h2 className="card-title">{strain.name}</h2>
+              <div className="flex">
+                <div className="my-2 flex flex-row gap-4">
+                  {strain.TerpTags?.map((tag) => {
+                    return <Tag tag={tag} key={tag.id} />;
+                  })}
+                </div>
               </div>
+              <div className="text-gray-40 mb-3">
+                {strain.batchDate.toDateString()}
+              </div>
+              <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
+                💬
+              </button>
             </div>
-            <div className="text-gray-40 mb-3">{strain.batchDate}</div>
-            <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
-              💬
-            </button>
           </div>
-        </div>
-      </Link>
-    </>
-  );
+        </Link>
+      </>
+    );
+  });
+
+  return items;
 }
 
 // getServerSideProps only runs on the server. never on the client.
@@ -83,7 +100,9 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     return { notFound: true };
   }
 
-  const producer = await getProducerById(producerId);
+  let producer = await getProducerById(producerId);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  producer = convertDatesToStrings(producer);
 
   if (!producer) {
     return { notFound: true };
@@ -91,29 +110,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
 
   return {
     props: {
-      producer: {
-        id: producer.id,
-        bannerImage: producer.bannerImage,
-        location: producer.location,
-        name: producer.name,
-        website: producer.website,
-        Strains: producer.Strains.map((strain) => ({
-          image: strain.image,
-          id: strain.id,
-          name: strain.name,
-          batchDate: strain.batchDate.toDateString(),
-          THC: strain.THC,
-          productType: strain.productType,
-          producerId: strain.producerId,
-          producerName: producer.name,
-          tags: strain.TerpTags.map((tag) => ({
-            id: tag.id,
-            color: tag.color,
-            lean: tag.lean,
-            name: tag.name,
-          })),
-        })),
-      },
+      producer: producer,
     },
   };
 };
