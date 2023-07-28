@@ -1,15 +1,8 @@
 import React from 'react';
-
-type Tags = {
-    id: number;
-    weight: number;
-    color: string;
-    lean: number;
-    name: string;
-};
+import type { TerpTag } from '@/server/database/types';
 
 type TagProps = {
-    tag: Tags;
+    tag: TerpTag;
 };
 
 const Tag: React.FC<TagProps> = ({ tag }) => {

@@ -65,7 +65,7 @@ function StrainItem({ strain }: { strain: Strain }) {
           <p className="text-gray-500">{strain.batchDate}</p>
 
           <div className="my-2 flex flex-row gap-4">
-            {strain.tags?.map((tag) => {
+            {strain.TerpTags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -92,14 +92,14 @@ export const getServerSideProps: GetServerSideProps<
           productType: strain.productType,
           THC: strain.THC,
           producerId: strain.producerId,
-          producerName: strain.producer.name,
+          producerName: strain.Producer.name,
+          Producer: strain.Producer,
           image: strain.image,
-          tags: strain.tags.map((tag) => ({
-            weight: tag.weight,
-            id: tag.tag.id,
-            color: tag.tag.color,
-            lean: tag.tag.lean,
-            name: tag.tag.name,
+          TerpTags: strain.TerpTags.map((tag) => ({
+            id: tag.id,
+            color: tag.color,
+            lean: tag.lean,
+            name: tag.name,
           })),
         })),
       },

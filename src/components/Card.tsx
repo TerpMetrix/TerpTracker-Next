@@ -1,6 +1,6 @@
 // /components/Card.tsx
 import React from 'react';
-import type { Strain, Producer } from '../pages/index'; // Import the Strain type from the strains page
+import type { Strain, Producer } from '@/server/database/types';
 import Image from 'next/image';
 import Tag from '@/components/tag';
 import Link from 'next/link';
@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
                 <div className="flex flex-col justify-between px-4 py-2">
                     <p className="text-2xl mb-2 font-medium">{data.name}</p>
                     <div className="flex flex-row gap-4 my-2">
-                        {data.tags.map((tag) => {
+                        {data.TerpTags?.map((tag) => {
                             return <Tag tag={tag} key={tag.id} />;
                         })}
                     </div>

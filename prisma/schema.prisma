@@ -5,8 +5,7 @@
 // Prisma Configuration
 //////////////////////////////////////////
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["jsonProtocol"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -94,9 +93,9 @@ model Profile {
 
   // relations
   userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  reviews Review[]
+  Reviews Review[]
 }
 
 model Producer {
@@ -107,7 +106,7 @@ model Producer {
   bannerImage String @default("")
 
   // relations
-  strains Strain[]
+  Strains Strain[]
 }
 
 model Strain {
@@ -117,13 +116,15 @@ model Strain {
   batchDate   DateTime @default(now())
   productType String // flower or concentrate
   THC         Float    @default(0)
-  image  String   @default("")
+  image       String   @default("")
 
   // relations
-  reviews    Review[]
-  producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
-  producerId Int
-  tags       TagOnStrain[]
+
+  producerId Int 
+  Producer   Producer      @relation(fields: [producerId], references: [id], onDelete: Cascade)
+
+  TerpTags       TerpTag[]
+  Reviews        Review[]
 
   @@index([producerId])
 }
@@ -134,39 +135,29 @@ model Review {
   rating    Float    @default(0)
   comment   String   @default("")
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
 
   // relations
   strainId Int
-  strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
+  Strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
 
-  profileId String
-  Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  terpTagId Int @default(0)
+  TerpTag   TerpTag? @relation(fields: [terpTagId], references: [id], onDelete: Cascade)
+
+  profileName String @default("")
+  Profile     Profile @relation(fields: [profileName], references: [profileName], onDelete: Cascade)
 
   @@index([strainId])
-  @@index([profileId])
+  @@index([terpTagId])
+  @@index([profileName])
 }
 
 model TerpTag {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  lean Float @default(0)
-  color String @default("000000")
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  lean   Float  @default(0)
+  color  String @default("000000")
 
   // relations
-  strains TagOnStrain[]
-}
-
-model TagOnStrain {
-  strain       Strain     @relation(fields: [strainId], references: [id])
-  strainId     Int // relation scalar field (used in the `@relation` attribute above)
-  tag   TerpTag @relation(fields: [tagId], references: [id])
-  tagId Int // relation scalar field (used in the `@relation` attribute above)
-  assignedAt DateTime @default(now())
-  assignedBy String 
-  weight Float @default(0)
-
-  @@id([strainId, tagId])
-  @@index([strainId])
-  @@index([tagId])
+  Strains Strain[]
+  Reviews Review[]
 }

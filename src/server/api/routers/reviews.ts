@@ -8,24 +8,62 @@ export const reviewRouter = createTRPCRouter({
         strainId: z.number(),
         rating: z.number().max(5).min(1),
         comment: z.string().max(500),
-        profileId: z.string(),
+        profileName: z.string(),
+        tagId: z.number(),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const newReview = await ctx.prisma.review.create({
-          data: {
-            rating: input.rating,
-            comment: input.comment,
-            strain: {
-              connect: { id: input.strainId },
+
+        console.log("input: ", input);
+
+        //update strain to include new tags and create new review
+        //udpate only if tag exists
+        if (input.tagId) {
+          const newTagOnStrain = await ctx.prisma.strain.update({
+            where: {
+              id: input.strainId,
             },
-            Profile: {
-              connect: { userId: input.profileId },
+            data: {
+              TerpTags: {
+                connect: { id: input.tagId },
+              },
             },
-          },
-        });
-        console.log("created new review: ", newReview);
+          });
+          console.log("updated strain: ", newTagOnStrain);
+
+          const newReviewWithTag = await ctx.prisma.review.create({
+            data: {
+              rating: input.rating,
+              comment: input.comment,
+              Strain: {
+                connect: { id: input.strainId },
+              },
+              Profile: {
+                connect: { profileName: input.profileName },
+              },
+              TerpTag: {
+                connect: { id: input.tagId },
+              },
+            },
+          });
+          console.log("created new review with tag: ", newReviewWithTag);
+        }
+        else {
+          const newReviewWithoutTag = await ctx.prisma.review.create({
+            data: {
+              rating: input.rating,
+              comment: input.comment,
+              Strain: {
+                connect: { id: input.strainId },
+              },
+              Profile: {  
+                connect: { profileName: input.profileName },
+              },
+            },
+          });
+          console.log("created new review without tag: ", newReviewWithoutTag);
+        }
       } catch (e) {
         console.error(e);
       }
