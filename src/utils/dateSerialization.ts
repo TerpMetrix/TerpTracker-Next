@@ -17,6 +17,10 @@
  *
  * convertDatesToStrings: will look at every field of an object and recursively convert any Date objects to strings.
  * convertStringsToDates: will convert all strings to Dates for the specified fields listed in stringToDateFields.
+ *
+ * For more context see these issues on GitHub:
+ * NextJS - https://github.com/vercel/next.js/issues/11993
+ * Prisma - https://github.com/prisma/prisma/discussions/5522
  */
 
 const stringToDateFields = ["updatedAt", "createdAt", "batchDate"];
