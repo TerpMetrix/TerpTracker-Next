@@ -1,5 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { LogIn, LogOut, Menu } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -9,7 +9,11 @@ export default function Navigation() {
   return (
     <div className="navbar bg-base-100 justify-center">
       <div className="navbar-start">
-        <div className="dropdown">
+        <Link href="/" className="btn-ghost btn h-24 w-24 normal-case p-4">
+          <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70} />
+        </Link>
+        {/* HIDDING THIS DROPDOWN FOR NOW - MIGHT BE USEFUL LATER */}
+        {/* <div className="dropdown">
           <label tabIndex={0} className="btn-ghost btn lg:hidden">
             <Menu className="inline mt-2" size={40} />
           </label>
@@ -24,27 +28,10 @@ export default function Navigation() {
               <Link href="/producer">Popular Producers</Link>
             </li>
           </ul>
-        </div>
-        <div className="hidden lg:flex p-4">
-          <Link href="/" className="btn-ghost btn h-24 w-24 normal-case">
-            <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70}/>
-          </Link>
-        </div>
+        </div> */}
       </div>
       <div className="navbar-center lg:hidden">
-          <Link href="/" className="btn-ghost btn h-24 w-24 normal-case">
-            <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70}/>
-          </Link>
-        </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 pt-3 text-xl">
-          <li tabIndex={0}>
-            <Link href="/strain">Strains</Link>
-          </li>
-          <li>
-            <Link href="/producer">Producers</Link>
-          </li>
-        </ul>
+
       </div>
       <div className="navbar-end p-4">{sessionData ? logOut() : logIn()}</div>
     </div>

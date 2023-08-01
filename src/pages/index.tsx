@@ -19,7 +19,7 @@ export default function Home({ strains, producers }: HomeProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="m-auto flex min-h-screen w-11/12 flex-col space-y-8 overflow-hidden">
-        <div className="m-auto flex flex-row items-center gap-2">
+        <div className="m-auto flex flex-row items-center">
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
             <span className="bg-gradient-to-r from-red-600 via-green-600 to-blue-600 bg-clip-text px-1 tracking-tight text-transparent">
               Terp
@@ -27,7 +27,7 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 p-4 sm:w-1/2">
+        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 md:px-4 sm:w-1/2">
           <input
             type="text"
             placeholder="Find what's next in weed..."
