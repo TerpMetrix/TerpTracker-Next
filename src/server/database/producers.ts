@@ -1,7 +1,7 @@
 import { prisma } from "@/server/database/db";
 import type { Prisma, Producer } from "@prisma/client";
 
-type ProducerWithRelations = Prisma.ProducerGetPayload<{
+export type ProducerWithRelations = Prisma.ProducerGetPayload<{
   include: {
     Strains: {
       include: {
@@ -27,11 +27,10 @@ export async function getProducerById(
       Strains: {
         include: {
           TerpTags: true,
-          },
         },
       },
     },
-  );
+  });
 
   return producer;
 }

@@ -23,7 +23,7 @@ export default function Producers({ producers }: ProducersProps) {
   return (
     <>
       <Head>
-        <title>Producers | Terptracker</title>
+        <title>Producers | TerpTracker</title>
       </Head>
       <BackButton />
       <div className="flex flex-col items-center">

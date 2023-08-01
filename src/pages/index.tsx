@@ -31,7 +31,7 @@ export default function Home({ strains, producers }: HomeProps) {
           <input
             type="text"
             placeholder="Find what's next in weed..."
-            className="input-base-content input-bordered input w-full border-white shadow-xl shadow-green-700/10"
+            className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
           />
           <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
             <Search className="w-6 sm:w-full" />
