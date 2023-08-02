@@ -6,18 +6,35 @@ import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
 import type { Review, Strain, TerpTag } from "@/server/database/types";
-import { getStrainById } from "@/server/database/strains";
-import { getAllTags } from "@/server/database/tags";
+import {
+  type ReviewWithRelations
+}
+  from "@/server/database/reviews";
+import { 
+  type StrainWithRelations,
+  getStrainById
+} from "@/server/database/strains";
+import { 
+  type TagWithRelations,
+  getAllTags 
+} 
+  from "@/server/database/tags";
+import {
+  convertDatesToStrings,
+  convertStringsToDates,
+}
+  from "@/utils/dateSerialization";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
-  strain: Strain;
-  allTags: TerpTag[];
+  strain: StrainWithRelations;
+  allTags: TagWithRelations[];
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
 export default function Strain({ strain, allTags }: StrainProps) {
+  strain = convertStringsToDates(strain);
   return (
     <>
       <Head>
@@ -130,7 +147,8 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 
   const allTags = await getAllTags();
 
-  const strain = await getStrainById(id);
+  let strain = await getStrainById(id);
+  strain = convertDatesToStrings(strain)
   console.log(strain);
 
   if (!strain) {
@@ -143,38 +161,8 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 
   return {
     props: {
-      strain: {
-        id: strain.id,
-        name: strain.name,
-        batchDate: strain.batchDate.toDateString(),
-        THC: strain.THC,
-        image: strain.image,
-        productType: strain.productType,
-        producerId: strain.producerId,
-        producerName: strain.Producer.name,
-        Producer: strain.Producer,
-        Reviews: strain.Reviews?.map((review) => ({
-          id: review.id,
-          rating: review.rating,
-          comment: review.comment,
-          profileName: review.Profile.profileName || "",
-          createdAt: review.createdAt.toDateString(),
-          TerpTag: review.TerpTag,
-          TerpTagId: review.terpTagId,
-        })),
-        TerpTags: strain.TerpTags.map((tag) => ({
-          id: tag.id,
-          name: tag.name,
-          lean: tag.lean,
-          color: tag.color,
-        })),
-      },
-      allTags: allTags.map((tag) => ({
-        id: tag.id,
-        name: tag.name,
-        lean: tag.lean,
-        color: tag.color,
-      })),
+      strain: strain,
+      allTags: allTags,
     },
   };
 };

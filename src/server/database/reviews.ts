@@ -1,7 +1,7 @@
 import { prisma } from "@/server/database/db";
 import type { Prisma } from "@prisma/client";
 
-type ReviewWithRelations = Prisma.ReviewGetPayload<{
+export type ReviewWithRelations = Prisma.ReviewGetPayload<{
   include: {
     Profile: { 
       include: {
