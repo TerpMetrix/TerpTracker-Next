@@ -5,7 +5,6 @@ import NewReviewModal from "@/components/newReviewModal";
 import Head from "next/head";
 import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
-import type { Review, Strain, TerpTag } from "@/server/database/types";
 import {
   type ReviewWithRelations
 }
@@ -51,7 +50,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
-            <p className="badge">{strain.batchDate}</p>
+            <p className="badge">{strain.batchDate.toDateString()}</p>
             <p className="badge badge-primary">{strain.productType}</p>
           </div>
 
@@ -65,7 +64,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
             className="btn-outline btn"
             href={producerLink(strain.producerId)}
           >
-            {strain.producerName} <ArrowUpRight />{" "}
+            {strain.Producer.name} <ArrowUpRight />{" "}
             {/*need to make this link to prod name */}
           </Link>
         </div>
@@ -88,7 +87,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
 }
 
 type ReviewCardProps = {
-  review: Review;
+  review: ReviewWithRelations;
 };
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
@@ -103,7 +102,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       {/* if tag, show it */}
       {review.TerpTag &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-        <Tag tag={review.TerpTag} key={review.TerpTagId} />
+        <Tag tag={review.TerpTag} key={review.TerpTag.id} />
         </div>
       }
     </div>
