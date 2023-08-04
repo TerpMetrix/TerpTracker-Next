@@ -14,7 +14,7 @@ import {
   getStrainById
 } from "@/server/database/strains";
 import { 
-  type TagWithRelations,
+  type TagWithNoRelations,
   getAllTags 
 } 
   from "@/server/database/tags";
@@ -27,7 +27,7 @@ import {
 // The props this component receives from getServerSideProps
 export type StrainProps = {
   strain: StrainWithRelations;
-  allTags: TagWithRelations[];
+  allTags: TagWithNoRelations[];
   notFound?: boolean;
 };
 
@@ -97,7 +97,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
     <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-neutral ">
       <h3 className="mb-1 text-lg font-medium">{review.profileName}</h3>
       <RatingStars rating={rating} />
-      <p className="text-gray-400">{review.createdAt}</p>
+      <p className="text-gray-400">{review.createdAt.toDateString()}</p>
       <p className="text-gray-200">{comment}</p>
       {/* if tag, show it */}
       {review.TerpTag &&

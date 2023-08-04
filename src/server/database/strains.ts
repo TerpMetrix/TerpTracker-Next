@@ -8,9 +8,14 @@ export type StrainWithRelations = Prisma.StrainGetPayload<{
   include: {
     Reviews: {
       include: {
-        Profile: true,
+        Profile: {
+          include: {
+            User: true;
+          };
+        }
         TerpTag: true,
         terpTagId: true,
+        Strain: true,
       }
     },
     TerpTags: true,
@@ -41,8 +46,13 @@ export async function getStrainById(
     include: {
       Reviews: {
         include: {
-          Profile: true,
+          Profile: {
+            include: {
+              User: true,
+            },
+          },    
           TerpTag: true,
+          Strain: true,
         }
       },
       TerpTags: true,
@@ -64,8 +74,13 @@ export async function getAllStrainsWithRelations(): Promise<
     include: {
       Reviews: {
         include: {
-          Profile: true,
+          Profile: {
+            include: {
+              User: true,
+            },
+          },
           TerpTag: true,
+          Strain: true,
         }
       },
       TerpTags: true,
