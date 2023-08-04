@@ -12,8 +12,6 @@ import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
-import { Strain } from "@prisma/client";
-import { StrainWithRelations } from "@/server/database/strains";
 import Image from "next/image";
 
 // The props this component receives from getServerSideProps
@@ -87,7 +85,7 @@ function StrainsList({ producer }: { producer: ProducerWithRelations }) {
     );
   });
   return strains;
-  };
+}
 
 // getServerSideProps only runs on the server. never on the client.
 // We can make calls to our database directly here.
