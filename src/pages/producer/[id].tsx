@@ -12,6 +12,7 @@ import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
+import Image from "next/image";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -31,6 +32,13 @@ export default function Producer({ producer }: ProducerProps) {
       </Head>
       <BackButton />
       <div className="mb-4 flex flex-col items-center">
+        <Image
+          src={producer.bannerImage}
+          alt="Producer Banner Image"
+          width={1000}
+          height={300}
+          className="rounded-lg"
+        />
         <Hero
           title={producer.name}
           description="Generic default description of this producer. Should add a database column for an about."
@@ -41,11 +49,7 @@ export default function Producer({ producer }: ProducerProps) {
             id="#strains"
             className="flex flex-wrap items-center justify-center gap-5"
           >
-            {producer.Strains?.map((strain) => {
-              return (
-                <StrainItem key={strain.id} producer={producer}></StrainItem>
-              );
-            })}
+                <StrainsList producer={producer} />
           </ul>
         </div>
       </div>
@@ -53,8 +57,8 @@ export default function Producer({ producer }: ProducerProps) {
   );
 }
 
-function StrainItem({ producer }: { producer: ProducerWithRelations }) {
-  const items = producer.Strains?.map((strain) => {
+function StrainsList({ producer }: { producer: ProducerWithRelations }) {
+  const strains = producer.Strains?.map((strain) => {
     return (
       <>
         <Link href={"/strain/" + String(strain.id)}>
@@ -80,8 +84,7 @@ function StrainItem({ producer }: { producer: ProducerWithRelations }) {
       </>
     );
   });
-
-  return items;
+  return strains;
 }
 
 // getServerSideProps only runs on the server. never on the client.
@@ -103,6 +106,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   let producer = await getProducerById(producerId);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertDatesToStrings(producer);
+  console.log(producer); // eslint-disable-line no-console
 
   if (!producer) {
     return { notFound: true };
