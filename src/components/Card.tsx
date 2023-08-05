@@ -1,12 +1,13 @@
 // /components/Card.tsx
 import React from "react";
-import type { Strain, Producer } from "@/server/database/types";
 import Image from "next/image";
 import Tag from "@/components/tag";
 import Link from "next/link";
+import { type StrainWithRelations } from "@/server/database/strains";
+import { type ProducerWithRelations } from "@/server/database/producers";
 
 type CardProps = {
-  data: Strain | Producer;
+  data: StrainWithRelations | ProducerWithRelations;
 };
 
 const Card: React.FC<CardProps> = ({ data }) => {

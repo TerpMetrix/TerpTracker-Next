@@ -68,12 +68,13 @@ export function convertStringsToDates(obj: any): any {
       newObj[key] = new Date(value);
     } else if (typeof value === "object") {
       // If the value is an object, recurse on it.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       newObj[key] = convertStringsToDates(value);
     } else {
       // Otherwise, copy the value as is.
       newObj[key] = value;
     }
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return newObj;
 }

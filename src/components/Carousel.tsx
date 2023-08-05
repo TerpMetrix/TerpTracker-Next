@@ -1,35 +1,41 @@
 // /components/Carousel.tsx
-import React from 'react';
-import type { Strain, Producer } from '@/server/database/types';
-import Card from './Card';
-
+import React from "react";
+import Card from "./Card";
+import { type StrainWithRelations } from "@/server/database/strains";
+import { type ProducerWithRelations } from "@/server/database/producers";
 
 interface CarouselProps {
-    title: string;
-    data: Strain[] | Producer[];
+  title: string;
+  data: StrainWithRelations[] | ProducerWithRelations[];
 }
 
 export const getItemId = (carouselName: string, index: number) =>
-    `${carouselName}-item-${index}`
+  `${carouselName}-item-${index}`;
 
 const Carousel: React.FC<CarouselProps> = ({ title, data }) => {
-    return (
-        <>  
-            <h2 className="text-2xl font-bold mb-2 text-left w-full ml-5 md:ml-24">{title}</h2>
-            <ul className="flex overflow-x-auto gap-0 snap-x scroll-pl-14 md:gap-6 snap-mandatory mb-2 motion-safe:scroll-smooth scroll-">
-                {data.map((item: Strain | Producer, index: number) => (
-                    <li
-                        id={getItemId(title, index)}
-                        key={index}
-                        className="shrink-0 snap-start snap-always m-5"
-                    >
-                        <Card data = {item} key={index} />
-                    </li>
-                ))}
-            </ul>
-        </>
-    )
-}
+  return (
+    <>
+      <h2 className="mb-2 ml-5 w-full text-left text-2xl font-bold md:ml-24">
+        {title}
+      </h2>
+      <ul className="scroll- mb-2 flex snap-x snap-mandatory scroll-pl-14 gap-0 overflow-x-auto motion-safe:scroll-smooth md:gap-6">
+        {data.map(
+          (
+            item: StrainWithRelations | ProducerWithRelations,
+            index: number
+          ) => (
+            <li
+              id={getItemId(title, index)}
+              key={index}
+              className="m-5 shrink-0 snap-start snap-always"
+            >
+              <Card data={item} key={index} />
+            </li>
+          )
+        )}
+      </ul>
+    </>
+  );
+};
 
 export default Carousel;
-

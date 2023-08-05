@@ -1,8 +1,6 @@
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
 import Hero from "@/components/hero";
 import Head from "next/head";
-import Tag from "@/components/tag";
 import BackButton from "@/components/BackButton";
 import {
   type ProducerWithRelations,
@@ -25,7 +23,7 @@ export type ProducerProps = {
 
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   producer = convertStringsToDates(producer);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -67,42 +65,18 @@ export default function Producer({ producer }: ProducerProps) {
             id="#strains"
             className="flex flex-wrap items-center justify-center gap-5"
           >
-            {StrainsList({ producer })}
+            <Carousel
+              title="🔥 Producers"
+              data={producer.Strains?.map((strain) =>
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                convertDatesToStrings(strain)
+              )}
+            />
           </ul>
         </div>
       </div>
     </>
   );
-}
-
-function StrainsList({ producer }: { producer: ProducerWithRelations }) {
-  const strains = producer.Strains?.map((strain) => {
-    return (
-      <>
-        <Link href={"/strain/" + String(strain.id)}>
-          <div className="card w-96 bg-neutral text-neutral-content">
-            <div className="card-body">
-              <h2 className="card-title">{strain.name}</h2>
-              <div className="flex">
-                <div className="my-2 flex flex-row gap-4">
-                  {strain.TerpTags?.map((tag) => {
-                    return <Tag tag={tag} key={tag.id} />;
-                  })}
-                </div>
-              </div>
-              <div className="text-gray-40 mb-3">
-                {strain.batchDate.toDateString()}
-              </div>
-              <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
-                💬
-              </button>
-            </div>
-          </div>
-        </Link>
-      </>
-    );
-  });
-  return strains;
 }
 
 // getServerSideProps only runs on the server. never on the client.
@@ -130,6 +104,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     return { notFound: true };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     props: {
       producer: producer,
