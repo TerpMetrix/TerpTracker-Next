@@ -22,9 +22,9 @@ type HomeProps = {
 
 export default function Home({ strains, producers }: HomeProps) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  producers = producers.map((producer) => convertStringsToDates(producer));
+  producers = convertStringsToDates(producers);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  strains = strains.map((strain) => convertStringsToDates(strain));
+  strains = convertStringsToDates(strains);
 
   return (
     <>
@@ -65,16 +65,12 @@ export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
 
     // iterate on strains with dateserialization function
 
-    strains = strains.map((strain) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return convertDatesToStrings(strain);
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    strains = convertDatesToStrings(strains);
 
     // iterate on producers with dateserialization function
-    producers = producers.map((producer) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return convertDatesToStrings(producer);
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    producers = convertDatesToStrings(producers);
 
     return {
       props: {

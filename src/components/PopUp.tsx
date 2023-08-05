@@ -1,7 +1,6 @@
-import react from "react";
 import Modal from "react-modal";
-import type { Strain, Producer } from "@/server/database/types";
-import { ProducerWithRelations } from "@/server/database/producers";
+import { type Strain } from "@/server/database/types";
+import { type ProducerWithRelations } from "@/server/database/producers";
 
 type PopUpProps = {
   isOpen: boolean;

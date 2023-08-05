@@ -23,7 +23,7 @@ export type ProducerProps = {
 
 // The main producer component exported in this file
 export default function Producer({ producer }: ProducerProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -67,10 +67,10 @@ export default function Producer({ producer }: ProducerProps) {
           >
             <Carousel
               title="🔥 Producers"
-              data={producer.Strains?.map((strain) =>
+              data={
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                convertDatesToStrings(strain)
-              )}
+                convertDatesToStrings(producer.Strains)
+              }
             />
           </ul>
         </div>
@@ -104,7 +104,6 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
     return { notFound: true };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     props: {
       producer: producer,
