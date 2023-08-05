@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
+import Carousel from "@/components/Carousel";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -66,7 +67,7 @@ export default function Producer({ producer }: ProducerProps) {
             id="#strains"
             className="flex flex-wrap items-center justify-center gap-5"
           >
-            <StrainsList producer={producer} />
+            {StrainsList({ producer })}
           </ul>
         </div>
       </div>
