@@ -9,20 +9,21 @@ import {
   type ReviewWithRelations
 }
   from "@/server/database/reviews";
-import { 
+import {
   type StrainWithRelations,
   getStrainById
 } from "@/server/database/strains";
-import { 
+import {
   type TagWithNoRelations,
-  getAllTags 
-} 
+  getAllTags
+}
   from "@/server/database/tags";
 import {
   convertDatesToStrings,
   convertStringsToDates,
 }
   from "@/utils/dateSerialization";
+import Image from "next/image";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -33,6 +34,7 @@ export type StrainProps = {
 
 // The main producer component exported in this file
 export default function Strain({ strain, allTags }: StrainProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strain = convertStringsToDates(strain);
   return (
     <>
@@ -42,7 +44,14 @@ export default function Strain({ strain, allTags }: StrainProps) {
       <BackButton />
       <div className="mb-10 min-h-screen">
         <div className="flex h-96 flex-col items-center justify-center gap-10">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center gap-10">
+            <Image
+              className="h-full w-full object-cover object-center"
+              src={strain.image}
+              width={500}
+              height={500}
+              alt={"image of " + strain.name}
+            />
             <h1 className="text-4xl">{strain.name}</h1>
             <p className="italic text-gray-400">
               Quick description of this strain.
@@ -102,7 +111,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       {/* if tag, show it */}
       {review.TerpTag &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-        <Tag tag={review.TerpTag} key={review.TerpTag.id} />
+          <Tag tag={review.TerpTag} key={review.TerpTag.id} />
         </div>
       }
     </div>
@@ -147,6 +156,7 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
   const allTags = await getAllTags();
 
   let strain = await getStrainById(id);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strain = convertDatesToStrings(strain)
   console.log(strain);
 
