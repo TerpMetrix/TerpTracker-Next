@@ -14,6 +14,8 @@ import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
+import StrainCard from "@/components/StrainCard";
+import ProducerCard from "@/components/ProducerCard";
 
 type HomeProps = {
   strains: StrainWithRelations[];
@@ -51,8 +53,14 @@ export default function Home({ strains, producers }: HomeProps) {
             <Search className="w-6 sm:w-full" />
           </button>
         </div>
-        <Carousel title="🔥 Strains" data={strains} />
-        <Carousel title="🔥 Producers" data={producers} />
+        <Carousel title="🔥 Strains"
+                  data={strains}
+                  renderItem={(strain) => <StrainCard strain={strain}/>}
+                  getKey={(strain) => strain.name}/>
+        <Carousel title="🔥 Producers"
+                  data={producers}
+                  renderItem={(producer) => <ProducerCard producer={producer}/>}
+                  getKey={(producer) => producer.name}/>
       </main>
     </>
   );
