@@ -13,6 +13,9 @@ import {
   convertStringsToDates,
 } from "@/utils/dateSerialization";
 import Image from "next/image";
+import PopUp from "@/components/PopUp";
+import { useState } from "react";
+import Carousel from "@/components/Carousel";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -24,6 +27,15 @@ export type ProducerProps = {
 export default function Producer({ producer }: ProducerProps) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -31,6 +43,12 @@ export default function Producer({ producer }: ProducerProps) {
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
       <BackButton />
+      <button onClick={() => openModal()}>Open {producer.name} Modal</button>
+      <PopUp
+        data={producer}
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+      ></PopUp>
       <div className="mb-4 flex flex-col items-center">
         <Image
           src={producer.bannerImage}
@@ -49,7 +67,7 @@ export default function Producer({ producer }: ProducerProps) {
             id="#strains"
             className="flex flex-wrap items-center justify-center gap-5"
           >
-                <StrainsList producer={producer} />
+            {StrainsList({ producer })}
           </ul>
         </div>
       </div>
