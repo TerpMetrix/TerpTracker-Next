@@ -1,7 +1,7 @@
 // /components/Card.tsx
 import React from "react";
 import Image from "next/image";
-import Tag from "@/components/tag";
+import Tag from "@/components/Tag";
 import Link from "next/link";
 import { type StrainWithRelations } from "@/server/database/strains";
 import { type ProducerWithRelations } from "@/server/database/producers";
@@ -10,7 +10,7 @@ type CardProps = {
   data: StrainWithRelations | ProducerWithRelations;
 };
 
-const Card: React.FC<CardProps> = ({ data }) => {
+const Card: React.FC<CardProps> = ({ data }) => { 
   if ("THC" in data) {
     // data is of type Strain
     return (

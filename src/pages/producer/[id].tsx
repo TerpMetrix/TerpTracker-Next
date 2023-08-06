@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import Hero from "@/components/hero";
+import Hero from "@/components/Hero";
 import Head from "next/head";
 import BackButton from "@/components/BackButton";
 import {
