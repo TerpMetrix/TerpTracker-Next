@@ -23,13 +23,6 @@ export type StrainWithRelations = Prisma.StrainGetPayload<{
   };
 }>;
 
-type FeaturedStrain = Prisma.StrainGetPayload<{
-  include: {
-    Reviews: true,
-    TerpTags: true,
-    Producer: true;
-  };
-}>;
 
 /**
  * Retrieves a strain by its ID, including its related reviews, tags, and producer.
@@ -50,7 +43,7 @@ export async function getStrainById(
             include: {
               User: true,
             },
-          },    
+          },
           TerpTag: true,
           Strain: true,
         }
@@ -95,13 +88,29 @@ export async function getAllStrainsWithRelations(): Promise<
  * @returns A Promise that resolves to an array of all featured strains with their related data.
  */
 
-export async function getFeaturedStrains(): Promise<FeaturedStrain[]> {
+//* Gets all strains from one producer by id
+
+export async function getStrainsByProducerId(
+  producerId: number
+): Promise<StrainWithRelations[]> {
   const strains = await prisma.strain.findMany({
-    take: 10,
+    where: {
+      producerId: producerId,
+    },
     include: {
-      Reviews: true,
-      Producer: true,
       TerpTags: true,
+      Producer: true,
+      Reviews: {
+        include: {
+          Profile: {
+            include: {
+              User: true,
+            }
+          },
+          TerpTag: true,
+          Strain: true,
+        },
+      },
     },
   });
   return strains;

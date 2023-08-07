@@ -2,16 +2,32 @@ import Head from "next/head";
 import { Search } from "lucide-react";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
-import { getFeaturedProducers } from "@/server/database/producers";
-import { getFeaturedStrains } from "@/server/database/strains";
-import type { Producer, Strain } from "@/server/database/types";
+import {
+  getAllProducersWithRelations,
+  type ProducerWithRelations,
+} from "@/server/database/producers";
+import {
+  getAllStrainsWithRelations,
+  type StrainWithRelations,
+} from "@/server/database/strains";
+import {
+  convertDatesToStrings,
+  convertStringsToDates,
+} from "@/utils/dateSerialization";
+import StrainCard from "@/components/StrainCard";
+import ProducerCard from "@/components/ProducerCard";
 
 type HomeProps = {
-  strains: Strain[];
-  producers: Producer[];
+  strains: StrainWithRelations[];
+  producers: ProducerWithRelations[];
 };
 
 export default function Home({ strains, producers }: HomeProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  producers = convertStringsToDates(producers);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strains = convertStringsToDates(strains);
+
   return (
     <>
       <Head>
@@ -27,7 +43,7 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 md:px-4 sm:w-1/2">
+        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 sm:w-1/2 md:px-4">
           <input
             type="text"
             placeholder="Find what's next in weed..."
@@ -37,8 +53,14 @@ export default function Home({ strains, producers }: HomeProps) {
             <Search className="w-6 sm:w-full" />
           </button>
         </div>
-        <Carousel title="🔥 Strains" data={strains} />
-        <Carousel title="🔥 Producers" data={producers} />
+        <Carousel title="🔥 Strains"
+                  data={strains}
+                  renderItem={(strain) => <StrainCard strain={strain}/>}
+                  getKey={(strain) => strain.name}/>
+        <Carousel title="🔥 Producers"
+                  data={producers}
+                  renderItem={(producer) => <ProducerCard producer={producer}/>}
+                  getKey={(producer) => producer.name}/>
       </main>
     </>
   );
@@ -46,35 +68,22 @@ export default function Home({ strains, producers }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
-    const strains = await getFeaturedStrains();
-    const producers = await getFeaturedProducers();
+    let strains = await getAllStrainsWithRelations();
+    let producers = await getAllProducersWithRelations();
+
+    // iterate on strains with dateserialization function
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    strains = convertDatesToStrings(strains);
+
+    // iterate on producers with dateserialization function
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    producers = convertDatesToStrings(producers);
 
     return {
       props: {
-        strains: strains.map((strain) => ({
-          id: strain.id,
-          name: strain.name,
-          batchDate: strain.batchDate.toDateString(),
-          productType: strain.productType,
-          producerBannerImage: strain.Producer.bannerImage,
-          THC: strain.THC,
-          producerId: strain.Producer.id,
-          producerName: strain.Producer.name,
-          image: strain.image,
-          TerpTags: strain.TerpTags.map((tag) => ({
-            id: tag.id,
-            color: tag.color,
-            lean: tag.lean,
-            name: tag.name,
-          })),
-        })),
-        producers: producers.map((producer) => ({
-          id: producer.id,
-          name: producer.name,
-          bannerImage: producer.bannerImage,
-          location: producer.location,
-          website: producer.website,
-        })),
+        strains: strains,
+        producers: producers,
       },
     };
   } catch (e) {
