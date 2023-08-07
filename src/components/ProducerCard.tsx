@@ -13,7 +13,7 @@ const ProducerCard: React.FC<Props> = (props) => (
         <div className="card w-96 md:w-72 min-h-full flex flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary">
             {props.producer.bannerImage && (
                 <Image
-                    className="h-full w-full overflow-hidden object-cover object-center"
+                    className="w-full h-full overflow-hidden object-cover object-center"
                     src={props.producer.bannerImage}
                     width={400}
                     height={400}

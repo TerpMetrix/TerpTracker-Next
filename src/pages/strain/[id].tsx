@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Star, InfoIcon, Flower2, Droplets } from "lucide-react";
+import { Star, InfoIcon, Flower2, Droplets } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
