@@ -7,6 +7,10 @@ import {
   getProducerById,
 } from "@/server/database/producers";
 import {
+  type StrainWithRelations,
+  getStrainsByProducerId,
+} from "@/server/database/strains";
+import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
@@ -14,10 +18,12 @@ import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
 import Carousel from "@/components/Carousel";
+import { get } from "http";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
   producer: ProducerWithRelations;
+  strains: StrainWithRelations[];
   notFound?: boolean;
 };
 
@@ -96,6 +102,8 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   }
 
   let producer = await getProducerById(producerId);
+  let strains = await getStrainsByProducerId(producerId);
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertDatesToStrings(producer);
   console.log(producer); // eslint-disable-line no-console
@@ -107,6 +115,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   return {
     props: {
       producer: producer,
+      strains: strains,
     },
   };
 };

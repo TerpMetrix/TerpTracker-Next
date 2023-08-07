@@ -71,3 +71,26 @@ export async function getAllStrainsWithRelations(): Promise<
  * Retrieves all featured strains, including their related producer and tags.
  * @returns A Promise that resolves to an array of all featured strains with their related data.
  */
+
+//* Gets all strains from one producer by id
+
+export async function getStrainsByProducerId(
+  producerId: number
+): Promise<StrainWithRelations[]> {
+  const strains = await prisma.strain.findMany({
+    where: {
+      producerId: producerId,
+    },
+    include: {
+      TerpTags: true,
+      Producer: true,
+      Reviews: {
+        include: {
+          Profile: true,
+          TerpTag: true,
+        },
+      },
+    },
+  });
+  return strains;
+}
