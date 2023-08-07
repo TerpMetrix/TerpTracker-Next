@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { type Strain } from "@/server/database/types";
+import { type Strain } from "@prisma/client";
 import { type ProducerWithRelations } from "@/server/database/producers";
 
 type PopUpProps = {
