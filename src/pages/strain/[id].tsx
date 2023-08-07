@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowUpRight, Star, InfoIcon } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
@@ -24,6 +24,8 @@ import {
 }
   from "@/utils/dateSerialization";
 import Image from "next/image";
+import PopUp from "@/components/PopUp";
+import { useState } from "react";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -36,50 +38,61 @@ export type StrainProps = {
 export default function Strain({ strain, allTags }: StrainProps) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strain = convertStringsToDates(strain);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <Head>
         <title>{strain.name} | TerpTracker</title>
       </Head>
       <BackButton />
-      <div className="mb-10 min-h-screen">
-        <div className="flex h-96 flex-col items-center justify-center gap-10">
-          <div className="flex flex-col items-center gap-10">
-            <Image
-              className="h-full w-full object-cover object-center"
-              src={strain.image}
-              width={500}
-              height={500}
-              alt={"image of " + strain.name}
-            />
+      <PopUp
+        data={strain}
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+      ></PopUp>
+      <div className="flex flex-row items-start justify-center gap-10">
+        <div>
+          <button onClick={() => openModal()} className="absolute m-4 align-right"><InfoIcon /></button>
+          <Image
+            className="rounded-lg"
+            src={strain.image}
+            width={500}
+            height={500}
+            alt={"image of " + strain.name}
+          />
+        </div>
+        <div>
+          <div className="flex flex-col items-center justify-center gap-4 bg-neutral rounded-lg p-4">
             <h1 className="text-4xl">{strain.name}</h1>
             <p className="italic text-gray-400">
               Quick description of this strain.
             </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
             <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
             <p className="badge">{strain.batchDate.toDateString()}</p>
             <p className="badge badge-primary">{strain.productType}</p>
+            <div className="my-2 flex flex-row items-center justify-center gap-4">
+              {strain.TerpTags?.map((tag) => {
+                return <Tag tag={tag} key={tag.id} />;
+              })}
+            </div>
+            <Link
+              className="btn-outline btn"
+              href={producerLink(strain.producerId)}
+            >
+              {strain.Producer.name} <ArrowUpRight />{" "}
+              {/*need to make this link to prod name */}
+            </Link>
           </div>
-
-          <div className="my-2 flex flex-row items-center justify-center gap-4">
-            {strain.TerpTags?.map((tag) => {
-              return <Tag tag={tag} key={tag.id} />;
-            })}
-          </div>
-
-          <Link
-            className="btn-outline btn"
-            href={producerLink(strain.producerId)}
-          >
-            {strain.Producer.name} <ArrowUpRight />{" "}
-            {/*need to make this link to prod name */}
-          </Link>
-        </div>
-
-        <div className="flex flex-col items-center justify-center">
-          <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
+          <ul className="flex flex-col gap-4 p-4">
             {strain.Reviews?.map((review) => {
               return (
                 <li key={review.id}>
@@ -87,8 +100,9 @@ export default function Strain({ strain, allTags }: StrainProps) {
                 </li>
               );
             })}
+            <NewReviewModal strainId={strain.id} tagslist={allTags} />
+
           </ul>
-          <NewReviewModal strainId={strain.id} tagslist={allTags} />
         </div>
       </div>
     </>
