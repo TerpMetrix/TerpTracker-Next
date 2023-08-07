@@ -45,3 +45,19 @@ export async function getFeaturedProducers(): Promise<Array<Producer>> {
   });
   return producers;
 }
+
+// get all producers with relations
+export async function getAllProducersWithRelations(): Promise<
+  ProducerWithRelations[]
+> {
+  const producers = await prisma.producer.findMany({
+    include: {
+      Strains: {
+        include: {
+          TerpTags: true,
+        },
+      },
+    },
+  });
+  return producers;
+}

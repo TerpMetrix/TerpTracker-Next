@@ -2,7 +2,7 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { X } from "lucide-react";
-import Tag from "./tag";
+import Tag from "./Tag";
 
 declare global {
   interface Window {

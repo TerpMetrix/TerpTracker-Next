@@ -1,9 +1,9 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
-import NewReviewModal from "@/components/newReviewModal";
+import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
-import Tag from "@/components/tag";
+import Tag from "@/components/Tag";
 import BackButton from "@/components/BackButton";
 import type { Review, Strain, TerpTag } from "@/server/database/types";
 import { getStrainById } from "@/server/database/strains";
