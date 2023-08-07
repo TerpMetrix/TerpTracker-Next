@@ -18,7 +18,7 @@ import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
 import Carousel from "@/components/Carousel";
-import { get } from "http";
+import StrainCard from "@/components/StrainCard";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
@@ -28,7 +28,7 @@ export type ProducerProps = {
 };
 
 // The main producer component exported in this file
-export default function Producer({ producer }: ProducerProps) {
+export default function Producer({ producer , strains}: ProducerProps) {
   //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
   const [isOpen, setIsOpen] = useState(false);
@@ -66,20 +66,10 @@ export default function Producer({ producer }: ProducerProps) {
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
         />
-        <div className="flex w-full justify-center">
-          <ul
-            id="#strains"
-            className="flex flex-wrap items-center justify-center gap-5"
-          >
-            <Carousel
-              title="🔥 Producers"
-              data={
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                convertDatesToStrings(producer.Strains)
-              }
-            />
-          </ul>
-        </div>
+          <Carousel title="🔥 Strains"
+                      data={strains}
+                      renderItem={(strain) => <StrainCard strain={strain}/>}
+                      getKey={(strain) => strain.name}/>
       </div>
     </>
   );
@@ -102,10 +92,13 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   }
 
   let producer = await getProducerById(producerId);
+
   let strains = await getStrainsByProducerId(producerId);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertDatesToStrings(producer);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strains = convertDatesToStrings(strains);
   console.log(producer); // eslint-disable-line no-console
 
   if (!producer) {
