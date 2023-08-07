@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Star, InfoIcon } from "lucide-react";
+import { ArrowUpRight, Star, InfoIcon, Flower2, Droplets } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
@@ -72,13 +72,12 @@ export default function Strain({ strain, allTags }: StrainProps) {
         </div>
         <div>
           <div className="flex flex-col items-center justify-center gap-4 bg-neutral rounded-lg p-4">
-            <h1 className="text-4xl">{strain.name}</h1>
-            <p className="italic text-gray-400">
-              Quick description of this strain.
-            </p>
+            <h1 className="text-2xl">{strain.name}</h1>
             <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
-            <p className="badge">{strain.batchDate.toDateString()}</p>
-            <p className="badge badge-primary">{strain.productType}</p>
+            <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
+            //func to check if "flower" or "hash" and display flower or hash icon
+            strain.productType === "flower" ? <Flower2/> : <Droplets/>
+            }</p>
             <div className="my-2 flex flex-row items-center justify-center gap-4">
               {strain.TerpTags?.map((tag) => {
                 return <Tag tag={tag} key={tag.id} />;
@@ -88,7 +87,14 @@ export default function Strain({ strain, allTags }: StrainProps) {
               className="btn-outline btn"
               href={producerLink(strain.producerId)}
             >
-              {strain.Producer.name} <ArrowUpRight />{" "}
+              <Image
+                src={strain.Producer.bannerImage}
+                alt="Producer Banner Image"
+                width={20}
+                height={20}
+                className="rounded-full"
+              />
+              {strain.Producer.name}{" "}
               {/*need to make this link to prod name */}
             </Link>
           </div>

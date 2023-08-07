@@ -9,7 +9,7 @@ interface CarouselProps<TData> {
 }
 const Carousel = <TData,>({ title, data, getKey, renderItem }: CarouselProps<TData>) => {
     return (
-        <div className="w-11/12 flex-col space-y-8 overflow-hidden">
+        <div className="w-full flex-col space-y-8 overflow-hidden">
             <h2 className="text-2xl font-bold mb-2 text-left w-full ml-5 md:ml-24">
                 {title}
             </h2>
