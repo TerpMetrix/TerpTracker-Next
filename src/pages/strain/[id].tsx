@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Link from "next/link";
-import { Star, InfoIcon, Flower2, Droplets } from "lucide-react";
+import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
@@ -59,56 +59,62 @@ export default function Strain({ strain, allTags }: StrainProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp>
-      <div className="flex flex-row items-start justify-center gap-10">
-        <div>
-          <button onClick={() => openModal()} className="absolute m-4 align-right"><InfoIcon /></button>
+      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-center gap-10 mt-4 rounded-lg lg:h-[500px] p-4 lg:p-0">
+        <div className="relative">
+          <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
+          <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
+            {strain.TerpTags?.map((tag) => {
+              return <Tag tag={tag} key={tag.id} />;
+            })}
+          </div>
           <Image
-            className="rounded-lg"
+            className="rounded-lg w-96 md:w-[450px] lg:w-[500px] h-96 md:h-[450px] lg:h-[500px]"
             src={strain.image}
-            width={500}
-            height={500}
+            width={600}
+            height={600}
             alt={"image of " + strain.name}
           />
         </div>
-        <div>
-          <div className="flex flex-col items-center justify-center gap-4 bg-neutral rounded-lg p-4">
-            <h1 className="text-2xl">{strain.name}</h1>
-            <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
-            <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
-            //func to check if "flower" or "hash" and display flower or hash icon
-            strain.productType === "flower" ? <Flower2/> : <Droplets/>
-            }</p>
-            <div className="my-2 flex flex-row items-center justify-center gap-4">
-              {strain.TerpTags?.map((tag) => {
-                return <Tag tag={tag} key={tag.id} />;
-              })}
+        <div className="h-full lg:overflow-hidden w-80 md:w-96">
+          <div className="">
+            <div className="gap-2 rounded-lg p-4 border w-full relative">
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-bold uppercase">{strain.name}</h1>
+                <Link
+                  className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-1 mb-4 p-4"
+                  href={producerLink(strain.producerId)}
+                >
+                  <Image
+                    src={strain.Producer.bannerImage}
+                    alt="Producer Banner Image"
+                    width={30}
+                    height={30}
+                    className="rounded-full"
+                  />
+                  {strain.Producer.name}{" "}
+                  {/*need to make this link to prod name */}
+                </Link>
+                <p className="badge badge-outline">{Math.floor(strain.THC * 100)}% THC</p>
+              </div>
+              <p className="badge badge-primary uppercase text-white font-bold h-auto p-3 absolute right-4 bottom-4">{
+                //func to check if "flower" or "hash" and display flower or hash icon
+                strain.productType === "flower" ? <Flower2 /> : <Droplets />
+              }</p>
             </div>
-            <Link
-              className="btn-outline btn"
-              href={producerLink(strain.producerId)}
-            >
-              <Image
-                src={strain.Producer.bannerImage}
-                alt="Producer Banner Image"
-                width={20}
-                height={20}
-                className="rounded-full"
-              />
-              {strain.Producer.name}{" "}
-              {/*need to make this link to prod name */}
-            </Link>
-          </div>
-          <ul className="flex flex-col gap-4 p-4">
-            {strain.Reviews?.map((review) => {
-              return (
-                <li key={review.id}>
-                  <ReviewCard review={review} />
-                </li>
-              );
-            })}
-            <NewReviewModal strainId={strain.id} tagslist={allTags} />
 
-          </ul>
+            <div className="overflow-y-auto max-h-96">
+              <ul className="h-full flex flex-col justify-center gap-3 pb-8 pt-4">
+                {strain.Reviews?.map((review) => {
+                  return (
+                    <li key={review.id} className="">
+                      <ReviewCard review={review} />
+                    </li>
+                  );
+                })}
+                <NewReviewModal strainId={strain.id} tagslist={allTags} />
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -123,11 +129,22 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
   const { rating, comment } = review;
 
   return (
-    <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-neutral ">
-      <h3 className="mb-1 text-lg font-medium">{review.profileName}</h3>
-      <RatingStars rating={rating} />
-      <p className="text-gray-400">{review.createdAt.toDateString()}</p>
-      <p className="text-gray-200">{comment}</p>
+    <div className="rounded-md border p-4 transition-all relative">
+      <h3 className="text-lg font-medium">{review.profileName}</h3>
+      {/* //func to convert ratings to up or down votes (>=4 up, <4 down) */}
+      <div className="">
+        {rating >= 4 ? (
+          <div className="badge badge-success h-auto p-2 text-white absolute right-4 top-4">
+            <ThumbsUp />
+          </div>
+        ) : (
+          <div className="badge badge-error h-auto p-2 text-white absolute right-4 top-4">
+            <ThumbsDown />
+          </div>
+        )}
+      </div>
+      <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
+      <p className="text-gray-200 mt-2">{comment}</p>
       {/* if tag, show it */}
       {review.TerpTag &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
@@ -138,27 +155,27 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
   );
 };
 
-function RatingStars({ rating }: { rating: number }) {
-  //  if we somehow get a rating over 5, just cap it at 5
-  const MAX_STARS = 5;
-  rating %= MAX_STARS + 1;
+// function RatingStars({ rating }: { rating: number }) {
+//   //  if we somehow get a rating over 5, just cap it at 5
+//   const MAX_STARS = 5;
+//   rating %= MAX_STARS + 1;
 
-  const filledStars = [];
-  const emptyStars = [];
+//   const filledStars = [];
+//   const emptyStars = [];
 
-  for (let i = 0; i < rating; i++) {
-    filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
-  }
-  for (let i = rating; i < MAX_STARS; i++) {
-    emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
-  }
-  return (
-    <div className="mb-4 flex">
-      {filledStars}
-      {emptyStars}
-    </div>
-  );
-}
+//   for (let i = 0; i < rating; i++) {
+//     filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
+//   }
+//   for (let i = rating; i < MAX_STARS; i++) {
+//     emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
+//   }
+//   return (
+//     <div className="mb-4 flex">
+//       {filledStars}
+//       {emptyStars}
+//     </div>
+//   );
+// }
 
 function producerLink(id: number) {
   return "/producer/" + String(id);
@@ -178,7 +195,6 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
   let strain = await getStrainById(id);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strain = convertDatesToStrings(strain)
-  console.log(strain);
 
   if (!strain) {
     return { notFound: true };

@@ -49,7 +49,7 @@ export default function NewReviewModal({
 
   return (
     <>
-      <button className="btn w-auto" onClick={() => window.review_modal.showModal()}>
+      <button className="btn w-1/2 m-auto bg-primary text-white hover:bg-neutral" onClick={() => window.review_modal.showModal()}>
         <PlusCircle/> Comment
       </button>
       <dialog id="review_modal" className="modal">
