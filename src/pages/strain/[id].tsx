@@ -59,7 +59,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp>
-      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-center gap-10 mt-4 rounded-lg lg:h-[500px] p-4 lg:p-0">
+      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-center gap-10 mt-4 rounded-lg p-4 lg:p-0">
         <div className="relative">
           <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
           <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
@@ -76,7 +76,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
           />
         </div>
         <div className="h-full lg:overflow-hidden w-80 md:w-96">
-          <div className="">
+          <div>
             <div className="gap-2 rounded-lg p-4 border w-full relative">
               <div className="flex flex-col">
                 <h1 className="text-2xl font-bold uppercase">{strain.name}</h1>
@@ -131,7 +131,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
   return (
     <div className="rounded-md border p-4 transition-all relative">
       <h3 className="text-lg font-medium">{review.profileName}</h3>
-      {/* //func to convert ratings to up or down votes (>=4 up, <4 down) */}
+      {/* //cursed temporary func to convert star ratings to up or down votes (>=4 up, <4 down) */}
       <div className="">
         {rating >= 4 ? (
           <div className="badge badge-success h-auto p-2 text-white absolute right-4 top-4">
