@@ -22,7 +22,7 @@ type NewReviewModalProps = {
   tagslist: Tag[];
 };
 
-export default function NewReviewModal(this: any, {
+export default function NewReviewModal({
   strainId,
   tagslist,
 }: NewReviewModalProps) {
@@ -33,19 +33,17 @@ export default function NewReviewModal(this: any, {
 
   const mutation = api.reviews.newReview.useMutation();
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     //should close the modal as well and refresh the data
-    try {
-      const res = await mutation.mutate({
-        rating: rating,
-        comment: comment,
-        strainId: strainId,
-        profileName: sessionData?.user.name || "",
-        tagId: selectedTag?.id || 0,
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    const res = mutation.mutate({
+      rating: rating,
+      comment: comment,
+      strainId: strainId,
+      profileName: sessionData?.user.name || "",
+      tagId: selectedTag?.id || 0,
+    });
+    console.log(res);
+
     window.review_modal.close();
   };
 
@@ -109,9 +107,9 @@ export default function NewReviewModal(this: any, {
           </form>
         </div>
       </dialog>
-      {mutation.isLoading && <div className="m-auto alert alert-info w-3/4"><CircleEllipsis/>Posting...</div>}
-      {mutation.isSuccess && <div className="m-auto alert alert-success w-3/4"><CheckCircle/>Success!</div>}
-      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle/> You must be logged in to post a comment!</div>}
+      {mutation.isLoading && <div className="m-auto alert alert-info w-3/4"><CircleEllipsis />Posting...</div>}
+      {mutation.isSuccess && <div className="m-auto alert alert-success w-3/4"><CheckCircle />Success!</div>}
+      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle /> You must be logged in to post a comment!</div>}
     </>
   );
 }
