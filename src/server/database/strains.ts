@@ -1,5 +1,5 @@
 import { prisma } from "@/server/database/db";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 /**
  * The StrainWithRelations type represents a strain with its related data, including reviews, tags, and producer.
@@ -124,21 +124,9 @@ export async function getStrainsBySearchTerm(
 ): Promise<StrainWithRelations[]> {
   const strains = await prisma.strain.findMany({
     where: {
-      OR: [
-        {
-          name: {
-            contains: searchTerm,
-          },
-        },
-        {
-          Producer: {
-            name: {
-              contains: searchTerm,
-            }
-          }
-        }
-      ]
-
+      name: {
+        contains: searchTerm,
+      },
     },
     include: {
       TerpTags: true,

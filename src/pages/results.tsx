@@ -9,6 +9,8 @@ import {
   convertStringsToDates,
 } from "@/utils/dateSerialization";
 import { GetServerSideProps } from 'next';
+import StrainCard from '@/components/StrainCard';
+import Grid from '@/components/Grid';
 
 type ResultsPageProps = {
   strains: StrainWithRelations[];
@@ -17,14 +19,19 @@ type ResultsPageProps = {
 
 function ResultsPage({ strains }: ResultsPageProps) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  strains = convertStringsToDates(strains);
+  strains = convertDatesToStrings(strains);
   const router = useRouter();
   const { search } = router.query;
 
   return (
     <div>
       <h1>Search Results for "{search}"</h1>
-      {/* Display search results */}
+      <Grid 
+        title="Results"
+        data={strains}
+        renderItem={(strain) => <StrainCard strain={strain} />}
+        getKey={(strain) => strain.name}
+      />
     </div>
   );
 }
