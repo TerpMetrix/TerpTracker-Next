@@ -1,5 +1,8 @@
 import Head from "next/head";
+import Link from "next/link";
 import { Search } from "lucide-react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
 import {
@@ -16,6 +19,7 @@ import {
 } from "@/utils/dateSerialization";
 import StrainCard from "@/components/StrainCard";
 import ProducerCard from "@/components/ProducerCard";
+import { set } from "zod";
 
 type HomeProps = {
   strains: StrainWithRelations[];
@@ -27,6 +31,14 @@ export default function Home({ strains, producers }: HomeProps) {
   producers = convertStringsToDates(producers);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strains = convertStringsToDates(strains);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/results?search=${searchTerm}`);
+  };
 
   return (
     <>
@@ -44,23 +56,28 @@ export default function Home({ strains, producers }: HomeProps) {
           </h1>
         </div>
         <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 sm:w-1/2 md:px-4">
-          <input
-            type="text"
-            placeholder="Find what's next in weed..."
-            className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
-          />
-          <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
-            <Search className="w-6 sm:w-full" />
-          </button>
+          <form onSubmit={handleSearch} className="flex flex-row w-full">
+            <input
+              type="text"
+              placeholder="Find what's next in weed..."
+              className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Link href={`/results?search=${searchTerm}`}>
+              <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
+                <Search className="w-6 sm:w-full" />
+              </button>
+            </Link>
+          </form>
         </div>
         <Carousel title="🔥 Strains"
-                  data={strains}
-                  renderItem={(strain) => <StrainCard strain={strain}/>}
-                  getKey={(strain) => strain.name}/>
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name} />
         <Carousel title="🔥 Producers"
-                  data={producers}
-                  renderItem={(producer) => <ProducerCard producer={producer}/>}
-                  getKey={(producer) => producer.name}/>
+          data={producers}
+          renderItem={(producer) => <ProducerCard producer={producer} />}
+          getKey={(producer) => producer.name} />
       </main>
     </>
   );
