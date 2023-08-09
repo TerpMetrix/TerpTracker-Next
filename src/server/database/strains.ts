@@ -124,9 +124,29 @@ export async function getStrainsBySearchTerm(
 ): Promise<StrainWithRelations[]> {
   const strains = await prisma.strain.findMany({
     where: {
-      name: {
-        contains: searchTerm,
-      },
+      OR: [
+        {
+          name: {
+            contains: searchTerm,
+          }
+        },
+        {
+          Producer: {
+            name: {
+              contains: searchTerm,
+            }
+          }
+        },
+        {
+          TerpTags: {
+            some: {
+              name: {
+                contains: searchTerm,
+              }
+            }
+          }
+        }
+      ]
     },
     include: {
       TerpTags: true,
