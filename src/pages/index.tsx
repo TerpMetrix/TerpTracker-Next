@@ -43,7 +43,9 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <SearchBar/>
+        <div className="m-auto w-11/12 md:w-1/2 flex flex-row items-center">
+          <SearchBar />
+        </div>
         <Carousel title="🔥 Strains"
           data={strains}
           renderItem={(strain) => <StrainCard strain={strain} />}

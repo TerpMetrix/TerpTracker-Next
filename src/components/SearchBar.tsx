@@ -25,8 +25,8 @@ export const SearchBar = ({ initialState }: SearchBarProps) => {
 
     return (
 
-        <div className="w-full justify-center">
-            <form onSubmit={handleSearch} className="flex flex-row w-full m-auto items-center gap-1 space-x-2 sm:w-1/2 md:px-4">
+        <div className="w-full">
+            <form onSubmit={handleSearch} className="flex flex-row m-auto w-full gap-1 space-x-2">
                 <input
                     type="text"
                     placeholder={initialState ? initialState.toString() : "Search strains and brands..."}

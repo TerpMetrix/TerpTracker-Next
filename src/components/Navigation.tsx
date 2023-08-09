@@ -17,15 +17,14 @@ export default function Navigation() {
           <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70} />
         </Link>
 
-        {/* if index page, do not show search bar */}
-        {!isIndex ?
-          <div className="navbar-center flex w-full">
-            <SearchBar />
-          </div>
-          : null}
-
       </div>
-      <div className="navbar-end p-4">{sessionData ? logOut() : logIn()}</div>
+      {/* if not index, do not display log in button */}
+      {isIndex ?
+        <div className="navbar-end p-4">{sessionData ? logOut() : logIn()}</div>
+        : <div className="navbar-end flex w-3/4 pr-4 md:pl-12">
+          <SearchBar />
+        </div>
+      }
     </div>
   );
 }
