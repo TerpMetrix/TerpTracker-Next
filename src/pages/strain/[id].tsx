@@ -1,6 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown } from "lucide-react";
+import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown, PlusCircle } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
@@ -35,6 +36,7 @@ export type StrainProps = {
 
 // The main producer component exported in this file
 export default function Strain({ strain, allTags }: StrainProps) {
+  const { data: sessionData } = useSession();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   strain = convertStringsToDates(strain);
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +112,15 @@ export default function Strain({ strain, allTags }: StrainProps) {
                   );
                 })}
                 {/* Add functionality to this component to only let logged-in users comment */}
-                <NewReviewModal strainId={strain.id} tagslist={allTags} />
+                {sessionData ? (
+                  <NewReviewModal strainId={strain.id} tagslist={allTags} />
+                ) : (
+                  <Link href="/api/auth/signin" className="m-auto">
+                    <button className="btn w-full bg-neutral text-white hover:bg-primary" onClick={() => window.review_modal.showModal()}>
+                      <PlusCircle /> Login To Comment
+                    </button>
+                  </Link>
+                )}
               </ul>
             </div>
           </div>
