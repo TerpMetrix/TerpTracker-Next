@@ -111,6 +111,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
                     </li>
                   );
                 })}
+                {/* Add functionality to this component to only let logged-in users comment */}
                 <NewReviewModal strainId={strain.id} tagslist={allTags} />
               </ul>
             </div>
