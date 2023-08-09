@@ -1,11 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { init } from "next/dist/compiled/@vercel/og/satori";
 
 type SearchBarProps = {
-    initialState?: String;
+    initialState?: string;
 }
 
 //accept input argument that determines initial state of search bar
@@ -18,7 +16,11 @@ export const SearchBar = ({ initialState }: SearchBarProps) => {
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        router.push(`/results?search=${searchTerm}`);
+        router.push(`/results?search=${searchTerm}`).then(() => {
+            // Handle successful navigation
+        }).catch((error) => {
+            console.error(error);
+        });
     };
 
     return (
@@ -31,11 +33,9 @@ export const SearchBar = ({ initialState }: SearchBarProps) => {
                     className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <Link href={`/results?search=${searchTerm}`}>
-                    <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
-                        <Search className="w-6 sm:w-full" />
-                    </button>
-                </Link>
+                <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
+                    <Search className="w-6 sm:w-full" />
+                </button>
             </form>
         </div>
 

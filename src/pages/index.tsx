@@ -1,8 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
-import { Search } from "lucide-react";
-import { useRouter } from "next/router";
-import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
 import {
