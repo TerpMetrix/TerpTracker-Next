@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 export const reviewRouter = createTRPCRouter({
-  newReview: publicProcedure
+  newReview: protectedProcedure
     .input(
       z.object({
         strainId: z.number(),
