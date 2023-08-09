@@ -4,7 +4,6 @@ import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown } from "lucide-react"
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
-import BackButton from "@/components/BackButton";
 import {
   type ReviewWithRelations
 }
@@ -53,7 +52,6 @@ export default function Strain({ strain, allTags }: StrainProps) {
       <Head>
         <title>{strain.name} | TerpTracker</title>
       </Head>
-      <BackButton />
       <PopUp
         data={strain}
         isOpen={isOpen}

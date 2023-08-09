@@ -1,7 +1,6 @@
 import type { GetServerSideProps } from "next";
 import Hero from "@/components/Hero";
 import Head from "next/head";
-import BackButton from "@/components/BackButton";
 import {
   type ProducerWithRelations,
   getProducerById,
@@ -46,7 +45,6 @@ export default function Producer({ producer , strains}: ProducerProps) {
       <Head>
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
-      <BackButton />
       <button onClick={() => openModal()}>Open {producer.name} Modal</button>
       <PopUp
         data={producer}
