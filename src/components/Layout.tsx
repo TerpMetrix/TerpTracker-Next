@@ -5,11 +5,11 @@ import { Footer } from "./Footer";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Navigation />
-      <main className="selection:bg-accent selection:text-accent">
+      <main className="selection:bg-accent selection:text-accent h-screen">
+        <Navigation />
         {children}
+        <Footer></Footer>
       </main>
-      <Footer></Footer>
     </>
   );
 }

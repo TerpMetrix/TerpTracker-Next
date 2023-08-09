@@ -1,7 +1,7 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, PlusCircle } from "lucide-react";
 import Tag from "./Tag";
 
 declare global {
@@ -49,8 +49,8 @@ export default function NewReviewModal({
 
   return (
     <>
-      <button className="btn" onClick={() => window.review_modal.showModal()}>
-        New Review
+      <button className="btn w-1/2 m-auto bg-primary text-white hover:bg-neutral" onClick={() => window.review_modal.showModal()}>
+        <PlusCircle/> Comment
       </button>
       <dialog id="review_modal" className="modal">
         <div className="modal-box">

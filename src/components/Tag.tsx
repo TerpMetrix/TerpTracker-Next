@@ -1,5 +1,5 @@
 import React from 'react';
-import type { TerpTag } from '@/server/database/types';
+import type { TerpTag } from '@prisma/client';
 
 type TagProps = {
     tag: TerpTag;
