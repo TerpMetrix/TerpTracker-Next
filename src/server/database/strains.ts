@@ -145,6 +145,15 @@ export async function getStrainsBySearchTerm(
               }
             }
           }
+        },
+        {
+          Reviews: {
+            some: {
+              comment: {
+                contains: searchTerm,
+              }
+            }
+          }
         }
       ]
     },

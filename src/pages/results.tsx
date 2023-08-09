@@ -11,6 +11,7 @@ import {
 import { GetServerSideProps } from 'next';
 import StrainCard from '@/components/StrainCard';
 import Grid from '@/components/Grid';
+import Head from 'next/head';
 
 type ResultsPageProps = {
   strains: StrainWithRelations[];
@@ -24,6 +25,10 @@ function ResultsPage({ strains }: ResultsPageProps) {
   const { search } = router.query;
 
   return (
+    <>
+    <Head>
+      <title>Search Results for "{search}" | TerpTracker</title>
+    </Head>
     <div>
       <h1>Search Results for "{search}"</h1>
       <Grid 
@@ -33,6 +38,7 @@ function ResultsPage({ strains }: ResultsPageProps) {
         getKey={(strain) => strain.name}
       />
     </div>
+    </>
   );
 }
 
