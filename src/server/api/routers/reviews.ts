@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { error } from "console";
 
 export const reviewRouter = createTRPCRouter({
   newReview: protectedProcedure
@@ -65,7 +66,7 @@ export const reviewRouter = createTRPCRouter({
           console.log("created new review without tag: ", newReviewWithoutTag);
         }
       } catch (e) {
-        console.error(e);
+        return error(e);
       }
     }),
 });

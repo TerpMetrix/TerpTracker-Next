@@ -1,7 +1,7 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { X, PlusCircle } from "lucide-react";
+import { X, PlusCircle, XCircle, CheckCircle, CircleEllipsis } from "lucide-react";
 import Tag from "./Tag";
 
 declare global {
@@ -22,7 +22,7 @@ type NewReviewModalProps = {
   tagslist: Tag[];
 };
 
-export default function NewReviewModal({
+export default function NewReviewModal(this: any, {
   strainId,
   tagslist,
 }: NewReviewModalProps) {
@@ -33,24 +33,26 @@ export default function NewReviewModal({
 
   const mutation = api.reviews.newReview.useMutation();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     //should close the modal as well and refresh the data
-    const res = mutation.mutate({
-      rating: rating,
-      comment: comment,
-      strainId: strainId,
-      profileName: sessionData?.user.name || "",
-      tagId: selectedTag?.id || 0,
-    });
-
-    console.log(res);
+    try {
+      const res = await mutation.mutate({
+        rating: rating,
+        comment: comment,
+        strainId: strainId,
+        profileName: sessionData?.user.name || "",
+        tagId: selectedTag?.id || 0,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     window.review_modal.close();
   };
 
   return (
     <>
       <button className="btn w-1/2 m-auto bg-primary text-white hover:bg-neutral" onClick={() => window.review_modal.showModal()}>
-        <PlusCircle/> Comment
+        <PlusCircle /> Comment
       </button>
       <dialog id="review_modal" className="modal">
         <div className="modal-box">
@@ -107,6 +109,9 @@ export default function NewReviewModal({
           </form>
         </div>
       </dialog>
+      {mutation.isLoading && <div className="m-auto alert alert-info w-3/4"><CircleEllipsis/>Posting...</div>}
+      {mutation.isSuccess && <div className="m-auto alert alert-success w-3/4"><CheckCircle/>Success!</div>}
+      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle/> You must be logged in to post a comment!</div>}
     </>
   );
 }
