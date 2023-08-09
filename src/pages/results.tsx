@@ -27,12 +27,11 @@ function ResultsPage({ strains }: ResultsPageProps) {
   return (
     <>
     <Head>
-      <title>Search Results for "{search}" | TerpTracker</title>
+      <title>Results for "{search}" | TerpTracker</title>
     </Head>
     <div>
-      <h1>Search Results for "{search}"</h1>
       <Grid 
-        title="Results"
+        title={`Results for "${search}"`}
         data={strains}
         renderItem={(strain) => <StrainCard strain={strain} />}
         getKey={(strain) => strain.name}

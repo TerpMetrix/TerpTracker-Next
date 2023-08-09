@@ -2,9 +2,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { LogIn, LogOut } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import SearchBar from "./SearchBar";
+import { useRouter } from "next/router";
 
 export default function Navigation() {
   const { data: sessionData } = useSession();
+  const router = useRouter();
+  const isIndex = router.pathname === "/";
 
   return (
     <div className="navbar bg-base-100 justify-center">
@@ -12,25 +16,13 @@ export default function Navigation() {
         <Link href="/" className="btn-ghost btn h-24 w-24 normal-case p-4">
           <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70} />
         </Link>
-        {/* HIDDING THIS DROPDOWN FOR NOW - MIGHT BE USEFUL LATER */}
-        {/* <div className="dropdown">
-          <label tabIndex={0} className="btn-ghost btn lg:hidden">
-            <Menu className="inline mt-2" size={40} />
-          </label>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu rounded-box menu-lg z-[1] mt-3 w-52 bg-base-100 p-2 shadow text-xl"
-          >
-            <li>
-              <Link href="/strain">Popular Strains</Link>
-            </li>
-            <li>
-              <Link href="/producer">Popular Producers</Link>
-            </li>
-          </ul>
-        </div> */}
-      </div>
-      <div className="navbar-center lg:hidden">
+
+        {/* if index page, do not show search bar */}
+        {!isIndex ?
+          <div className="navbar-center flex w-full">
+            <SearchBar />
+          </div>
+          : null}
 
       </div>
       <div className="navbar-end p-4">{sessionData ? logOut() : logIn()}</div>
