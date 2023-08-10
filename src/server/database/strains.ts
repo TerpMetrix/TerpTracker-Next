@@ -115,3 +115,63 @@ export async function getStrainsByProducerId(
   });
   return strains;
 }
+
+
+// Function to get strains by search term 
+
+export async function getStrainsBySearchTerm(
+  searchTerm: string
+): Promise<StrainWithRelations[]> {
+  const strains = await prisma.strain.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: searchTerm,
+          }
+        },
+        {
+          Producer: {
+            name: {
+              contains: searchTerm,
+            }
+          }
+        },
+        {
+          TerpTags: {
+            some: {
+              name: {
+                contains: searchTerm,
+              }
+            }
+          }
+        },
+        {
+          Reviews: {
+            some: {
+              comment: {
+                contains: searchTerm,
+              }
+            }
+          }
+        }
+      ]
+    },
+    include: {
+      TerpTags: true,
+      Producer: true,
+      Reviews: {
+        include: {
+          Profile: {
+            include: {
+              User: true,
+            }
+          },
+          TerpTag: true,
+          Strain: true,
+        },
+      },
+    },
+  });
+  return strains;
+}

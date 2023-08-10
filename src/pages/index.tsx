@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { Search } from "lucide-react";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
 import {
@@ -16,6 +15,7 @@ import {
 } from "@/utils/dateSerialization";
 import StrainCard from "@/components/StrainCard";
 import ProducerCard from "@/components/ProducerCard";
+import SearchBar from "@/components/SearchBar";
 
 type HomeProps = {
   strains: StrainWithRelations[];
@@ -43,24 +43,17 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 sm:w-1/2 md:px-4">
-          <input
-            type="text"
-            placeholder="Find what's next in weed..."
-            className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
-          />
-          <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
-            <Search className="w-6 sm:w-full" />
-          </button>
+        <div className="m-auto w-11/12 md:w-1/2 flex flex-row items-center">
+          <SearchBar />
         </div>
         <Carousel title="🔥 Strains"
-                  data={strains}
-                  renderItem={(strain) => <StrainCard strain={strain}/>}
-                  getKey={(strain) => strain.name}/>
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name} />
         <Carousel title="🔥 Producers"
-                  data={producers}
-                  renderItem={(producer) => <ProducerCard producer={producer}/>}
-                  getKey={(producer) => producer.name}/>
+          data={producers}
+          renderItem={(producer) => <ProducerCard producer={producer} />}
+          getKey={(producer) => producer.name} />
       </main>
     </>
   );

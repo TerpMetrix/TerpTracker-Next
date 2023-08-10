@@ -77,18 +77,18 @@ export default function Strain({ strain, allTags }: StrainProps) {
         </div>
         <div className="h-full lg:overflow-hidden w-80 md:w-96">
           <div>
-            <div className="gap-2 rounded-lg p-4 border w-full relative">
+            <div className="gap-2 rounded-lg p-4 border border-green-600 w-full relative">
               <div className="flex flex-col">
                 <h1 className="text-2xl font-bold uppercase">{strain.name}</h1>
                 <Link
-                  className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-1 mb-4 p-4"
+                  className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-2 mb-4 py-6"
                   href={producerLink(strain.producerId)}
                 >
                   <Image
                     src={strain.Producer.bannerImage}
                     alt="Producer Banner Image"
-                    width={30}
-                    height={30}
+                    width={40}
+                    height={40}
                     className="rounded-full"
                   />
                   {strain.Producer.name}{" "}
