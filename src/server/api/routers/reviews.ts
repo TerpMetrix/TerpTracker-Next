@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { error } from "console";
 
 export const reviewRouter = createTRPCRouter({
-  newReview: publicProcedure
+  newReview: protectedProcedure
     .input(
       z.object({
         strainId: z.number(),
@@ -65,7 +66,7 @@ export const reviewRouter = createTRPCRouter({
           console.log("created new review without tag: ", newReviewWithoutTag);
         }
       } catch (e) {
-        console.error(e);
+        return error(e);
       }
     }),
 });
