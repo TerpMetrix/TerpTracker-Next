@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { X, PlusCircle, XCircle, CheckCircle, CircleEllipsis } from "lucide-react";
 import Tag from "./Tag";
+import Select from "react-select";
+
 
 declare global {
   interface Window {
@@ -22,30 +24,48 @@ type NewReviewModalProps = {
   tagslist: Tag[];
 };
 
+type OptionType = { value: number; label: string };
+type MultiValue<T> = ReadonlyArray<T> | null | undefined;
+type ActionMeta<T> = {
+  action: string;
+  // ... other properties as needed
+};
+
+
 export default function NewReviewModal({
   strainId,
   tagslist,
 }: NewReviewModalProps) {
   const { data: sessionData } = useSession();
-  const [rating, setRating] = useState(1);
+  const [vote, setVote] = useState(1);
   const [comment, setComment] = useState("");
-  const [selectedTag, setTag] = useState<Tag>(); //should be an array of tag ids
+  const [selectedTags, setTags] = useState<Tag[]>([]);
 
   const mutation = api.reviews.newReview.useMutation();
 
   const handleSubmit = () => {
     //should close the modal as well and refresh the data
     const res = mutation.mutate({
-      rating: rating,
+      //pass in data as arrays to be mapped over
+      vote: vote,
       comment: comment,
       strainId: strainId,
       profileName: sessionData?.user.name || "",
-      tagId: selectedTag?.id || 0,
+      tagIds: selectedTags.map((tag) => tag.id),
     });
     console.log(res);
 
     window.review_modal.close();
   };
+
+  const handleTagChange = (selectedOptions: MultiValue<OptionType>, actionMeta: ActionMeta<OptionType>) => {
+    if (selectedOptions) {
+      const newTags = selectedOptions
+        .map((option) => tagslist.find((tag) => tag.id === option.value))
+        .filter((tag): tag is Tag => tag !== undefined);
+      setTags(newTags);
+    }
+  };  
 
   return (
     <>
@@ -67,36 +87,36 @@ export default function NewReviewModal({
               placeholder="Your review"
               className="input-bordered input-primary input w-full max-w-xs"
             />
-            <select
-              onChange={(e) => setRating(Number(e.target.value))}
-              value={rating}
-              className="select-primary select w-full max-w-xs"
-            >
-              <option disabled>Rating</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
+            {/* Upvote/Downvote */}
+            <div className="flex flex-row items-center justify-center gap-4">
+              <button
+                onClick={() => setVote(1)}
+                className={`btn btn-ghost btn-sm ${
+                  vote === 1 ? "btn-primary" : "btn-neutral"
+                }`}
+              >
+                <CheckCircle />
+              </button>
+              <button
+                onClick={() => setVote(-1)}
+                className={`btn btn-ghost btn-sm ${
+                  vote === -1 ? "btn-primary" : "btn-neutral"
+                }`}
+              >
+                <XCircle />
+              </button>
+            </div>
 
             {/*TAG SELECTOR*/}
-            <div className="my-2 flex flex-row items-center justify-center gap-4">
-              <select
-                onChange={(e) =>
-                  setTag(tagslist.find((tag) => tag.name === e.target.value))
-                }
-                className="select-primary select w-full max-w-xs"
-              >
-                {tagslist.map((tag) => {
-                  return <option key={tag.id}>{tag.name}</option>;
-                })}
-              </select>
-            </div>
+            <Select
+              isMulti
+              options={tagslist.map((tag) => ({ value: tag.id, label: tag.name }))}
+              onChange={handleTagChange}
+            />
 
             {/* Selected TAG DISPLAY CHECK */}
             <div className="my-2 flex flex-row items-center justify-center gap-4">
-              {selectedTag ? <Tag tag={selectedTag} /> : <></>}
+              {selectedTags ? selectedTags.map((tag) => <Tag key={tag.id} tag={tag} />) : null}
             </div>
 
             <div className="modal-action">

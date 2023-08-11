@@ -135,14 +135,14 @@ type ReviewCardProps = {
 };
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
-  const { rating, comment } = review;
+  const { vote, comment } = review;
 
   return (
     <div className="rounded-md border p-4 transition-all relative">
       <h3 className="text-lg font-medium">{review.profileName}</h3>
       {/* //cursed temporary func to convert star ratings to up or down votes (>=4 up, <4 down) */}
       <div className="">
-        {rating >= 4 ? (
+        {vote >= 4 ? (
           <div className="badge badge-success h-auto p-2 text-white absolute right-4 top-4">
             <ThumbsUp />
           </div>
@@ -154,10 +154,13 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       </div>
       <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
       <p className="text-gray-200 mt-2">{comment}</p>
-      {/* if tag, show it */}
-      {review.TerpTag &&
+      {/* if tags, show them */}
+      {review.TerpTags &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-          <Tag tag={review.TerpTag} key={review.TerpTag.id} />
+          {review.TerpTags.map((tag) => {
+            return <Tag tag={tag} key={tag.id} />;
+          }
+          )}
         </div>
       }
     </div>

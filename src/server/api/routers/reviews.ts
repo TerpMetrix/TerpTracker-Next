@@ -7,10 +7,10 @@ export const reviewRouter = createTRPCRouter({
     .input(
       z.object({
         strainId: z.number(),
-        rating: z.number().max(5).min(1),
+        vote: z.number().max(5).min(1),
         comment: z.string().max(500),
         profileName: z.string(),
-        tagId: z.number(),
+        tagIds: z.array(z.number()),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -20,14 +20,14 @@ export const reviewRouter = createTRPCRouter({
 
         //update strain to include new tags and create new review
         //udpate only if tag exists
-        if (input.tagId) {
+        if (input.tagIds) {
           const newTagOnStrain = await ctx.prisma.strain.update({
             where: {
               id: input.strainId,
             },
             data: {
               TerpTags: {
-                connect: { id: input.tagId },
+                connect: input.tagIds.map((tagId) => ({ id: tagId })),
               },
             },
           });
@@ -35,7 +35,7 @@ export const reviewRouter = createTRPCRouter({
 
           const newReviewWithTag = await ctx.prisma.review.create({
             data: {
-              rating: input.rating,
+              vote: input.vote,
               comment: input.comment,
               Strain: {
                 connect: { id: input.strainId },
@@ -43,8 +43,8 @@ export const reviewRouter = createTRPCRouter({
               Profile: {
                 connect: { profileName: input.profileName },
               },
-              TerpTag: {
-                connect: { id: input.tagId },
+              TerpTags: {
+                connect: input.tagIds.map((tagId) => ({ id: tagId })),
               },
             },
           });
@@ -53,7 +53,7 @@ export const reviewRouter = createTRPCRouter({
         else {
           const newReviewWithoutTag = await ctx.prisma.review.create({
             data: {
-              rating: input.rating,
+              vote: input.vote,
               comment: input.comment,
               Strain: {
                 connect: { id: input.strainId },
