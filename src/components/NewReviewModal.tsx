@@ -47,7 +47,6 @@ export default function NewReviewModal({
     //should close the modal as well and refresh the data
     const res = mutation.mutate({
       //pass in data as arrays to be mapped over
-      vote: vote,
       comment: comment,
       strainId: strainId,
       profileName: sessionData?.user.name || "",
@@ -87,26 +86,6 @@ export default function NewReviewModal({
               placeholder="Your review"
               className="input-bordered input-primary input w-full max-w-xs"
             />
-            {/* Upvote/Downvote */}
-            <div className="flex flex-row items-center justify-center gap-4">
-              <button
-                onClick={() => setVote(1)}
-                className={`btn btn-ghost btn-sm ${
-                  vote === 1 ? "btn-primary" : "btn-neutral"
-                }`}
-              >
-                <CheckCircle />
-              </button>
-              <button
-                onClick={() => setVote(-1)}
-                className={`btn btn-ghost btn-sm ${
-                  vote === -1 ? "btn-primary" : "btn-neutral"
-                }`}
-              >
-                <XCircle />
-              </button>
-            </div>
-
             {/*TAG SELECTOR*/}
             <Select
               isMulti

@@ -118,6 +118,7 @@ model Strain {
   productType String // flower or concentrate
   THC         Float    @default(0)
   image       String   @default("")
+  vote    Int    @default(0)
 
   // relations
 
@@ -133,7 +134,6 @@ model Strain {
 model Review {
   // values
   id        Int      @id @default(autoincrement())
-  vote    Int    @default(0)
   comment   String   @default("")
   createdAt DateTime @default(now())
 

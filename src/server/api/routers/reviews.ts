@@ -7,7 +7,6 @@ export const reviewRouter = createTRPCRouter({
     .input(
       z.object({
         strainId: z.number(),
-        vote: z.number().max(5).min(1),
         comment: z.string().max(500),
         profileName: z.string(),
         tagIds: z.array(z.number()),
@@ -15,7 +14,6 @@ export const reviewRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-
         console.log("input: ", input);
 
         //update strain to include new tags and create new review
@@ -35,7 +33,6 @@ export const reviewRouter = createTRPCRouter({
 
           const newReviewWithTag = await ctx.prisma.review.create({
             data: {
-              vote: input.vote,
               comment: input.comment,
               Strain: {
                 connect: { id: input.strainId },
@@ -53,7 +50,6 @@ export const reviewRouter = createTRPCRouter({
         else {
           const newReviewWithoutTag = await ctx.prisma.review.create({
             data: {
-              vote: input.vote,
               comment: input.comment,
               Strain: {
                 connect: { id: input.strainId },
