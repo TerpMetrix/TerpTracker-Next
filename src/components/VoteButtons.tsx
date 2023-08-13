@@ -8,41 +8,45 @@ export const VoteButtons = ({ strainId, votes }: { strainId: number, votes: numb
     //if they have, disable the buttons
     //if they haven't, enable the buttons
 
-    if (localStorage.getItem("voted") == "true") {
-        return (
-            <div className="flex flex-row gap-2">
-                <button className="btn bg-primary text-white" disabled>
-                    <ChevronUp />
-                </button>
-                <p className="text-white">{votes}</p>
-                <button className="btn bg-primary text-white" disabled>
-                    <ChevronDown />
-                </button>
-            </div>
-        );
-    }
-
     const mutation = api.strains.updateStrainVotes.useMutation();
     const [vote, setVote] = useState(votes);
+    //block out buttons after voting
+    const [voted, setVoted] = useState(false);
 
-    const upvote = async () => {
-        await mutation.mutateAsync({ id: strainId, vote: 1 });
-        setVote(vote + 1);
-    }
-
-    const downvote = async () => {
-        await mutation.mutateAsync({ id: strainId, vote: 2 });
-        setVote(vote - 1);
-    }
+    const upvote = () => {
+        mutation.mutate({ id: strainId, vote: 1 }, {
+          onSuccess: () => {
+            setVote(vote + 1);
+            setVoted(true);
+          },
+          onError: (error) => {
+            console.log(error);
+          }
+        });
+      };
+      
+      const downvote = () => {
+        mutation.mutate({ id: strainId, vote: 2 }, {
+          onSuccess: () => {
+            setVote(vote - 1);
+            setVoted(true);
+          },
+          onError: (error) => {
+            console.log(error);
+          }
+        });
+      };
 
     return (
         <div className="flex flex-row gap-2">
-            <button className="btn bg-primary text-white" onClick={upvote}>
-                <ChevronUp />
+            <button className= {voted ? "btn bg-primary text-white cursor-not-allowed" : "btn bg-primary text-white"}
+                onClick={voted ? undefined : upvote}>
+                {voted ? <ChevronUp className="text-white opacity-50" /> : <ChevronUp />}
             </button>
             <p className="text-white">{vote}</p>
-            <button className="btn bg-primary text-white" onClick={downvote}>
-                <ChevronDown />
+            <button className= {voted ? "btn bg-primary text-white cursor-not-allowed" : "btn bg-primary text-white"}
+             onClick={voted ? undefined : downvote}>
+                {voted ? <ChevronDown className="text-white opacity-50" /> : <ChevronDown />}
             </button>
         </div>
     );

@@ -26,18 +26,12 @@ type NewReviewModalProps = {
 
 type OptionType = { value: number; label: string };
 type MultiValue<T> = ReadonlyArray<T> | null | undefined;
-type ActionMeta<T> = {
-  action: string;
-  // ... other properties as needed
-};
-
 
 export default function NewReviewModal({
   strainId,
   tagslist,
 }: NewReviewModalProps) {
   const { data: sessionData } = useSession();
-  const [vote, setVote] = useState(1);
   const [comment, setComment] = useState("");
   const [selectedTags, setTags] = useState<Tag[]>([]);
 
@@ -57,7 +51,7 @@ export default function NewReviewModal({
     window.review_modal.close();
   };
 
-  const handleTagChange = (selectedOptions: MultiValue<OptionType>, actionMeta: ActionMeta<OptionType>) => {
+  const handleTagChange = (selectedOptions: MultiValue<OptionType>) => {
     if (selectedOptions) {
       const newTags = selectedOptions
         .map((option) => tagslist.find((tag) => tag.id === option.value))

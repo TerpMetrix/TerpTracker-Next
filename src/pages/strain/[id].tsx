@@ -1,7 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown, PlusCircle } from "lucide-react";
+import { InfoIcon, Flower2, Droplets, PlusCircle } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";

@@ -39,7 +39,7 @@ export const strainRouter = createTRPCRouter({
 
       if (input.vote === 1) {
         try {
-          const strain = await ctx.prisma.strain.update({
+          await ctx.prisma.strain.update({
             where: {
               id: input.id,
             },
@@ -56,7 +56,7 @@ export const strainRouter = createTRPCRouter({
       }
       else if (input.vote === 2) {
         try {
-          const strain = await ctx.prisma.strain.update({
+          await ctx.prisma.strain.update({
             where: {
               id: input.id,
             },
