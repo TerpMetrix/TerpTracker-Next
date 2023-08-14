@@ -5,7 +5,6 @@ import { X, PlusCircle, XCircle, CheckCircle, CircleEllipsis } from "lucide-reac
 import Tag from "./Tag";
 import Select from "react-select";
 
-
 declare global {
   interface Window {
     review_modal: HTMLDialogElement;
@@ -85,6 +84,9 @@ export default function NewReviewModal({
               isMulti
               options={tagslist.map((tag) => ({ value: tag.id, label: tag.name }))}
               onChange={handleTagChange}
+              className="w-full max-w-xs text-black max-h-24"
+              placeholder="Type a flavor"
+          
             />
 
             {/* Selected TAG DISPLAY CHECK */}
