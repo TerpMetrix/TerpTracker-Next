@@ -118,7 +118,6 @@ model Strain {
   productType String // flower or concentrate
   THC         Float    @default(0)
   image       String   @default("")
-  vote    Int    @default(0)
 
   // relations
 

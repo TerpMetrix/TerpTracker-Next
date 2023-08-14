@@ -26,7 +26,7 @@ import {
 import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
-import { VoteButtons } from "@/components/VoteButtons";
+// import { VoteButtons } from "@/components/VoteButtons";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -102,7 +102,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
                 strain.productType === "flower" ? <Flower2 /> : <Droplets />
               }</p>
               {/* Upvote/Downvote Buttons to +/- to strain.vote */}
-              <VoteButtons strainId={strain.id} votes={strain.vote} />
+              {/* <VoteButtons strainId={strain.id} votes={strain.vote} /> */}
 
             </div>
 
