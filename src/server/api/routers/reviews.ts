@@ -24,7 +24,7 @@ export const reviewRouter = createTRPCRouter({
               id: input.strainId,
             },
             data: {
-              TerpTags: {
+              terpTags: {
                 connect: input.tagIds.map((tagId) => ({ id: tagId })),
               },
             },
@@ -34,13 +34,13 @@ export const reviewRouter = createTRPCRouter({
           const newReviewWithTag = await ctx.prisma.review.create({
             data: {
               comment: input.comment,
-              Strain: {
+              strain: {
                 connect: { id: input.strainId },
               },
-              Profile: {
+              profile: {
                 connect: { profileName: input.profileName },
               },
-              TerpTags: {
+              terpTags: {
                 connect: input.tagIds.map((tagId) => ({ id: tagId })),
               },
             },
@@ -51,10 +51,10 @@ export const reviewRouter = createTRPCRouter({
           const newReviewWithoutTag = await ctx.prisma.review.create({
             data: {
               comment: input.comment,
-              Strain: {
+              strain: {
                 connect: { id: input.strainId },
               },
-              Profile: {  
+              profile: {  
                 connect: { profileName: input.profileName },
               },
             },

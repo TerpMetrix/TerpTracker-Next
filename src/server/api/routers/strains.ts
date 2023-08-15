@@ -11,13 +11,13 @@ export const strainRouter = createTRPCRouter({
           id: input.id,
         },
         include: {
-          Reviews: {
+          reviews: {
             include: {
-              TerpTags: true,
+              terpTags: true,
             },
           },
-          TerpTags: true,
-          Producer: true,
+          terpTags: true,
+          producer: true,
         },
       });
 

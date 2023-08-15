@@ -71,7 +71,7 @@ export const authOptions: NextAuthOptions = {
         .create({
           data: {
             profileName: message.user.name,
-            User: {
+            user: {
               connect: {
                 id: message.user.id,
               },
