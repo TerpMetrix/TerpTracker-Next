@@ -10,7 +10,7 @@ export type ReviewWithRelations = Prisma.ReviewGetPayload<{
       };
     };
     Strain: true;
-    TerpTag: true;
+    TerpTags: true;
   };
 }>;
 
@@ -33,7 +33,7 @@ export async function getReviewById(
         },
       },
       Strain: true,
-      TerpTag: true,
+      TerpTags: true,
     },
   });
 

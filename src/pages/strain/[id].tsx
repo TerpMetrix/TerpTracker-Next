@@ -1,7 +1,7 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { InfoIcon, Flower2, Droplets, ThumbsUp, ThumbsDown, PlusCircle } from "lucide-react";
+import { InfoIcon, Flower2, Droplets, PlusCircle } from "lucide-react";
 import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
@@ -26,6 +26,7 @@ import {
 import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
+// import { VoteButtons } from "@/components/VoteButtons";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -100,6 +101,9 @@ export default function Strain({ strain, allTags }: StrainProps) {
                 //func to check if "flower" or "hash" and display flower or hash icon
                 strain.productType === "flower" ? <Flower2 /> : <Droplets />
               }</p>
+              {/* Upvote/Downvote Buttons to +/- to strain.vote */}
+              {/* <VoteButtons strainId={strain.id} votes={strain.vote} /> */}
+
             </div>
 
             <div className="overflow-y-auto max-h-96">
@@ -135,56 +139,25 @@ type ReviewCardProps = {
 };
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
-  const { rating, comment } = review;
+  const { comment } = review;
 
   return (
     <div className="rounded-md border p-4 transition-all relative">
       <h3 className="text-lg font-medium">{review.profileName}</h3>
-      {/* //cursed temporary func to convert star ratings to up or down votes (>=4 up, <4 down) */}
-      <div className="">
-        {rating >= 4 ? (
-          <div className="badge badge-success h-auto p-2 text-white absolute right-4 top-4">
-            <ThumbsUp />
-          </div>
-        ) : (
-          <div className="badge badge-error h-auto p-2 text-white absolute right-4 top-4">
-            <ThumbsDown />
-          </div>
-        )}
-      </div>
       <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
       <p className="text-gray-200 mt-2">{comment}</p>
-      {/* if tag, show it */}
-      {review.TerpTag &&
+      {/* if tags, show them */}
+      {review.TerpTags &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-          <Tag tag={review.TerpTag} key={review.TerpTag.id} />
+          {review.TerpTags.map((tag) => {
+            return <Tag tag={tag} key={tag.id} />;
+          }
+          )}
         </div>
       }
     </div>
   );
 };
-
-// function RatingStars({ rating }: { rating: number }) {
-//   //  if we somehow get a rating over 5, just cap it at 5
-//   const MAX_STARS = 5;
-//   rating %= MAX_STARS + 1;
-
-//   const filledStars = [];
-//   const emptyStars = [];
-
-//   for (let i = 0; i < rating; i++) {
-//     filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
-//   }
-//   for (let i = rating; i < MAX_STARS; i++) {
-//     emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
-//   }
-//   return (
-//     <div className="mb-4 flex">
-//       {filledStars}
-//       {emptyStars}
-//     </div>
-//   );
-// }
 
 function producerLink(id: number) {
   return "/producer/" + String(id);

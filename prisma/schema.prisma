@@ -133,7 +133,6 @@ model Strain {
 model Review {
   // values
   id        Int      @id @default(autoincrement())
-  rating    Float    @default(0)
   comment   String   @default("")
   createdAt DateTime @default(now())
 
@@ -141,14 +140,12 @@ model Review {
   strainId Int
   Strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
 
-  terpTagId Int      @default(0)
-  TerpTag   TerpTag? @relation(fields: [terpTagId], references: [id], onDelete: Cascade)
+  TerpTags TerpTag[]
 
   profileName String  @default("")
   Profile     Profile @relation(fields: [profileName], references: [profileName], onDelete: Cascade)
 
   @@index([strainId])
-  @@index([terpTagId])
   @@index([profileName])
 }
 
