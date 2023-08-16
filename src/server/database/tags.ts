@@ -7,7 +7,7 @@ import type { Prisma } from "@prisma/client";
 
 export type TagWithRelations = Prisma.TerpTagGetPayload<{
     include: {
-        Strains: true;
+        strains: true;
     };
 }>;
 
@@ -18,7 +18,7 @@ export type TagWithRelations = Prisma.TerpTagGetPayload<{
 
 export type TagWithNoRelations = Prisma.TerpTagGetPayload<{
     include: {
-        Strains: false;
+        strains: false;
     };
 }>;
 

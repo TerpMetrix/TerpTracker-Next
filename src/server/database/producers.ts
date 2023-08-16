@@ -3,9 +3,9 @@ import type { Prisma, Producer } from "@prisma/client";
 
 export type ProducerWithRelations = Prisma.ProducerGetPayload<{
   include: {
-    Strains: {
+    strains: {
       include: {
-        TerpTags: true;
+        terpTags: true;
       };
     };
   };
@@ -24,9 +24,9 @@ export async function getProducerById(
       id: id,
     },
     include: {
-      Strains: {
+      strains: {
         include: {
-          TerpTags: true,
+          terpTags: true,
         },
       },
     },
@@ -52,9 +52,9 @@ export async function getAllProducersWithRelations(): Promise<
 > {
   const producers = await prisma.producer.findMany({
     include: {
-      Strains: {
+      strains: {
         include: {
-          TerpTags: true,
+          terpTags: true,
         },
       },
     },

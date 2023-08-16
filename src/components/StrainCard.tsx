@@ -28,9 +28,9 @@ const StrainCard: React.FC<Props> = (props) => (
             </div>
             <div className="flex flex-col justify-between px-4 py-2">
                 <p className="mb-2 text-2xl font-medium">{props.strain.name}</p>
-                <p>{props.strain.Producer.name}</p>
+                <p>{props.strain.producer.name}</p>
                 <div className="my-2 flex flex-row gap-4">
-                    {props.strain.TerpTags?.map((tag) => {
+                    {props.strain.terpTags?.map((tag) => {
                         return <Tag tag={tag} key={tag.id} />;
                     })}
                 </div>

@@ -64,7 +64,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
         <div className="relative">
           <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
           <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
-            {strain.TerpTags?.map((tag) => {
+            {strain.terpTags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
@@ -86,16 +86,16 @@ export default function Strain({ strain, allTags }: StrainProps) {
                   href={producerLink(strain.producerId)}
                 >
                   <Image
-                    src={strain.Producer.bannerImage}
+                    src={strain.producer.bannerImage}
                     alt="Producer Banner Image"
                     width={40}
                     height={40}
                     className="rounded-full"
                   />
-                  {strain.Producer.name}{" "}
+                  {strain.producer.name}{" "}
                   {/*need to make this link to prod name */}
                 </Link>
-                <p className="badge badge-outline">{Math.floor(strain.THC * 100)}% THC</p>
+                <p className="badge badge-outline">{Math.floor(strain.thc * 100)}% THC</p>
               </div>
               <p className="badge badge-primary uppercase text-white font-bold h-auto p-3 absolute right-4 bottom-4">{
                 //func to check if "flower" or "hash" and display flower or hash icon
@@ -108,7 +108,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
 
             <div className="overflow-y-auto max-h-96">
               <ul className="h-full flex flex-col justify-center gap-3 pb-8 pt-4">
-                {strain.Reviews?.map((review) => {
+                {strain.reviews?.map((review) => {
                   return (
                     <li key={review.id} className="">
                       <ReviewCard review={review} />
@@ -147,9 +147,9 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
       <p className="text-gray-200 mt-2">{comment}</p>
       {/* if tags, show them */}
-      {review.TerpTags &&
+      {review.terpTags &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-          {review.TerpTags.map((tag) => {
+          {review.terpTags.map((tag) => {
             return <Tag tag={tag} key={tag.id} />;
           }
           )}

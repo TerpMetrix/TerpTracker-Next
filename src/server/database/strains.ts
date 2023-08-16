@@ -6,19 +6,19 @@ import type { Prisma } from "@prisma/client";
  */
 export type StrainWithRelations = Prisma.StrainGetPayload<{
   include: {
-    Reviews: {
+    reviews: {
       include: {
-        Profile: {
+        profile: {
           include: {
-            User: true;
+            user: true;
           };
         }
-        TerpTags: true,
-        Strain: true,
+        terpTags: true,
+        strain: true,
       }
     },
-    TerpTags: true,
-    Producer: true;
+    terpTags: true,
+    producer: true;
   };
 }>;
 
@@ -36,19 +36,19 @@ export async function getStrainById(
       id: Number(id),
     },
     include: {
-      Reviews: {
+      reviews: {
         include: {
-          Profile: {
+          profile: {
             include: {
-              User: true,
+              user: true,
             },
           },
-          TerpTags: true,
-          Strain: true,
+          terpTags: true,
+          strain: true,
         }
       },
-      TerpTags: true,
-      Producer: true,
+      terpTags: true,
+      producer: true,
     },
   });
 
@@ -64,19 +64,19 @@ export async function getAllStrainsWithRelations(): Promise<
 > {
   const strains = await prisma.strain.findMany({
     include: {
-      Reviews: {
+      reviews: {
         include: {
-          Profile: {
+          profile: {
             include: {
-              User: true,
+              user: true,
             },
           },
-          TerpTags: true,
-          Strain: true,
+          terpTags: true,
+          strain: true,
         }
       },
-      TerpTags: true,
-      Producer: true,
+      terpTags: true,
+      producer: true,
     },
   });
   return strains;
@@ -97,17 +97,17 @@ export async function getStrainsByProducerId(
       producerId: producerId,
     },
     include: {
-      TerpTags: true,
-      Producer: true,
-      Reviews: {
+      terpTags: true,
+      producer: true,
+      reviews: {
         include: {
-          Profile: {
+          profile: {
             include: {
-              User: true,
+              user: true,
             }
           },
-          TerpTags: true,
-          Strain: true,
+          terpTags: true,
+          strain: true,
         },
       },
     },
@@ -130,14 +130,14 @@ export async function getStrainsBySearchTerm(
           }
         },
         {
-          Producer: {
+          producer: {
             name: {
               contains: searchTerm,
             }
           }
         },
         {
-          TerpTags: {
+          terpTags: {
             some: {
               name: {
                 contains: searchTerm,
@@ -146,7 +146,7 @@ export async function getStrainsBySearchTerm(
           }
         },
         {
-          Reviews: {
+          reviews: {
             some: {
               comment: {
                 contains: searchTerm,
@@ -157,17 +157,17 @@ export async function getStrainsBySearchTerm(
       ]
     },
     include: {
-      TerpTags: true,
-      Producer: true,
-      Reviews: {
+      terpTags: true,
+      producer: true,
+      reviews: {
         include: {
-          Profile: {
+          profile: {
             include: {
-              User: true,
+              user: true,
             }
           },
-          TerpTags: true,
-          Strain: true,
+          terpTags: true,
+          strain: true,
         },
       },
     },
