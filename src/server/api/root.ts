@@ -3,6 +3,7 @@ import { createTRPCRouter } from "@/server/api/trpc";
 import { strainRouter } from "./routers/strains";
 import { reviewRouter } from "./routers/reviews";
 import { tagRouter } from "./routers/tags";
+import { voteRouter } from "./routers/votes";
 
 /**
  * This is the primary router for your server.
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   example: exampleRouter,
   strains: strainRouter,
   reviews: reviewRouter,
+  votes: voteRouter,
   tags: tagRouter,
 });
 

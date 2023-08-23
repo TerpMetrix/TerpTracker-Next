@@ -167,6 +167,7 @@ model StrainVote {
 
   strainId Int
   profileName String  @default("")
+  value Int @default(0) //either 1 or -1 for upvote or downvote
 
   @@id([strainId, profileName])
 }
