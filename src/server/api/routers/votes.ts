@@ -191,6 +191,82 @@ export const voteRouter = createTRPCRouter({
             }
         }),
 
+    deleteVote: protectedProcedure
+        .input(
+            z.object({
+                strainId: z.number(),
+                profileName: z.string(),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            try {
+                const deletedVote = await ctx.prisma.strainVote.delete({
+                    where: {
+                        strainId_profileName: {
+                            strainId: input.strainId,
+                            profileName: input.profileName,
+                        },
+                    },
+                });
+
+                console.log("deleted vote: ", deletedVote);
+
+                //update strain vote count
+
+                // get all votes for this strain
+
+                const allVotes = await ctx.prisma.strainVote.findMany({
+                    where: {
+                        strainId: input.strainId,
+                    },
+                });
+
+                // add up down/upvotes
+
+                const upVotes = allVotes.filter((vote) => vote.value === 1);
+                const downVotes = allVotes.filter((vote) => vote.value === -1);
+
+                //count up and down and come up with vote number
+
+                const voteCount = upVotes.length - downVotes.length;
+
+                // update strain table with new vote count
+
+                const updatedStrain = await ctx.prisma.strain.update({
+                    where: {
+                        id: input.strainId,
+                    },
+                    data: {
+                        votes: voteCount,
+                    },
+                });
+
+                console.log("updated strain: ", updatedStrain);
+
+                //update profile and remove strain if previously upvote
+
+                const updatedProfile = await ctx.prisma.profile.update({
+                    where: {
+                        profileName: input.profileName,
+                    },
+                    data: {
+                        upvotedStrains: {
+                            disconnect: {
+                                id: input.strainId,
+                            },
+                        },
+                    },
+                });
+
+                console.log("updated profile: ", updatedProfile);
+
+
+            }
+            catch (e) {
+                return error(e);
+            }
+        }),
+
 
 });
 

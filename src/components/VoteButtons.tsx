@@ -14,6 +14,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   const profileName = session?.user.name || "";
   const mutation = api.votes.newVote.useMutation();
   const updateMutation = api.votes.updateVote.useMutation();
+  const deleteMutation = api.votes.deleteVote.useMutation();
   const [vote, setVote] = useState(totalVotes);
   //block out buttons after voting
   const [upvoted, setUpvote] = useState(false);
@@ -70,22 +71,46 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
 
   const updateVote = (vote: number) => () => {
     //update states
-    if (vote === 1) {
+
+    // if vote is equal to -1 and downvoted, then delete vote and vice versa
+
+    let deleteFlag = false;
+
+
+    if (vote === 1 && downvoted) {
       setUpvote(true);
       setDownvote(false);
-    } else if (vote === -1) {
+      deleteFlag = false;
+    } else if (vote === -1 && upvoted) {
       setDownvote(true);
       setUpvote(false);
+      deleteFlag = false;
+    } else {
+      setUpvote(false);
+      setDownvote(false);
+      (vote === 1 ? setVote(--vote) : setVote(++vote));
+      deleteFlag = true;
     }
 
-    updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: vote }, {
-      onSuccess: () => {
-        setVote(vote);
-      },
-      onError: (error) => {
-        console.log(error);
-      }
-    });
+    if (!deleteFlag) {
+      updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: vote }, {
+        onSuccess: () => {
+          setVote(vote);
+        },
+        onError: (error) => {
+          console.log(error);
+        }
+      });
+    } else {
+      deleteMutation.mutate({ strainId: strainId, profileName: profileName }, {
+        onSuccess: () => {
+          setVote(vote);
+        },
+        onError: (error) => {
+          console.log(error);
+        }
+      });
+    }
   };
 
 
