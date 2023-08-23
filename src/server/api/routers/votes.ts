@@ -161,7 +161,21 @@ export const voteRouter = createTRPCRouter({
                         },
                     },
                 });
-
+                console.log("updated profile: ", updatedProfile);
+            }
+            else if (input.vote === -1) {
+                const updatedProfile = await ctx.prisma.profile.update({
+                    where: {
+                        profileName: input.profileName,
+                    },
+                    data: {
+                        upvotedStrains: {
+                            disconnect: {
+                                id: input.strainId,
+                            },
+                        },
+                    },
+                });
                 console.log("updated profile: ", updatedProfile);
             }
         }),
