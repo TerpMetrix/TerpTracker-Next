@@ -1,8 +1,8 @@
-// import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import { useState } from "react";
-import { XCircle, CheckCircle, CircleEllipsis } from "lucide-react";
+import { XCircle } from "lucide-react";
 
 export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalVotes: number }) => {
 
@@ -90,15 +90,35 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
 
 
   return (
-    <div className="flex flex-row gap-2">
-      <button className= { upvoted ? 'btn bg-primary text-white' : 'btn bg-neutral text-white' }
+    <div className="flex flex-col gap-2 w-12 items-center absolute top-4 right-4 my-auto">
+      <button className={upvoted ? 'btn btn-primary text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
         onClick={upvoted || downvoted ? updateVote(1) : upvote}>
-        {upvoted ? <p>🔥</p>: <p className="grayscale">🔥</p>}
+        {upvoted ?
+          <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
+            <ChevronUp />
+            <p className="tracking-tight">🔥</p>
+          </div>
+          :
+          <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
+            <ChevronUp />
+            <p className="tracking-tight grayscale">🔥</p>
+          </div>
+        }
       </button>
       <p className="text-white">{vote}</p>
-      <button className={ downvoted ? 'btn bg-primary text-white' : 'btn bg-neutral text-white'}
+      <button className={downvoted ? 'btn btn-error text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
         onClick={downvoted || upvoted ? updateVote(-1) : downvote}>
-        {downvoted ? <p>🗑️</p>: <p className="grayscale">🗑️</p>}
+        {downvoted ?
+          <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
+            <p>🗑️</p>
+            <ChevronDown />
+          </div>
+          :
+          <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
+            <p className="grayscale">🗑️</p>
+            <ChevronDown />
+          </div>
+        }
       </button>
       {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle /> You must be logged in to vote!</div>}
     </div>

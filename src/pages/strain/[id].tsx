@@ -60,7 +60,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp>
-      <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-center gap-10 mt-4 rounded-lg p-4 lg:p-0">
+      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-center gap-10 mt-4 rounded-lg p-4 md:p-0">
         <div className="relative">
           <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
           <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
@@ -76,11 +76,17 @@ export default function Strain({ strain, allTags }: StrainProps) {
             alt={"image of " + strain.name}
           />
         </div>
-        <div className="h-full lg:overflow-hidden w-80 md:w-96">
-          <div>
+        <div className="h-full lg:overflow-hidden w-full md:w-96">
+          <div className="w-full">
             <div className="gap-2 rounded-lg p-4 border border-green-600 w-full relative">
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold uppercase">{strain.name}</h1>
+                <div className="flex flex-row items-center max-w-xs">
+                <h1 className="text-2xl font-bold uppercase w-52">{strain.name}</h1>
+                <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
+                //func to check if "flower" or "hash" and display flower or hash icon
+                strain.productType === "flower" ? <Flower2 /> : <Droplets />
+              }</p>
+              </div>
                 <Link
                   className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-2 mb-4 py-6"
                   href={producerLink(strain.producerId)}
@@ -97,10 +103,6 @@ export default function Strain({ strain, allTags }: StrainProps) {
                 </Link>
                 <p className="badge badge-outline">{Math.floor(strain.thc * 100)}% THC</p>
               </div>
-              <p className="badge badge-primary uppercase text-white font-bold h-auto p-3 absolute right-4 bottom-4">{
-                //func to check if "flower" or "hash" and display flower or hash icon
-                strain.productType === "flower" ? <Flower2 /> : <Droplets />
-              }</p>
               {/* Upvote/Downvote Buttons to +/- to strain.vote */}
               <VoteButtons strainId={strain.id} totalVotes={strain.votes} />
 
