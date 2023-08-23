@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import { useState } from "react";
+import { XCircle, CheckCircle, CircleEllipsis } from "lucide-react";
 
 export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalVotes: number }) => {
 
@@ -95,6 +96,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
         onClick={downvoted || upvoted ? updateVote(-1) : downvote}>
         {downvoted ? <p>🗑️</p>: <p className="grayscale">🗑️</p>}
       </button>
+      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle /> You must be logged in to vote!</div>}
     </div>
   );
 
