@@ -115,38 +115,47 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
 
 
   return (
-    <div className="flex flex-col gap-2 w-12 items-center absolute top-4 right-4 my-auto">
-      <button className={upvoted ? 'btn btn-primary text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
-        onClick={upvoted || downvoted ? updateVote(1) : upvote}>
-        {upvoted ?
-          <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
-            <ChevronUp />
-            <p className="tracking-tight">🔥</p>
-          </div>
-          :
-          <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
-            <ChevronUp />
-            <p className="tracking-tight grayscale">🔥</p>
-          </div>
-        }
-      </button>
-      <p className="text-white">{vote}</p>
-      <button className={downvoted ? 'btn btn-error text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
-        onClick={downvoted || upvoted ? updateVote(-1) : downvote}>
-        {downvoted ?
-          <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
-            <p>🗑️</p>
-            <ChevronDown />
-          </div>
-          :
-          <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
-            <p className="grayscale">🗑️</p>
-            <ChevronDown />
-          </div>
-        }
-      </button>
-      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle /> You must be logged in to vote!</div>}
-    </div>
+    <>
+      <div className="flex flex-col gap-2 w-12 items-center absolute top-4 right-4 my-auto">
+        <button className={upvoted ? 'btn btn-primary text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
+          onClick={upvoted || downvoted ? updateVote(1) : upvote}>
+          {upvoted ?
+            <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
+              <ChevronUp />
+              <p className="tracking-tight">🔥</p>
+            </div>
+            :
+            <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
+              <ChevronUp />
+              <p className="tracking-tight grayscale">🔥</p>
+            </div>
+          }
+        </button>
+        <p className="text-white">{vote}</p>
+        <button className={downvoted ? 'btn btn-error text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
+          onClick={downvoted || upvoted ? updateVote(-1) : downvote}>
+          {downvoted ?
+            <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
+              <p>🗑️</p>
+              <ChevronDown />
+            </div>
+            :
+            <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
+              <p className="grayscale">🗑️</p>
+              <ChevronDown />
+            </div>
+          }
+        </button>
+      </div>
+      {/* show then hide the element after a few seconds */}
+
+
+      {mutation.error && 
+        <div className="m-auto alert alert-error w-3/4 mt-4 flex flex-row" role="alert"> <XCircle /> You must be logged in to vote!</div>
+      }
+
+
+    </>
   );
 
 };
