@@ -46,6 +46,8 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     mutation.mutate({ strainId: strainId, profileName: profileName, vote: 1 }, {
       onSuccess: () => {
         setVote(vote + 1);
+        setUpvote(true);
+        setDownvote(false);
       },
       onError: (error) => {
         console.log(error);
@@ -57,6 +59,8 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     mutation.mutate({ strainId: strainId, profileName: profileName, vote: -1 }, {
       onSuccess: () => {
         setVote(vote - 1);
+        setDownvote(true);
+        setUpvote(false);
       },
       onError: (error) => {
         console.log(error);
