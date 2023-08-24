@@ -189,6 +189,7 @@ export const voteRouter = createTRPCRouter({
                 });
                 console.log("updated profile: ", updatedProfile);
             }
+            return voteCount;
         }),
 
     deleteVote: protectedProcedure
