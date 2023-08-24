@@ -44,7 +44,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   checkIfVoted();
 
   const upvote = () => {
-    mutation.mutate({ strainId: strainId, profileName: profileName, vote: totalVotes }, {
+    mutation.mutate({ strainId: strainId, profileName: profileName, vote: 1 }, {
       onSuccess: () => {
         setVote(vote + 1);
         setUpvote(true);
@@ -57,7 +57,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   };
 
   const downvote = () => {
-    mutation.mutate({ strainId: strainId, profileName: profileName, vote: totalVotes }, {
+    mutation.mutate({ strainId: strainId, profileName: profileName, vote: -1 }, {
       onSuccess: () => {
         setVote(vote - 1);
         setDownvote(true);
@@ -117,7 +117,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   return (
     <>
       <div className="flex flex-col gap-2 w-12 items-center absolute top-4 right-4 my-auto">
-        <button className={upvoted ? 'btn btn-primary text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
+        <button className={upvoted ? 'btn btn-primary text-white w-4 h-auto' : 'btn btn-primary text-white w-4 h-auto btn-outline'}
           onClick={upvoted || downvoted ? updateVote(1) : upvote}>
           {upvoted ?
             <div className="flex flex-col px-auto pb-1 tracking-tighter items-center">
@@ -132,7 +132,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
           }
         </button>
         <p className="text-white">{vote}</p>
-        <button className={downvoted ? 'btn btn-error text-white w-4 h-auto' : 'btn btn-neutral text-white w-4 h-auto btn-outline'}
+        <button className={downvoted ? 'btn btn-error text-white w-4 h-auto' : 'btn btn-error text-white w-4 h-auto btn-outline'}
           onClick={downvoted || upvoted ? updateVote(-1) : downvote}>
           {downvoted ?
             <div className="flex flex-col px-auto pt-3 tracking-tighter items-center">
