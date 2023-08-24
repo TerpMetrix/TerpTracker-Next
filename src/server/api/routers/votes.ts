@@ -44,23 +44,18 @@ export const voteRouter = createTRPCRouter({
                     console.log("new vote: ", newVote);
 
                     // get all votes for this strain
-
                     const allVotes = await ctx.prisma.strainVote.findMany({
                         where: {
                             strainId: input.strainId,
                         },
                     });
 
-                    // add up down/upvotes
+                    //update strain with sum
+                    //sum votes from allvotes
+                    const voteCount = allVotes.reduce((acc, vote) => {
+                        return acc + vote.value;
+                    }, 0);
 
-                    const upVotes = allVotes.filter((vote) => vote.value === 1);
-                    const downVotes = allVotes.filter((vote) => vote.value === -1);
-
-                    //count up and down and come up with vote number
-
-                    const voteCount = upVotes.length - downVotes.length;
-
-                    // update strain table with new vote count
 
                     const updatedStrain = await ctx.prisma.strain.update({
                         where: {
@@ -71,10 +66,10 @@ export const voteRouter = createTRPCRouter({
                         },
                     });
 
+
                     console.log("updated strain: ", updatedStrain);
 
                     //update profile with upvoted strain if upvote
-
                     if (input.vote === 1) {
                         const updatedProfile = await ctx.prisma.profile.update({
                             where: {
@@ -128,23 +123,18 @@ export const voteRouter = createTRPCRouter({
             //update strain vote count
 
             // get all votes for this strain
-
             const allVotes = await ctx.prisma.strainVote.findMany({
                 where: {
                     strainId: input.strainId,
                 },
             });
 
-            // add up down/upvotes
+            //update strain with sum
+            //sum votes from allvotes
+            const voteCount = allVotes.reduce((acc, vote) => {
+                return acc + vote.value;
+            }, 0);
 
-            const upVotes = allVotes.filter((vote) => vote.value === 1);
-            const downVotes = allVotes.filter((vote) => vote.value === -1);
-
-            //count up and down and come up with vote number
-
-            const voteCount = upVotes.length - downVotes.length;
-
-            // update strain table with new vote count
 
             const updatedStrain = await ctx.prisma.strain.update({
                 where: {
@@ -158,7 +148,6 @@ export const voteRouter = createTRPCRouter({
             console.log("updated strain: ", updatedStrain);
 
             //update profile with upvoted strain if upvote
-
             if (input.vote === 1) {
                 const updatedProfile = await ctx.prisma.profile.update({
                     where: {
@@ -215,23 +204,18 @@ export const voteRouter = createTRPCRouter({
                 //update strain vote count
 
                 // get all votes for this strain
-
                 const allVotes = await ctx.prisma.strainVote.findMany({
                     where: {
                         strainId: input.strainId,
                     },
                 });
 
-                // add up down/upvotes
+                //update strain with sum
+                //sum votes from allvotes
+                const voteCount = allVotes.reduce((acc, vote) => {
+                    return acc + vote.value;
+                }, 0);
 
-                const upVotes = allVotes.filter((vote) => vote.value === 1);
-                const downVotes = allVotes.filter((vote) => vote.value === -1);
-
-                //count up and down and come up with vote number
-
-                const voteCount = upVotes.length - downVotes.length;
-
-                // update strain table with new vote count
 
                 const updatedStrain = await ctx.prisma.strain.update({
                     where: {
@@ -245,7 +229,6 @@ export const voteRouter = createTRPCRouter({
                 console.log("updated strain: ", updatedStrain);
 
                 //update profile and remove strain if previously upvote
-
                 const updatedProfile = await ctx.prisma.profile.update({
                     where: {
                         profileName: input.profileName,
