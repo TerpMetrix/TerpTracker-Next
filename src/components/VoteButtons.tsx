@@ -84,8 +84,7 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
       setCurrentVote(-1);
       deleteFlag = false;
     } else {
-      setCurrentVote(0);
-      // (vote === 1 ? setVote(--vote) : setVote(++vote));
+      setCurrentVote(vote);
       deleteFlag = true;
     }
 
@@ -93,9 +92,9 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
       updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: currentVote }, {
         onSuccess: (data) => {
           if (updatedFlag) {
-            setVote(vote);
+            setVote(currentVote);
           } else {
-            setVote(totalVotes + vote);
+            setVote(totalVotes + currentVote);
           }
         },
         onError: (error) => {
@@ -108,7 +107,8 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
           if (updatedFlag) {
             setVote(totalVotes);
           }
-          setVote(totalVotes + vote);
+          ((currentVote === 1) ? setVote(totalVotes+currentVote) : setVote(totalVotes-currentVote));
+          setCurrentVote(0);
         },
         onError: (error) => {
           console.log(error);
