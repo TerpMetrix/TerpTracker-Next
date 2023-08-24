@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import { useState } from "react";
 import { XCircle } from "lucide-react";
+import { check } from "prettier";
+import { get } from "http";
 
 export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalVotes: number }) => {
 
@@ -43,6 +45,18 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
 
   checkIfVoted();
 
+  // const getVotes = () => {
+  //   api.strains.getStrain.useQuery({ id: strainId }, {
+  //     onSuccess: (data) => {
+  //       setVote(data.strain?.votes || 0);
+  //       console.log(data.strain?.votes);
+  //     },
+  //     onError: (error) => {
+  //       console.log(error);
+  //     }
+  //   });
+  // };
+
 
   const upvote = () => {
     mutation.mutate({ strainId: strainId, profileName: profileName, vote: 1 }, {
@@ -68,30 +82,29 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     });
   };
 
-  const updateVote = (vote: number) => () => {
+  let updatedFlag = false;
+
+  const updateVote = (updateVote: number) => () => {
     //update states
 
     // if vote is equal to -1 and downvoted, then delete vote and vice versa
 
     let deleteFlag = false;
-    let updatedFlag = true;
+    updatedFlag = !updatedFlag;
 
 
-    if (vote === 1 && (currentVote === -1)) {
-      setCurrentVote(1)
-      deleteFlag = false;
-    } else if (vote === -1 && (currentVote === 1)) {
-      setCurrentVote(-1);
+    if ((updateVote === 1 && currentVote === -1) || (updateVote === -1 && currentVote === 1)) {
       deleteFlag = false;
     } else {
-      setCurrentVote(vote);
       deleteFlag = true;
     }
 
     if (!deleteFlag) {
-      updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: currentVote }, {
-        onSuccess: (data) => {
-            setVote(totalVotes + currentVote);
+      updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: updateVote }, {
+        onSuccess: () => {
+          // getVotes();
+          (updateVote === 1) ? setVote(vote+2) : setVote(vote-2);
+          setCurrentVote(updateVote);
         },
         onError: (error) => {
           console.log(error);
@@ -100,7 +113,13 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     } else {
       deleteMutation.mutate({ strainId: strainId, profileName: profileName }, {
         onSuccess: () => {
-          ((currentVote === 1) ? setVote(totalVotes+currentVote) : setVote(totalVotes-currentVote));
+          // getVotes();
+          if (!updatedFlag) {
+          (updateVote === 1) ? setVote(vote+1) : setVote(vote-1);
+          }
+          else {
+            (updateVote === 1) ? setVote(vote-1) : setVote(vote+1);
+          }
           setCurrentVote(0);
         },
         onError: (error) => {

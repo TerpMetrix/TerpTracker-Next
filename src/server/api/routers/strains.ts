@@ -24,6 +24,7 @@ export const strainRouter = createTRPCRouter({
       return { strain };
     }),
 
+
   getAllStrains: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.strain.findMany();
   }),
