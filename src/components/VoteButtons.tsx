@@ -3,10 +3,13 @@ import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import { useState } from "react";
 import { XCircle } from "lucide-react";
-import { check } from "prettier";
-import { get } from "http";
 
-export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalVotes: number }) => {
+type VoteButtonProps = {
+  strainId : number,
+  totalVotes : number
+}
+
+export const VoteButtons: React.FC<VoteButtonProps> = ({ strainId, totalVotes }) => {
 
   // use local storage to keep track if a user has voted on a strain
   // if they have, disable the buttons
@@ -18,14 +21,9 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   const updateMutation = api.votes.updateVote.useMutation();
   const deleteMutation = api.votes.deleteVote.useMutation();
   const [vote, setVote] = useState(totalVotes);
-  //block out buttons after voting
-  // const [upvoted, setUpvote] = useState(false);
-  // const [downvoted, setDownvote] = useState(false);
   const [currentVote, setCurrentVote] = useState(0); // 1 = upvote, -1 = downvote, 0 = no vote
 
   //check if user has voted either up or down on this strain and set either the up or down vote button as clicked
-
-  //check if voted and return/update value 
   const checkIfVoted = () => {
     api.votes.checkIfVoted.useQuery({ strainId: strainId, profileName: profileName }, {
       onSuccess: (data) => {
@@ -44,19 +42,6 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
   };
 
   checkIfVoted();
-
-  // const getVotes = () => {
-  //   api.strains.getStrain.useQuery({ id: strainId }, {
-  //     onSuccess: (data) => {
-  //       setVote(data.strain?.votes || 0);
-  //       console.log(data.strain?.votes);
-  //     },
-  //     onError: (error) => {
-  //       console.log(error);
-  //     }
-  //   });
-  // };
-
 
   const upvote = () => {
     mutation.mutate({ strainId: strainId, profileName: profileName, vote: 1 }, {
@@ -102,7 +87,6 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     if (!deleteFlag) {
       updateMutation.mutate({ strainId: strainId, profileName: profileName, vote: updateVote }, {
         onSuccess: () => {
-          // getVotes();
           (updateVote === 1) ? setVote(vote+2) : setVote(vote-2);
           setCurrentVote(updateVote);
         },
@@ -113,7 +97,6 @@ export const VoteButtons = ({ strainId, totalVotes }: { strainId: number, totalV
     } else {
       deleteMutation.mutate({ strainId: strainId, profileName: profileName }, {
         onSuccess: () => {
-          // getVotes();
           if (!updatedFlag) {
           (updateVote === 1) ? setVote(vote+1) : setVote(vote-1);
           }
