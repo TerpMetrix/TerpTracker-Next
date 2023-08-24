@@ -26,6 +26,8 @@ const StrainCard: React.FC<Props> = (props) => (
                 props.strain.productType === "flower" ? <Flower2 /> : <Droplets />
             }
             </div>
+            {/* votes element */}
+            <div className="badge badge-primary absolute left-3 top-3 text-white font-bold h-auto p-2 text-lg">{props.strain.votes} {props.strain.votes>=0 ? <>🔥</> : <>🗑️</>}</div>
             <div className="flex flex-col justify-between px-4 py-2">
                 <p className="mb-2 text-2xl font-medium">{props.strain.name}</p>
                 <p>{props.strain.producer.name}</p>
