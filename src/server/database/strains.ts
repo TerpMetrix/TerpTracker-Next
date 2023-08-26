@@ -174,3 +174,35 @@ export async function getStrainsBySearchTerm(
   });
   return strains;
 }
+
+// Function to get strains in order of votes (input asending or descending and number of strains to return)
+
+type SearchOrder = "asc" | "desc";
+
+export async function getStrainsByVotes(
+  order: SearchOrder,
+  limit: number
+): Promise<StrainWithRelations[]> {
+  const strains = await prisma.strain.findMany({
+    orderBy: {
+      votes: order,
+    },
+    take: limit,
+    include: {
+      terpTags: true,
+      producer: true,
+      reviews: {
+        include: {
+          profile: {
+            include: {
+              user: true,
+            }
+          },
+          terpTags: true,
+          strain: true,
+        },
+      },
+    },
+  });
+  return strains;
+}
