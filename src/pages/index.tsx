@@ -2,7 +2,7 @@ import Head from "next/head";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
 import {
-  getAllProducersWithRelations,
+  getProducersByVotes,
   type ProducerWithRelations,
 } from "@/server/database/producers";
 import {
@@ -46,11 +46,12 @@ export default function Home({ strains, producers }: HomeProps) {
         <div className="m-auto w-11/12 md:w-1/2 flex flex-row items-center">
           <SearchBar />
         </div>
-        <Carousel title="🔥 Strains"
+
+        <Carousel title="Top Strains"
           data={strains}
           renderItem={(strain) => <StrainCard strain={strain} />}
           getKey={(strain) => strain.name} />
-        <Carousel title="🔥 Producers"
+        <Carousel title="Top Producers"
           data={producers}
           renderItem={(producer) => <ProducerCard producer={producer} />}
           getKey={(producer) => producer.name} />
@@ -62,7 +63,7 @@ export default function Home({ strains, producers }: HomeProps) {
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
     let strains = await getStrainsByVotes("desc", 10);
-    let producers = await getAllProducersWithRelations();
+    let producers = await getProducersByVotes("desc", 10);
 
     // iterate on strains with dateserialization function
 

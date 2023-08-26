@@ -1,4 +1,4 @@
-import {type ProducerWithRelations} from "@/server/database/producers";
+import { type ProducerWithRelations } from "@/server/database/producers";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -20,6 +20,13 @@ const ProducerCard: React.FC<Props> = (props) => (
                     alt={"image of " + props.producer.name}
                 />
             )}
+            <div className="badge badge-primary absolute left-3 top-3 text-white font-bold h-auto p-2 text-lg">
+                {
+                    props.producer.strains.reduce((acc, strain) => acc + strain.votes, 0)
+                } {
+                    props.producer.strains.reduce((acc, strain) => acc + strain.votes, 0) >= 0 ? <>🔥</> : <>🗑️</>
+                }
+            </div>
             <div className="flex flex-col justify-between px-4 py-2">
                 <p className="mb-2 text-2xl font-medium">{props.producer.name}</p>
                 <p className="text-gray-500">{props.producer.location}</p>

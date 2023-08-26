@@ -177,13 +177,15 @@ export async function getStrainsBySearchTerm(
 
 // Function to get strains in order of votes (input asending or descending and number of strains to return)
 
+type SearchOrder = "asc" | "desc";
+
 export async function getStrainsByVotes(
-  order: string,
+  order: SearchOrder,
   limit: number
 ): Promise<StrainWithRelations[]> {
   const strains = await prisma.strain.findMany({
     orderBy: {
-      votes: order as any,
+      votes: order,
     },
     take: limit,
     include: {
