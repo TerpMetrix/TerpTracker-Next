@@ -6,7 +6,7 @@ import {
   type ProducerWithRelations,
 } from "@/server/database/producers";
 import {
-  getAllStrainsWithRelations,
+  getStrainsByVotes,
   type StrainWithRelations,
 } from "@/server/database/strains";
 import {
@@ -61,7 +61,7 @@ export default function Home({ strains, producers }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
-    let strains = await getAllStrainsWithRelations();
+    let strains = await getStrainsByVotes("desc", 10);
     let producers = await getAllProducersWithRelations();
 
     // iterate on strains with dateserialization function
