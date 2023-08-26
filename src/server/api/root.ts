@@ -4,6 +4,7 @@ import { strainRouter } from "./routers/strains";
 import { reviewRouter } from "./routers/reviews";
 import { tagRouter } from "./routers/tags";
 import { voteRouter } from "./routers/votes";
+import { profileRouter } from "./routers/profiles";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   reviews: reviewRouter,
   votes: voteRouter,
   tags: tagRouter,
+  profiles: profileRouter,
 });
 
 // export type definition of API
