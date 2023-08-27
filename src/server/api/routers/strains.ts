@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+// import { error } from "console";
 
 export const strainRouter = createTRPCRouter({
   getStrain: publicProcedure
@@ -10,20 +11,23 @@ export const strainRouter = createTRPCRouter({
           id: input.id,
         },
         include: {
-          Reviews: {
+          reviews: {
             include: {
-              TerpTag: true,
+              terpTags: true,
             },
           },
-          TerpTags: true,
-          Producer: true,
+          terpTags: true,
+          producer: true,
         },
       });
 
       return { strain };
     }),
 
+
   getAllStrains: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.strain.findMany();
   }),
+
+
 });

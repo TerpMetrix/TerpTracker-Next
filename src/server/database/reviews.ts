@@ -1,14 +1,16 @@
 import { prisma } from "@/server/database/db";
 import type { Prisma } from "@prisma/client";
 
-type ReviewWithRelations = Prisma.ReviewGetPayload<{
+
+export type ReviewWithRelations = Prisma.ReviewGetPayload<{
   include: {
-    Profile: { 
+    profile: { 
       include: {
-        User: true;
+        user: true;
       };
-    }
-    Strain: true;
+    };
+    strain: true;
+    terpTags: true;
   };
 }>;
 
@@ -25,13 +27,13 @@ export async function getReviewById(
       id: Number(id),
     },
     include: {
-      Profile: {
+      profile: {
         include: {
-          User: true,
+          user: true,
         },
       },
-      Strain: true,
-      TerpTag: true,
+      strain: true,
+      terpTags: true,
     },
   });
 

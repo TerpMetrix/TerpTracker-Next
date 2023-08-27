@@ -1,36 +1,56 @@
 import type { GetServerSideProps } from "next";
-import Link from "next/link";
-import Hero from "@/components/hero";
+import Hero from "@/components/Hero";
 import Head from "next/head";
-import Tag from "@/components/tag";
-import BackButton from "@/components/BackButton";
 import {
   type ProducerWithRelations,
   getProducerById,
 } from "@/server/database/producers";
 import {
+  type StrainWithRelations,
+  getStrainsByProducerId,
+} from "@/server/database/strains";
+import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
 import Image from "next/image";
+import PopUp from "@/components/PopUp";
+import { useState } from "react";
+import Carousel from "@/components/Carousel";
+import StrainCard from "@/components/StrainCard";
 
 // The props this component receives from getServerSideProps
 export type ProducerProps = {
   producer: ProducerWithRelations;
+  strains: StrainWithRelations[];
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
-export default function Producer({ producer }: ProducerProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+export default function Producer({ producer , strains}: ProducerProps) {
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
       <Head>
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
-      <BackButton />
+      <button onClick={() => openModal()}>Open {producer.name} Modal</button>
+      <PopUp
+        data={producer}
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+      ></PopUp>
       <div className="mb-4 flex flex-col items-center">
         <Image
           src={producer.bannerImage}
@@ -44,47 +64,13 @@ export default function Producer({ producer }: ProducerProps) {
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
         />
-        <div className="flex w-full justify-center">
-          <ul
-            id="#strains"
-            className="flex flex-wrap items-center justify-center gap-5"
-          >
-                <StrainsList producer={producer} />
-          </ul>
-        </div>
+          <Carousel title="🔥 Strains"
+                      data={strains}
+                      renderItem={(strain) => <StrainCard strain={strain}/>}
+                      getKey={(strain) => strain.name}/>
       </div>
     </>
   );
-}
-
-function StrainsList({ producer }: { producer: ProducerWithRelations }) {
-  const strains = producer.Strains?.map((strain) => {
-    return (
-      <>
-        <Link href={"/strain/" + String(strain.id)}>
-          <div className="card w-96 bg-neutral text-neutral-content">
-            <div className="card-body">
-              <h2 className="card-title">{strain.name}</h2>
-              <div className="flex">
-                <div className="my-2 flex flex-row gap-4">
-                  {strain.TerpTags?.map((tag) => {
-                    return <Tag tag={tag} key={tag.id} />;
-                  })}
-                </div>
-              </div>
-              <div className="text-gray-40 mb-3">
-                {strain.batchDate.toDateString()}
-              </div>
-              <button className="btn w-20 border-0 bg-green-500 text-white hover:bg-green-600">
-                💬
-              </button>
-            </div>
-          </div>
-        </Link>
-      </>
-    );
-  });
-  return strains;
 }
 
 // getServerSideProps only runs on the server. never on the client.
@@ -104,8 +90,13 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   }
 
   let producer = await getProducerById(producerId);
+
+  let strains = await getStrainsByProducerId(producerId);
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertDatesToStrings(producer);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strains = convertDatesToStrings(strains);
   console.log(producer); // eslint-disable-line no-console
 
   if (!producer) {
@@ -115,6 +106,7 @@ export const getServerSideProps: GetServerSideProps<ProducerProps> = async (
   return {
     props: {
       producer: producer,
+      strains: strains,
     },
   };
 };

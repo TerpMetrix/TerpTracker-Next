@@ -1,37 +1,41 @@
-// /components/Card.tsx
+import { type ProducerWithRelations } from "@/server/database/producers";
 import React from "react";
-import type { Strain, Producer } from "@/server/database/types";
-import Image from "next/image";
-import Tag from "@/components/tag";
 import Link from "next/link";
+import Image from "next/image";
+import { useMemo } from "react";
 
-type ProducerCardProps = {
-  producer: Producer;
+type Props = {
+  producer: ProducerWithRelations;
 };
 
-const ProducerCard: React.FC<ProducerCardProps> = ({ producer }) => {
+const ProducerCard: React.FC<Props> = (props) => {
+  const totalVotes = useMemo(
+    () => props.producer.strains.reduce((acc, strain) => acc + strain.votes, 0), // your expensive code to run once
+    [props.producer.strains] // The dependency that, when changes, triggers your code to update
+  );
+
   return (
-    <Link href={`/producer/${producer.id}`}>
-      <div className="card flex h-56 w-64 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-96">
-        {producer.bannerImage && (
+    <Link href={`/producer/${props.producer.id}`}>
+      <div className="card flex min-h-full w-96 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-72">
+        {props.producer.bannerImage && (
           <Image
-            className="h-48 w-full overflow-hidden object-cover object-center"
-            src={producer.bannerImage}
+            className="h-full w-full overflow-hidden object-cover object-center"
+            src={props.producer.bannerImage}
             width={400}
-            height={200}
-            alt={"image of " + producer.name}
+            height={400}
+            alt={"image of " + props.producer.name}
           />
         )}
-        <div className="flex flex-col justify-between px-4 py-2">
-          <p className="mb-2 text-2xl font-medium">{producer.name}</p>
-          <p className="text-gray-500">{producer.location}</p>
+        <div className="badge badge-primary absolute left-3 top-3 h-auto p-2 text-lg font-bold text-white">
+          {totalVotes} {totalVotes >= 0 ? <>🔥</> : <>🗑️</>}
         </div>
-        <div className="absolute bottom-5 right-5">
-          <button className="text-md btn-primary btn uppercase">
-            See drops
-          </button>
+        <div className="flex flex-col justify-between px-4 py-2">
+          <p className="mb-2 text-2xl font-medium">{props.producer.name}</p>
+          <p className="text-gray-500">{props.producer.location}</p>
         </div>
       </div>
     </Link>
   );
 };
+
+export default ProducerCard;

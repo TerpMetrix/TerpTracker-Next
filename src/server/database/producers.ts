@@ -3,9 +3,9 @@ import type { Prisma, Producer } from "@prisma/client";
 
 export type ProducerWithRelations = Prisma.ProducerGetPayload<{
   include: {
-    Strains: {
+    strains: {
       include: {
-        TerpTags: true;
+        terpTags: true;
       };
     };
   };
@@ -24,9 +24,9 @@ export async function getProducerById(
       id: id,
     },
     include: {
-      Strains: {
+      strains: {
         include: {
-          TerpTags: true,
+          terpTags: true,
         },
       },
     },
@@ -43,5 +43,60 @@ export async function getFeaturedProducers(): Promise<Array<Producer>> {
   const producers = await prisma.producer.findMany({
     take: 10,
   });
+  return producers;
+}
+
+// get all producers with relations
+export async function getAllProducersWithRelations(): Promise<
+  ProducerWithRelations[]
+> {
+  const producers = await prisma.producer.findMany({
+    include: {
+      strains: {
+        include: {
+          terpTags: true,
+        },
+      },
+    },
+  });
+  return producers;
+}
+
+
+// get producers and order the output by the sum of all strains.votes (input either asc or desc and limit)
+
+export async function getProducersByVotes(
+  order: "asc" | "desc",
+  limit: number
+): Promise<ProducerWithRelations[]> {
+  const producers = await prisma.producer.findMany({
+    include: {
+      strains: {
+        include: {
+          terpTags: true,
+        },
+      },
+    },
+    take: limit,
+  });
+
+  //reorder producers after by sum of votes
+
+  producers.sort((a, b) => {
+    let aVotes = 0;
+    let bVotes = 0;
+    a.strains.forEach((strain) => {
+      aVotes += strain.votes;
+    });
+    b.strains.forEach((strain) => {
+      bVotes += strain.votes;
+    });
+    if (order === "asc") {
+      return aVotes - bVotes;
+    } else {
+      return bVotes - aVotes;
+    }
+  });
+
   return producers;
 }

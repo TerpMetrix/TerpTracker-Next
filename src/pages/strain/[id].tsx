@@ -1,69 +1,135 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { ArrowUpRight, Star } from "lucide-react";
-import NewReviewModal from "@/components/newReviewModal";
+import { InfoIcon, Flower2, Droplets, PlusCircle } from "lucide-react";
+import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
-import Tag from "@/components/tag";
-import BackButton from "@/components/BackButton";
-import type { Review, Strain, TerpTag } from "@/server/database/types";
-import { getStrainById } from "@/server/database/strains";
-import { getAllTags } from "@/server/database/tags";
+import Tag from "@/components/Tag";
+import {
+  type ReviewWithRelations
+}
+  from "@/server/database/reviews";
+import {
+  type StrainWithRelations,
+  getStrainById
+} from "@/server/database/strains";
+import {
+  type TagWithNoRelations,
+  getAllTags
+}
+  from "@/server/database/tags";
+import {
+  convertDatesToStrings,
+  convertStringsToDates,
+}
+  from "@/utils/dateSerialization";
+import Image from "next/image";
+import PopUp from "@/components/PopUp";
+import { useState } from "react";
+import { VoteButtons } from "@/components/VoteButtons";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
-  strain: Strain;
-  allTags: TerpTag[];
+  strain: StrainWithRelations;
+  allTags: TagWithNoRelations[];
   notFound?: boolean;
 };
 
 // The main producer component exported in this file
 export default function Strain({ strain, allTags }: StrainProps) {
+  const { data: sessionData } = useSession();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strain = convertStringsToDates(strain);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <Head>
         <title>{strain.name} | TerpTracker</title>
       </Head>
-      <BackButton />
-      <div className="mb-10 min-h-screen">
-        <div className="flex h-96 flex-col items-center justify-center gap-10">
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl">{strain.name}</h1>
-            <p className="italic text-gray-400">
-              Quick description of this strain.
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-4">
-            <p className="badge">{Math.floor(strain.THC * 100)}% THC</p>
-            <p className="badge">{strain.batchDate}</p>
-            <p className="badge badge-primary">{strain.productType}</p>
-          </div>
-
-          <div className="my-2 flex flex-row items-center justify-center gap-4">
-            {strain.TerpTags?.map((tag) => {
+      <PopUp
+        data={strain}
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+      ></PopUp>
+      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-center gap-10 mt-4 rounded-lg p-4 md:p-0">
+        <div className="relative">
+          <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
+          <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
+            {strain.terpTags?.map((tag) => {
               return <Tag tag={tag} key={tag.id} />;
             })}
           </div>
-
-          <Link
-            className="btn-outline btn"
-            href={producerLink(strain.producerId)}
-          >
-            {strain.producerName} <ArrowUpRight />{" "}
-            {/*need to make this link to prod name */}
-          </Link>
+          <Image
+            className="rounded-lg w-96 md:w-[450px] lg:w-[500px] h-96 md:h-[450px] lg:h-[500px]"
+            src={strain.image}
+            width={600}
+            height={600}
+            alt={"image of " + strain.name}
+          />
         </div>
+        <div className="h-full lg:overflow-hidden w-full md:w-96">
+          <div className="w-full">
+            <div className="gap-2 rounded-lg p-4 border border-green-600 w-full relative">
+              <div className="flex flex-col">
+                <div className="flex flex-row items-center max-w-xs">
+                <h1 className="text-2xl font-bold uppercase w-52">{strain.name}</h1>
+                <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
+                //func to check if "flower" or "hash" and display flower or hash icon
+                strain.productType === "flower" ? <Flower2 /> : <Droplets />
+              }</p>
+              </div>
+                <Link
+                  className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-2 mb-4 py-6"
+                  href={producerLink(strain.producerId)}
+                >
+                  <Image
+                    src={strain.producer.bannerImage}
+                    alt="Producer Banner Image"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  {strain.producer.name}{" "}
+                  {/*need to make this link to prod name */}
+                </Link>
+                <p className="badge badge-outline">{Math.floor(strain.thc * 100)}% THC</p>
+              </div>
+              {/* Upvote/Downvote Buttons to +/- to strain.vote */}
+              <VoteButtons strainId={strain.id} totalVotes={strain.votes} />
 
-        <div className="flex flex-col items-center justify-center">
-          <ul className="flex w-screen flex-col gap-4 p-4 md:w-2/3">
-            {strain.Reviews?.map((review) => {
-              return (
-                <li key={review.id}>
-                  <ReviewCard review={review} />
-                </li>
-              );
-            })}
-          </ul>
-          <NewReviewModal strainId={strain.id} tagslist={allTags} />
+            </div>
+
+            <div className="overflow-y-auto max-h-96">
+              <ul className="h-full flex flex-col justify-center gap-3 pb-8 pt-4">
+                {strain.reviews?.map((review) => {
+                  return (
+                    <li key={review.id} className="">
+                      <ReviewCard review={review} />
+                    </li>
+                  );
+                })}
+                {/* Add functionality to this component to only let logged-in users comment */}
+                {sessionData ? (
+                  <NewReviewModal strainId={strain.id} tagslist={allTags} />
+                ) : (
+                  <Link href="/api/auth/signin" className="m-auto">
+                    <button className="btn w-full bg-neutral text-white hover:bg-primary" onClick={() => window.review_modal.showModal()}>
+                      <PlusCircle /> Login To Comment
+                    </button>
+                  </Link>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </>
@@ -71,49 +137,29 @@ export default function Strain({ strain, allTags }: StrainProps) {
 }
 
 type ReviewCardProps = {
-  review: Review;
+  review: ReviewWithRelations;
 };
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
-  const { rating, comment } = review;
+  const { comment } = review;
 
   return (
-    <div className="rounded-md border p-4 transition-all hover:-translate-y-2 hover:bg-neutral ">
-      <h3 className="mb-1 text-lg font-medium">{review.profileName}</h3>
-      <RatingStars rating={rating} />
-      <p className="text-gray-400">{review.createdAt}</p>
-      <p className="text-gray-200">{comment}</p>
-      {/* if tag, show it */}
-      {review.TerpTag &&
+    <div className="rounded-md border p-4 transition-all relative">
+      <h3 className="text-lg font-medium">{review.profileName}</h3>
+      <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
+      <p className="text-gray-200 mt-2">{comment}</p>
+      {/* if tags, show them */}
+      {review.terpTags &&
         <div className="my-2 flex flex-row items-center justify-start gap-4">
-        <Tag tag={review.TerpTag} key={review.TerpTagId} />
+          {review.terpTags.map((tag) => {
+            return <Tag tag={tag} key={tag.id} />;
+          }
+          )}
         </div>
       }
     </div>
   );
 };
-
-function RatingStars({ rating }: { rating: number }) {
-  //  if we somehow get a rating over 5, just cap it at 5
-  const MAX_STARS = 5;
-  rating %= MAX_STARS + 1;
-
-  const filledStars = [];
-  const emptyStars = [];
-
-  for (let i = 0; i < rating; i++) {
-    filledStars.push(<Star className="h-4" key={i} fill="currentColor" />);
-  }
-  for (let i = rating; i < MAX_STARS; i++) {
-    emptyStars.push(<Star className="h-4" key={i} stroke="gray" />);
-  }
-  return (
-    <div className="mb-4 flex">
-      {filledStars}
-      {emptyStars}
-    </div>
-  );
-}
 
 function producerLink(id: number) {
   return "/producer/" + String(id);
@@ -130,8 +176,9 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 
   const allTags = await getAllTags();
 
-  const strain = await getStrainById(id);
-  console.log(strain);
+  let strain = await getStrainById(id);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strain = convertDatesToStrings(strain)
 
   if (!strain) {
     return { notFound: true };
@@ -143,38 +190,8 @@ export const getServerSideProps: GetServerSideProps<StrainProps> = async (
 
   return {
     props: {
-      strain: {
-        id: strain.id,
-        name: strain.name,
-        batchDate: strain.batchDate.toDateString(),
-        THC: strain.THC,
-        image: strain.image,
-        productType: strain.productType,
-        producerId: strain.producerId,
-        producerName: strain.Producer.name,
-        Producer: strain.Producer,
-        Reviews: strain.Reviews?.map((review) => ({
-          id: review.id,
-          rating: review.rating,
-          comment: review.comment,
-          profileName: review.Profile.profileName || "",
-          createdAt: review.createdAt.toDateString(),
-          TerpTag: review.TerpTag,
-          TerpTagId: review.terpTagId,
-        })),
-        TerpTags: strain.TerpTags.map((tag) => ({
-          id: tag.id,
-          name: tag.name,
-          lean: tag.lean,
-          color: tag.color,
-        })),
-      },
-      allTags: allTags.map((tag) => ({
-        id: tag.id,
-        name: tag.name,
-        lean: tag.lean,
-        color: tag.color,
-      })),
+      strain: strain,
+      allTags: allTags,
     },
   };
 };

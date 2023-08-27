@@ -5,7 +5,8 @@
 // Prisma Configuration
 //////////////////////////////////////////
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -69,7 +70,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  Profile       Profile? // Our application specific user data
+  profile       Profile? // Our application specific user data
 }
 
 model VerificationToken {
@@ -93,9 +94,10 @@ model Profile {
 
   // relations
   userId String @unique
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  Reviews Review[]
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  upvotedStrains Strain[]
+  reviews Review[]
 }
 
 model Producer {
@@ -104,9 +106,10 @@ model Producer {
   location    String @default("")
   website     String @default("")
   bannerImage String @default("")
+  nutrients   String @default("")
 
   // relations
-  Strains Strain[]
+  strains Strain[]
 }
 
 model Strain {
@@ -115,16 +118,17 @@ model Strain {
   name        String
   batchDate   DateTime @default(now())
   productType String // flower or concentrate
-  THC         Float    @default(0)
+  thc         Float    @default(0)
   image       String   @default("")
-
+  votes       Int      @default(0) //value to be updated when a user votes on a strain
   // relations
 
-  producerId Int 
-  Producer   Producer      @relation(fields: [producerId], references: [id], onDelete: Cascade)
+  producerId Int
+  producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
 
-  TerpTags       TerpTag[]
-  Reviews        Review[]
+  terpTags TerpTag[]
+  reviews  Review[]
+  profiles Profile[]
 
   @@index([producerId])
 }
@@ -132,32 +136,38 @@ model Strain {
 model Review {
   // values
   id        Int      @id @default(autoincrement())
-  rating    Float    @default(0)
   comment   String   @default("")
   createdAt DateTime @default(now())
 
   // relations
   strainId Int
-  Strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
+  strain   Strain @relation(fields: [strainId], references: [id], onDelete: Cascade)
 
-  terpTagId Int @default(0)
-  TerpTag   TerpTag? @relation(fields: [terpTagId], references: [id], onDelete: Cascade)
+  terpTags TerpTag[]
 
-  profileName String @default("")
-  Profile     Profile @relation(fields: [profileName], references: [profileName], onDelete: Cascade)
+  profileName String  @default("")
+  profile     Profile @relation(fields: [profileName], references: [profileName], onDelete: Cascade)
 
   @@index([strainId])
-  @@index([terpTagId])
   @@index([profileName])
 }
 
 model TerpTag {
-  id     Int    @id @default(autoincrement())
-  name   String @unique
-  lean   Float  @default(0)
-  color  String @default("000000")
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  lean  Float  @default(0)
+  color String @default("000000")
 
   // relations
-  Strains Strain[]
-  Reviews Review[]
+  strains Strain[]
+  reviews Review[]
+}
+
+model StrainVote {
+
+  strainId Int
+  profileName String  @default("")
+  value Int @default(0) //either 1 or -1 for upvote or downvote
+
+  @@id([strainId, profileName])
 }

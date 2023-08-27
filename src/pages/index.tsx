@@ -1,17 +1,33 @@
 import Head from "next/head";
-import { Search } from "lucide-react";
 import Carousel from "@/components/Carousel";
 import type { GetServerSideProps } from "next";
-import { getFeaturedProducers } from "@/server/database/producers";
-import { getFeaturedStrains } from "@/server/database/strains";
-import type { Producer, Strain } from "@/server/database/types";
+import {
+  getProducersByVotes,
+  type ProducerWithRelations,
+} from "@/server/database/producers";
+import {
+  getStrainsByVotes,
+  type StrainWithRelations,
+} from "@/server/database/strains";
+import {
+  convertDatesToStrings,
+  convertStringsToDates,
+} from "@/utils/dateSerialization";
+import StrainCard from "@/components/StrainCard";
+import ProducerCard from "@/components/ProducerCard";
+import SearchBar from "@/components/SearchBar";
 
 type HomeProps = {
-  strains: Strain[];
-  producers: Producer[];
+  strains: StrainWithRelations[];
+  producers: ProducerWithRelations[];
 };
 
 export default function Home({ strains, producers }: HomeProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  producers = convertStringsToDates(producers);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  strains = convertStringsToDates(strains);
+
   return (
     <>
       <Head>
@@ -27,18 +43,18 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="mx-auto flex w-4/5 flex-row items-center gap-1 space-x-2 px-0 md:px-4 sm:w-1/2">
-          <input
-            type="text"
-            placeholder="Find what's next in weed..."
-            className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
-          />
-          <button className="btn border-0 bg-green-600 shadow-xl shadow-green-700/10 hover:bg-green-700">
-            <Search className="w-6 sm:w-full" />
-          </button>
+        <div className="m-auto w-11/12 md:w-1/2 flex flex-row items-center">
+          <SearchBar />
         </div>
-        <Carousel title="🔥 Strains" data={strains} />
-        <Carousel title="🔥 Producers" data={producers} />
+
+        <Carousel title="Top Strains"
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name} />
+        <Carousel title="Top Producers"
+          data={producers}
+          renderItem={(producer) => <ProducerCard producer={producer} />}
+          getKey={(producer) => producer.name} />
       </main>
     </>
   );
@@ -46,35 +62,22 @@ export default function Home({ strains, producers }: HomeProps) {
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   try {
-    const strains = await getFeaturedStrains();
-    const producers = await getFeaturedProducers();
+    let strains = await getStrainsByVotes("desc", 10);
+    let producers = await getProducersByVotes("desc", 10);
+
+    // iterate on strains with dateserialization function
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    strains = convertDatesToStrings(strains);
+
+    // iterate on producers with dateserialization function
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    producers = convertDatesToStrings(producers);
 
     return {
       props: {
-        strains: strains.map((strain) => ({
-          id: strain.id,
-          name: strain.name,
-          batchDate: strain.batchDate.toDateString(),
-          productType: strain.productType,
-          producerBannerImage: strain.Producer.bannerImage,
-          THC: strain.THC,
-          producerId: strain.Producer.id,
-          producerName: strain.Producer.name,
-          image: strain.image,
-          TerpTags: strain.TerpTags.map((tag) => ({
-            id: tag.id,
-            color: tag.color,
-            lean: tag.lean,
-            name: tag.name,
-          })),
-        })),
-        producers: producers.map((producer) => ({
-          id: producer.id,
-          name: producer.name,
-          bannerImage: producer.bannerImage,
-          location: producer.location,
-          website: producer.website,
-        })),
+        strains: strains,
+        producers: producers,
       },
     };
   } catch (e) {

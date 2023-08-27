@@ -6,25 +6,22 @@ import type { Prisma } from "@prisma/client";
  */
 export type StrainWithRelations = Prisma.StrainGetPayload<{
   include: {
-    Reviews: {
+    reviews: {
       include: {
-        Profile: true,
-        TerpTag: true,
-        terpTagId: true,
+        profile: {
+          include: {
+            user: true;
+          };
+        }
+        terpTags: true,
+        strain: true,
       }
     },
-    TerpTags: true,
-    Producer: true;
+    terpTags: true,
+    producer: true;
   };
 }>;
 
-type FeaturedStrain = Prisma.StrainGetPayload<{
-  include: {
-    Reviews: true,
-    TerpTags: true,
-    Producer: true;
-  };
-}>;
 
 /**
  * Retrieves a strain by its ID, including its related reviews, tags, and producer.
@@ -39,14 +36,19 @@ export async function getStrainById(
       id: Number(id),
     },
     include: {
-      Reviews: {
+      reviews: {
         include: {
-          Profile: true,
-          TerpTag: true,
+          profile: {
+            include: {
+              user: true,
+            },
+          },
+          terpTags: true,
+          strain: true,
         }
       },
-      TerpTags: true,
-      Producer: true,
+      terpTags: true,
+      producer: true,
     },
   });
 
@@ -62,14 +64,19 @@ export async function getAllStrainsWithRelations(): Promise<
 > {
   const strains = await prisma.strain.findMany({
     include: {
-      Reviews: {
+      reviews: {
         include: {
-          Profile: true,
-          TerpTag: true,
+          profile: {
+            include: {
+              user: true,
+            },
+          },
+          terpTags: true,
+          strain: true,
         }
       },
-      TerpTags: true,
-      Producer: true,
+      terpTags: true,
+      producer: true,
     },
   });
   return strains;
@@ -80,13 +87,121 @@ export async function getAllStrainsWithRelations(): Promise<
  * @returns A Promise that resolves to an array of all featured strains with their related data.
  */
 
-export async function getFeaturedStrains(): Promise<FeaturedStrain[]> {
+//* Gets all strains from one producer by id
+
+export async function getStrainsByProducerId(
+  producerId: number
+): Promise<StrainWithRelations[]> {
   const strains = await prisma.strain.findMany({
-    take: 10,
+    where: {
+      producerId: producerId,
+    },
     include: {
-      Reviews: true,
-      Producer: true,
-      TerpTags: true,
+      terpTags: true,
+      producer: true,
+      reviews: {
+        include: {
+          profile: {
+            include: {
+              user: true,
+            }
+          },
+          terpTags: true,
+          strain: true,
+        },
+      },
+    },
+  });
+  return strains;
+}
+
+
+// Function to get strains by search term 
+
+export async function getStrainsBySearchTerm(
+  searchTerm: string
+): Promise<StrainWithRelations[]> {
+  const strains = await prisma.strain.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: searchTerm,
+          }
+        },
+        {
+          producer: {
+            name: {
+              contains: searchTerm,
+            }
+          }
+        },
+        {
+          terpTags: {
+            some: {
+              name: {
+                contains: searchTerm,
+              }
+            }
+          }
+        },
+        {
+          reviews: {
+            some: {
+              comment: {
+                contains: searchTerm,
+              }
+            }
+          }
+        }
+      ]
+    },
+    include: {
+      terpTags: true,
+      producer: true,
+      reviews: {
+        include: {
+          profile: {
+            include: {
+              user: true,
+            }
+          },
+          terpTags: true,
+          strain: true,
+        },
+      },
+    },
+  });
+  return strains;
+}
+
+// Function to get strains in order of votes (input asending or descending and number of strains to return)
+
+type SearchOrder = "asc" | "desc";
+
+export async function getStrainsByVotes(
+  order: SearchOrder,
+  limit: number
+): Promise<StrainWithRelations[]> {
+  const strains = await prisma.strain.findMany({
+    orderBy: {
+      votes: order,
+    },
+    take: limit,
+    include: {
+      terpTags: true,
+      producer: true,
+      reviews: {
+        include: {
+          profile: {
+            include: {
+              user: true,
+            }
+          },
+          terpTags: true,
+          strain: true,
+        },
+      },
     },
   });
   return strains;
