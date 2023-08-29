@@ -24,20 +24,36 @@ export default function Navigation() {
       {/* if not index, do not display log in button */}
       <div className="navbar-end">
       {isIndex ?
+        <>
+        <div>
+              {session?.user.name && (
+                <div className="p-4">
+                  <Link href={`/profile/${session.user.name}`}>
+                    <button className="btn btn-outline btn-primary">
+                      <UserCircle /> <p>{session.user.name}</p>
+                    </button>
+                  </Link>
+                </div>
+              )}
+        </div>
         <div className="p-4">{session ? logOut() : logIn()}</div>
-        : <div className="flex w-3/4 pr-4 md:pl-12">
+        </>
+        : 
+        <>
+        <div className="w-3/4 pr-4 md:pl-12">
           <SearchBar />
         </div>
+              {session?.user.name && (
+                <div className="p-4">
+                  <Link href={`/profile/${session.user.name}`}>
+                    <button className="btn btn-outline btn-primary">
+                      <UserCircle />
+                    </button>
+                  </Link>
+                </div>
+              )}
+        </>
       }
-      {session?.user.name && (
-        <div className="p-4">
-          <Link href={`/profile/${session.user.name}`}>
-            <button className="btn btn-outline btn-primary">
-              <UserCircle />
-            </button>
-          </Link>
-        </div>
-      )}
       </div>
       {/* if user is logged in, show profile button */}
 

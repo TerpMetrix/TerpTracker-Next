@@ -1,14 +1,17 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Carousel from '@/components/Carousel';
+import VCarousel from '@/components/VCarousel';
 import StrainCard from '@/components/StrainCard';
-import { 
+import CommentCard from '@/components/CommentCard';
+import {
   type ProfileWithRelations,
   getProfileByName
 } from '@/server/database/profiles';
-import { 
-  type GetServerSideProps, 
-  type GetServerSidePropsContext 
+import {
+  type GetServerSideProps,
+  type GetServerSidePropsContext
 } from 'next';
 import { convertDatesToStrings } from '@/utils/dateSerialization';
 
@@ -34,28 +37,58 @@ export default function Profile({ profile, notFound }: ProfileProps) {
   if (profile) {
     return (
       <div>
-        <h1>Profile of {profile.profileName}</h1>
         {session && (
           <>
-            {/* if user is logged in, and the username matches the route id, show an edit profile button */}
-            {session.user.id === profile.userId && (
-              <Link href="/profile/[profileName]/edit" as={`/profile/${profile.profileName ? profile.profileName : ""}/edit`}>
-                <button className='btn btn-primary'>Edit Profile</button>
-              </Link>
-            )}
+            <div className="flex flex-row justify-center">
+              <div className='flex flex-col items-center w-3/4'>
+                <div className='flex flex-row justify-center space-x-6 w-1/2 items-center'>
+                  <Image className='w-1/4 rounded-full' src={profile.user.image ?? ""} alt="Profile Image" width={200} height={200} />
+                  <div className='mb-12 flex flex-row justify-center space-x-4'>
+                    <h1 className='text-3xl text-center'>{profile.profileName}</h1>
+                    {/* if user is logged in, and the username matches the route id, show an edit profile button */}
+                    {session.user.id === profile.userId && (
+                      <Link href="/profile/[profileName]/edit" as={`/profile/${profile.profileName ? profile.profileName : ""}/edit`}>
+                        <button className='btn btn-primary'>Edit Profile</button>
+                      </Link>
+                    )}
+                  </div>
+                </div>
 
-            <p>You are signed in as {session.user.email}</p>
+                <div className="flex flex-row justify-center w-full space-x-4 ml-16 mb-8">
+                  <div className="flex flex-col items-center">
+                    <p>{profile.upvotedStrains.length}</p>
+                    <p>Liked Strains</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <p>{profile.reviews.length}</p>
+                    <p>Comments</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <p>Rank</p>
+                    <p>Rank</p>
+                  </div>
+                </div>
+                {/* horizontal element that has 3 numbers, one for number of liked strains, one for number of comments, and one that displays the rank of the account */}
+              </div>
 
-            <p>Profile of {profile.profileName}</p>
+            </div>
+
 
             {/* display strains */}
-
-            <Carousel
-              title="Liked Strains"
-              data={profile.upvotedStrains}
-              renderItem={(strain) => <StrainCard strain={strain} />}
-              getKey={(strain) => strain.name}
-            />
+            <div className="flex flex-row justify-center w-full mt-4 max-h-[550px]">
+              <Carousel
+                title="Liked Strains"
+                data={profile.upvotedStrains}
+                renderItem={(strain) => <StrainCard strain={strain} />}
+                getKey={(strain) => strain.name}
+              />
+              <VCarousel
+                title="Comments"
+                data={profile.reviews}
+                renderItem={(review) => <CommentCard review={review} />}
+                getKey={(review) => review.strain.name}
+              />
+            </div>
 
             {/* <button onClick={() => signOut()}>Sign out</button> */}
           </>

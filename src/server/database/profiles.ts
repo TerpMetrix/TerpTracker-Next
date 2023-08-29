@@ -7,6 +7,12 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
         reviews: {
             include: {
                 strain: true;
+                terpTags: true;
+                profile: {
+                    include: {
+                        user: true;
+                    };
+                };
             };
         };
         upvotedStrains: {
@@ -49,6 +55,12 @@ export async function getProfileByName(
             reviews: {
                 include: {
                     strain: true,
+                    terpTags: true,
+                    profile: {
+                        include: {
+                            user: true,
+                        },
+                    },
                 },
             },
             upvotedStrains: {
