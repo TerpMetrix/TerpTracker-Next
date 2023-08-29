@@ -45,38 +45,34 @@ export default function Producer({ producer, strains }: ProducerProps) {
       <Head>
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
-      <button onClick={() => openModal()}>Open {producer.name} Modal</button>
-      <PopUp
+      {/* <button onClick={() => openModal()}>Open {producer.name} Modal</button>
+      <PopU
         data={producer}
         isOpen={isOpen}
         onRequestClose={closeModal}
-      ></PopUp>
-      <div className="mb-4 flex flex-col">
+      ></PopUp> */}
+      <div className="mx-4 mb-4 flex max-h-[4/5] w-fit flex-row overflow-hidden rounded-xl drop-shadow">
         <Image
           src={producer.bannerImage}
           alt="Producer Banner Image"
           width={100}
           height={100}
-          style={{
-            width: "100%",
-            height: "auto",
-            maxWidth: "50vw",
-            maxHeight: "80vh",
-          }}
-          className="ml-0"
+          className="ml-0 w-fit object-cover"
         />
-        <Hero
-          title={producer.name}
-          description="Generic default description of this producer. Should add a database column for an about."
-          link={producer.website}
-        />
-        <Carousel
-          title="🔥 Strains"
-          data={strains}
-          renderItem={(strain) => <StrainCard strain={strain} />}
-          getKey={(strain) => strain.name}
-        />
+        <div className="mb-auto ml-8 mr-8 mt-auto w-full">
+          <Hero
+            title={producer.name}
+            link={producer.website}
+            instagram={producer.instagram}
+          />
+        </div>
       </div>
+      <Carousel
+        title="🔥 Strains"
+        data={strains}
+        renderItem={(strain) => <StrainCard strain={strain} />}
+        getKey={(strain) => strain.name}
+      />
     </>
   );
 }
