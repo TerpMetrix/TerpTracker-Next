@@ -5,12 +5,13 @@ interface CarouselProps<TData> {
     data: Array<TData>;
     renderItem: (datum: TData) => React.ReactElement;
     getKey: (datum: TData) => string;
+    className?: string;
 }
 
-const VCarousel = <TData,>({ title, data, getKey, renderItem }: CarouselProps<TData>) => {
+const VCarousel = <TData,>({ title, data, getKey, renderItem, className }: CarouselProps<TData>) => {
     return (
-        <div className="w-full flex flex-col space-y-6 overflow-hidden">
-            <h1 className="text-2xl font-bold text-left w-full ml-5 md:ml-10">
+        <div className={`w-full flex flex-col space-y-2 overflow-hidden ${className ? className : ""}`}>
+            <h1 className="text-2xl font-bold text-left w-full ml-5 md:ml-10 text-slate-100">
                 {title}
             </h1>
             <ul className="flex flex-col overflow-auto items-center motion-safe:scroll-smooth">

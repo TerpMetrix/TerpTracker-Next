@@ -14,18 +14,18 @@ export default function Navigation() {
   //await profileId response from useSession
 
   return (
-    
+
     <div className="navbar bg-base-100 justify-center">
-      <div className="navbar-start">
+      <div className="navbar-start w-1/2 md:w-full">
         <Link href="/" className="btn-ghost btn h-24 w-24 normal-case p-4">
           <Image src={"/terptracker-logo.png"} alt="TerpTracker Logo" width={70} height={70} />
         </Link>
       </div>
       {/* if not index, do not display log in button */}
       <div className="navbar-end">
-      {isIndex ?
-        <>
-        <div>
+        {isIndex ?
+          <>
+            <div>
               {session?.user.name && (
                 <div className="p-4">
                   <Link href={`/profile/${session.user.name}`}>
@@ -35,25 +35,25 @@ export default function Navigation() {
                   </Link>
                 </div>
               )}
-        </div>
-        <div className="p-4">{session ? logOut() : logIn()}</div>
-        </>
-        : 
-        <>
-        <div className="w-3/4 pr-4 md:pl-12">
-          <SearchBar />
-        </div>
-              {session?.user.name && (
-                <div className="p-4">
-                  <Link href={`/profile/${session.user.name}`}>
-                    <button className="btn btn-outline btn-primary">
-                      <UserCircle />
-                    </button>
-                  </Link>
-                </div>
-              )}
-        </>
-      }
+            </div>
+            <div className="p-4">{session ? logOut() : logIn()}</div>
+          </>
+          :
+          <>
+            <div className="navbar-center w-full md:pl-12">
+              <SearchBar />
+            </div>
+            {session?.user.name && (
+              <div className="p-2">
+                <Link href={`/profile/${session.user.name}`}>
+                  <button className="btn btn-outline btn-primary">
+                    <UserCircle />
+                  </button>
+                </Link>
+              </div>
+            )}
+          </>
+        }
       </div>
       {/* if user is logged in, show profile button */}
 

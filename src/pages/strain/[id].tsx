@@ -81,12 +81,12 @@ export default function Strain({ strain, allTags }: StrainProps) {
             <div className="gap-2 rounded-lg p-4 border border-green-600 w-full relative">
               <div className="flex flex-col">
                 <div className="flex flex-row items-center max-w-xs">
-                <h1 className="text-2xl font-bold uppercase w-52">{strain.name}</h1>
-                <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
-                //func to check if "flower" or "hash" and display flower or hash icon
-                strain.productType === "flower" ? <Flower2 /> : <Droplets />
-              }</p>
-              </div>
+                  <h1 className="text-2xl font-bold uppercase w-52">{strain.name}</h1>
+                  <p className="badge badge-primary uppercase text-white font-bold h-auto p-3">{
+                    //func to check if "flower" or "hash" and display flower or hash icon
+                    strain.productType === "flower" ? <Flower2 /> : <Droplets />
+                  }</p>
+                </div>
                 <Link
                   className="text-lg font-bold text-green-600 hover:underline badge border-0 gap-2 mt-2 mb-4 py-6"
                   href={producerLink(strain.producerId)}
@@ -145,7 +145,12 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
 
   return (
     <div className="rounded-md border p-4 transition-all relative">
-      <h3 className="text-lg font-medium">{review.profileName}</h3>
+      <Link
+        href={"/profile/[profileName]"}
+        as={`/profile/${review.profileName ? review.profileName : ""}`}
+      >
+        <h3 className="text-lg font-medium">{review.profileName}</h3>
+      </Link>
       <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
       <p className="text-gray-200 mt-2">{comment}</p>
       {/* if tags, show them */}
