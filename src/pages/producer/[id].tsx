@@ -27,7 +27,7 @@ export type ProducerProps = {
 };
 
 // The main producer component exported in this file
-export default function Producer({ producer , strains}: ProducerProps) {
+export default function Producer({ producer, strains }: ProducerProps) {
   //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
   const [isOpen, setIsOpen] = useState(false);
@@ -51,23 +51,31 @@ export default function Producer({ producer , strains}: ProducerProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp>
-      <div className="mb-4 flex flex-col items-center">
+      <div className="mb-4 flex flex-col">
         <Image
           src={producer.bannerImage}
           alt="Producer Banner Image"
-          width={1000}
-          height={300}
-          className="rounded-lg"
+          width={100}
+          height={100}
+          style={{
+            width: "100%",
+            height: "auto",
+            maxWidth: "50vw",
+            maxHeight: "80vh",
+          }}
+          className="ml-0"
         />
         <Hero
           title={producer.name}
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
         />
-          <Carousel title="🔥 Strains"
-                      data={strains}
-                      renderItem={(strain) => <StrainCard strain={strain}/>}
-                      getKey={(strain) => strain.name}/>
+        <Carousel
+          title="🔥 Strains"
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name}
+        />
       </div>
     </>
   );
