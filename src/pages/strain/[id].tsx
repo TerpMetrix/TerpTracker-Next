@@ -108,7 +108,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
 
             <ul className="h-full flex flex-col justify-center gap-3">
               <VCarousel
-                className="max-h-96"
+                className="max-h-96 mt-4"
                 data={strain.reviews}
                 renderItem={(review) => <CommentCard review={review} forStrain={true} />}
                 getKey={(review) => review.strain.name}
