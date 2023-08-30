@@ -86,10 +86,10 @@ export default function Profile({ profile, notFound }: ProfileProps) {
                 getKey={(strain) => strain.name}
               />
               <VCarousel
-                className="h-[300px] md:h-auto"
+                className="h-[400px] md:h-auto w-full"
                 title="Comments"
                 data={profile.reviews}
-                renderItem={(review) => <CommentCard review={review} />}
+                renderItem={(review) => <CommentCard review={review} forProfile={true} className='max-w-[80vw] md:max-w-md' />}
                 getKey={(review) => review.strain.name}
               />
             </div>

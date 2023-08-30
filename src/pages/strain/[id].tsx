@@ -6,10 +6,6 @@ import NewReviewModal from "@/components/NewReviewModal";
 import Head from "next/head";
 import Tag from "@/components/Tag";
 import {
-  type ReviewWithRelations
-}
-  from "@/server/database/reviews";
-import {
   type StrainWithRelations,
   getStrainById
 } from "@/server/database/strains";
@@ -27,6 +23,8 @@ import Image from "next/image";
 import PopUp from "@/components/PopUp";
 import { useState } from "react";
 import { VoteButtons } from "@/components/VoteButtons";
+import VCarousel from "@/components/VCarousel";
+import CommentCard from "@/components/CommentCard";
 
 // The props this component receives from getServerSideProps
 export type StrainProps = {
@@ -60,7 +58,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp>
-      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-center gap-10 mt-4 rounded-lg p-4 md:p-0">
+      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-center gap-10 md:mt-4 rounded-lg p-4 md:p-0">
         <div className="relative">
           <button onClick={() => openModal()} className="absolute m-4 text-white"><InfoIcon /></button>
           <div className="my-2 flex flex-row items-center justify-center gap-2 absolute right-4 top-3">
@@ -108,63 +106,31 @@ export default function Strain({ strain, allTags }: StrainProps) {
 
             </div>
 
-            <div className="overflow-y-auto max-h-96">
-              <ul className="h-full flex flex-col justify-center gap-3 pb-8 pt-4">
-                {strain.reviews?.map((review) => {
-                  return (
-                    <li key={review.id} className="">
-                      <ReviewCard review={review} />
-                    </li>
-                  );
-                })}
-                {/* Add functionality to this component to only let logged-in users comment */}
-                {sessionData ? (
-                  <NewReviewModal strainId={strain.id} tagslist={allTags} />
-                ) : (
-                  <Link href="/api/auth/signin" className="m-auto">
-                    <button className="btn w-full bg-neutral text-white hover:bg-primary" onClick={() => window.review_modal.showModal()}>
-                      <PlusCircle /> Login To Comment
-                    </button>
-                  </Link>
-                )}
-              </ul>
-            </div>
+            <ul className="h-full flex flex-col justify-center gap-3">
+              <VCarousel
+                className="max-h-96"
+                data={strain.reviews}
+                renderItem={(review) => <CommentCard review={review} forStrain={true} />}
+                getKey={(review) => review.strain.name}
+              />
+
+              {/* Add functionality to this component to only let logged-in users comment */}
+              {sessionData ? (
+                <NewReviewModal strainId={strain.id} tagslist={allTags} />
+              ) : (
+                <Link href="/api/auth/signin" className="m-auto">
+                  <button className="btn w-full bg-neutral text-white hover:bg-primary" onClick={() => window.review_modal.showModal()}>
+                    <PlusCircle /> Login To Comment
+                  </button>
+                </Link>
+              )}
+            </ul>
           </div>
         </div>
       </div>
     </>
   );
 }
-
-type ReviewCardProps = {
-  review: ReviewWithRelations;
-};
-
-const ReviewCard = ({ review }: ReviewCardProps) => {
-  const { comment } = review;
-
-  return (
-    <div className="rounded-md border p-4 transition-all relative">
-      <Link
-        href={"/profile/[profileName]"}
-        as={`/profile/${review.profileName ? review.profileName : ""}`}
-      >
-        <h3 className="text-lg font-medium">{review.profileName}</h3>
-      </Link>
-      <p className="text-gray-500 italic">{review.createdAt.toDateString()}</p>
-      <p className="text-gray-200 mt-2">{comment}</p>
-      {/* if tags, show them */}
-      {review.terpTags &&
-        <div className="my-2 flex flex-row items-center justify-start gap-4">
-          {review.terpTags.map((tag) => {
-            return <Tag tag={tag} key={tag.id} />;
-          }
-          )}
-        </div>
-      }
-    </div>
-  );
-};
 
 function producerLink(id: number) {
   return "/producer/" + String(id);
