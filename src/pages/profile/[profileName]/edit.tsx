@@ -12,10 +12,6 @@ export default function EditProfile() {
   const profileName = useRouter().query.profileName as string;
   const router = useRouter();
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
   const handleRefresh = (updatedName: string) => {
     // go to new profile page
     console.log("updated name:", updatedName);
@@ -35,6 +31,10 @@ export default function EditProfile() {
     },
     [editMutation, profileName]
   );
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   if (session && session.user.name === profileName) {
     return (
