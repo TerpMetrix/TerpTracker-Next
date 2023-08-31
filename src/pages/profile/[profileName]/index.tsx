@@ -79,7 +79,7 @@ export default function Profile({ profile, notFound }: ProfileProps) {
                     <h1 className='text-xl md:text-3xl text-center'>{profile.profileName}</h1>
                     {/* if user is logged in, and the username matches the route id, show an edit profile button */}
                     {session.user.id === profile.userId ? (
-                      <Link href="/profile/[profileName]/edit" as={`/profile/${profile.profileName ? profile.profileName : ""}/edit`}>
+                      <Link href="/profile/[profileName]/edit" as={`/profile/${profile.profileName || ""}/edit`}>
                         <button className='btn btn-primary h-auto'>Edit</button>
                       </Link>
                     )

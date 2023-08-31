@@ -3,6 +3,7 @@ import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { LoaderIcon, XCircle } from "lucide-react";
+import { useCallback } from "react";
 
 export default function EditProfile() {
     const { data: session, status } = useSession();
@@ -22,6 +23,16 @@ export default function EditProfile() {
         return null;
     };
 
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const data = new FormData(e.target as HTMLFormElement);
+        const res = editMutation.mutate({
+            originalName: profileName ? profileName : "",
+            updatedName: data.get("updatedName") as string,
+        });
+        console.log(res);
+    }, [editMutation, profileName]);
+
     if (session && session.user.name === profileName) {
         return (
             <>
@@ -32,15 +43,7 @@ export default function EditProfile() {
                     <h1 className="text-2xl md:text-3xl text-center md:text-left my-4 md:ml-8">Edit Profile</h1>
                     <form
                         className="flex flex-col gap-4 w-11/12 md:w-1/2 mx-auto bg-slate-100 rounded-xl p-4"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            const data = new FormData(e.target as HTMLFormElement);
-                            const res = editMutation.mutate({
-                                originalName: profileName ? profileName : "",
-                                updatedName: data.get("updatedName") as string,
-                            });
-                            console.log(res);
-                        }}
+                        onSubmit={handleSubmit}
                     >
                         <label htmlFor="updatedName" className="text-xl font-bold text-slate-900">Profile Name</label>
                         <input
@@ -48,7 +51,7 @@ export default function EditProfile() {
                             type="text"
                             name="updatedName"
                             id="updatedName"
-                            defaultValue={profileName ? profileName : ""}
+                            defaultValue={profileName || ""}
                         />
                         <button type="submit" className="w-1/2 mx-auto btn-primary btn">Submit</button>
                     </form>

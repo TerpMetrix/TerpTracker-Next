@@ -10,7 +10,7 @@ interface CarouselProps<TData> {
 
 const VCarousel = <TData,>({ title, data, getKey, renderItem, className }: CarouselProps<TData>) => {
     return (
-        <div className={`flex flex-col space-y-2 overflow-hidden ${className ? className : ""}`}>
+        <div className={`flex flex-col space-y-2 overflow-hidden ${className ?? ""}`}>
             {title ?
                 <h1 className="text-2xl font-bold text-left w-full ml-5 md:ml-10 text-slate-100">
                     {title}
