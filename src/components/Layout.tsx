@@ -5,7 +5,7 @@ import { Footer } from "./Footer";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <main className="selection:bg-accent selection:text-accent h-screen">
+      <main className="h-screen selection:bg-accent selection:text-accent">
         <Navigation />
         {children}
         <Footer></Footer>

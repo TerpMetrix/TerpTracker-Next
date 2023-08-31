@@ -43,18 +43,22 @@ export default function Home({ strains, producers }: HomeProps) {
             Tracker
           </h1>
         </div>
-        <div className="m-auto w-11/12 md:w-1/2 flex flex-row items-center">
+        <div className="m-auto flex w-11/12 flex-row items-center md:w-1/2">
           <SearchBar />
         </div>
 
-        <Carousel title="Top Strains"
+        <Carousel
+          title="Top Strains"
           data={strains}
           renderItem={(strain) => <StrainCard strain={strain} />}
-          getKey={(strain) => strain.name} />
-        <Carousel title="Top Producers"
+          getKey={(strain) => strain.name}
+        />
+        <Carousel
+          title="Top Producers"
           data={producers}
           renderItem={(producer) => <ProducerCard producer={producer} />}
-          getKey={(producer) => producer.name} />
+          getKey={(producer) => producer.name}
+        />
       </main>
     </>
   );

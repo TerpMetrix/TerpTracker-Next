@@ -62,7 +62,6 @@ export async function getAllProducersWithRelations(): Promise<
   return producers;
 }
 
-
 // get producers and order the output by the sum of all strains.votes (input either asc or desc and limit)
 
 export async function getProducersByVotes(

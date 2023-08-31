@@ -1,42 +1,36 @@
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
-import Image from 'next/image'
-import Carousel from '@/components/Carousel';
-import VCarousel from '@/components/VCarousel';
-import StrainCard from '@/components/StrainCard';
-import CommentCard from '@/components/CommentCard';
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import Image from "next/image";
+import Carousel from "@/components/Carousel";
+import VCarousel from "@/components/VCarousel";
+import StrainCard from "@/components/StrainCard";
+import CommentCard from "@/components/CommentCard";
 import {
   type ProfileWithRelations,
   getProfileByName,
-  getProfileFavTerps
-} from '@/server/database/profiles';
-import {
-  type TagWithNoRelations,
-} from '@/server/database/tags';
-import {
-  type GetServerSideProps,
-  type GetServerSidePropsContext
-} from 'next';
-import { convertDatesToStrings } from '@/utils/dateSerialization';
-import Head from 'next/head';
+  getProfileFavTerps,
+} from "@/server/database/profiles";
+import { type TagWithNoRelations } from "@/server/database/tags";
+import { type GetServerSideProps, type GetServerSidePropsContext } from "next";
+import { convertDatesToStrings } from "@/utils/dateSerialization";
+import Head from "next/head";
 
 type ProfileProps = {
   profile: ProfileWithRelations;
   favTerps: TagWithNoRelations[] | null;
   notFound?: boolean;
-}
+};
 
 export default function Profile({ profile, notFound }: ProfileProps) {
-
-  const { data: session, status } = useSession()
-  const loading = status === 'loading'
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   if (loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
 
   if (notFound) {
-    return <p>Profile not found</p>
+    return <p>Profile not found</p>;
   }
 
   // interface Terp {
@@ -55,8 +49,6 @@ export default function Profile({ profile, notFound }: ProfileProps) {
   //   favTerps = favTerps.slice(0, 3);
   // }
 
-
-
   if (profile) {
     return (
       <>
@@ -66,36 +58,44 @@ export default function Profile({ profile, notFound }: ProfileProps) {
         <div>
           {session && (
             <>
-              <div className='flex flex-row relative justify-center items-center md:space-x-6 w-4/5 lg:w-2/5 mx-auto h-fit lg:ml-16 h-fit my-2 p-4 rounded-xl bg-slate-100 text-slate-800'>
+              <div className="relative mx-auto my-2 flex h-fit h-fit w-4/5 flex-row items-center justify-center rounded-xl bg-slate-100 p-4 text-slate-800 md:space-x-6 lg:ml-16 lg:w-2/5">
                 <Image
-                  className='rounded-full w-1/4 h-1/4 mr-4'
+                  className="mr-4 h-1/4 w-1/4 rounded-full"
                   src={profile.user.image ?? ""}
                   alt="Profile Image"
                   width={200}
                   height={200}
                 />
-                <div className='flex flex-col'>
-                  <div className='flex flex-row justify-center items-center space-x-4'>
-                    <h1 className='text-xl md:text-3xl text-center'>{profile.profileName}</h1>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-center justify-center space-x-4">
+                    <h1 className="text-center text-xl md:text-3xl">
+                      {profile.profileName}
+                    </h1>
                     {/* if user is logged in, and the username matches the route id, show an edit profile button */}
                     {session.user.id === profile.userId ? (
-                      <Link href="/profile/[profileName]/edit" as={`/profile/${profile.profileName || ""}/edit`}>
-                        <button className='btn btn-primary h-auto'>Edit</button>
+                      <Link
+                        href="/profile/[profileName]/edit"
+                        as={`/profile/${profile.profileName || ""}/edit`}
+                      >
+                        <button className="btn-primary btn h-auto">Edit</button>
                       </Link>
-                    )
-                      : <div className='w-24 h-6 mt-6'></div>}
+                    ) : (
+                      <div className="mt-6 h-6 w-24"></div>
+                    )}
                   </div>
-                  <div className="absolute top-3 left-3 place-content-end">
-                    <p className='badge badge-warning mb-0.5'>Level 1</p>
+                  <div className="absolute left-3 top-3 place-content-end">
+                    <p className="badge badge-warning mb-0.5">Level 1</p>
                   </div>
-                  <div className="flex flex-row w-full mx-auto md:pt-5 md:pr-6 justify-evenly content-end md:gap-10">
-                    <div className="flex flex-col items-center place-content-end">
-                      <p className='font-bold'>{profile.upvotedStrains.length}</p>
-                      <p className='italic'>Liked Strains</p>
+                  <div className="mx-auto flex w-full flex-row content-end justify-evenly md:gap-10 md:pr-6 md:pt-5">
+                    <div className="flex flex-col place-content-end items-center">
+                      <p className="font-bold">
+                        {profile.upvotedStrains.length}
+                      </p>
+                      <p className="italic">Liked Strains</p>
                     </div>
-                    <div className="flex flex-col items-center place-content-end">
-                      <p className='font-bold'>{profile.reviews.length}</p>
-                      <p className='italic'>Comments</p>
+                    <div className="flex flex-col place-content-end items-center">
+                      <p className="font-bold">{profile.reviews.length}</p>
+                      <p className="italic">Comments</p>
                     </div>
                   </div>
                   {/* map terptags to tags component */}
@@ -104,14 +104,12 @@ export default function Profile({ profile, notFound }: ProfileProps) {
                       return <Tag tag={tag} key={tag.id} />;
                     })}
                   </div> */}
-
                 </div>
                 {/* horizontal element that has 3 numbers, one for number of liked strains, one for number of comments, and one that displays the rank of the account */}
               </div>
 
-
               {/* display strains */}
-              <div className="flex md:flex-row flex-col justify-center w-full mt-4 md:max-h-[55vh]">
+              <div className="mt-4 flex w-full flex-col justify-center md:max-h-[55vh] md:flex-row">
                 <Carousel
                   title="Liked Strains"
                   data={profile.upvotedStrains}
@@ -119,20 +117,25 @@ export default function Profile({ profile, notFound }: ProfileProps) {
                   getKey={(strain) => strain.name}
                 />
                 <VCarousel
-                  className="h-[400px] md:h-auto w-full"
+                  className="h-[400px] w-full md:h-auto"
                   title="Comments"
                   data={profile.reviews}
-                  renderItem={(review) => <CommentCard review={review} forProfile={true} className='max-w-[80vw] md:max-w-md' />}
+                  renderItem={(review) => (
+                    <CommentCard
+                      review={review}
+                      forProfile={true}
+                      className="max-w-[80vw] md:max-w-md"
+                    />
+                  )}
                   getKey={(review) => review.strain.name}
                 />
               </div>
               {/* <button onClick={() => signOut()}>Sign out</button> */}
             </>
-          )
-          }
-        </div >
+          )}
+        </div>
       </>
-    )
+    );
   }
 }
 
@@ -142,7 +145,6 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (
   const profileName = context.params?.profileName as string;
   let profile = await getProfileByName(profileName ? profileName : "");
   let favTerps = await getProfileFavTerps(profileName ? profileName : "");
-
 
   // console.log(favTerps);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -162,4 +164,4 @@ export const getServerSideProps: GetServerSideProps<ProfileProps> = async (
       favTerps: favTerps,
     },
   };
-}
+};

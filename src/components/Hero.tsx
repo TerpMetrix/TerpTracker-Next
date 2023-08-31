@@ -1,4 +1,3 @@
-
 export type HeroProps = {
   title: string;
   description: string;
