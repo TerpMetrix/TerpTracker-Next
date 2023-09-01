@@ -1,18 +1,18 @@
-import { Twitter, Instagram } from 'lucide-react'
-import Link from 'next/link';
+import { Twitter, Instagram } from "lucide-react";
+import Link from "next/link";
 
 export function Footer() {
   return (
-    <footer className="footer flex flex-row justify-between items-center bg-100 p-4 text-neutral-content">
+    <footer className="bg-100 footer flex flex-row items-center justify-between p-4 text-neutral-content">
       <div className="items-center">
         <p>Copyright © 2023 - All right reserved</p>
       </div>
-      <div className="gap-4 flex flex-row">
+      <div className="flex flex-row gap-4">
         <Link href="https://twitter.com/terpmetrix/">
-          <Twitter className='text-2xl'/> 
+          <Twitter className="text-2xl" />
         </Link>
         <Link href="https://instagram.com/terpmetr.x">
-          <Instagram className='text-2xl'/>
+          <Instagram className="text-2xl" />
         </Link>
       </div>
     </footer>

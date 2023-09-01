@@ -46,15 +46,14 @@ export const reviewRouter = createTRPCRouter({
             },
           });
           console.log("created new review with tag: ", newReviewWithTag);
-        }
-        else {
+        } else {
           const newReviewWithoutTag = await ctx.prisma.review.create({
             data: {
               comment: input.comment,
               strain: {
                 connect: { id: input.strainId },
               },
-              profile: {  
+              profile: {
                 connect: { profileName: input.profileName },
               },
             },

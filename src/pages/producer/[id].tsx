@@ -27,7 +27,7 @@ export type ProducerProps = {
 };
 
 // The main producer component exported in this file
-export default function Producer({ producer , strains}: ProducerProps) {
+export default function Producer({ producer, strains }: ProducerProps) {
   //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
   const [isOpen, setIsOpen] = useState(false);
@@ -64,10 +64,12 @@ export default function Producer({ producer , strains}: ProducerProps) {
           description="Generic default description of this producer. Should add a database column for an about."
           link={producer.website}
         />
-          <Carousel title="🔥 Strains"
-                      data={strains}
-                      renderItem={(strain) => <StrainCard strain={strain}/>}
-                      getKey={(strain) => strain.name}/>
+        <Carousel
+          title="🔥 Strains"
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name}
+        />
       </div>
     </>
   );

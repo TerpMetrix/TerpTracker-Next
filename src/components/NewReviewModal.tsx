@@ -1,7 +1,13 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { X, PlusCircle, XCircle, CheckCircle, CircleEllipsis } from "lucide-react";
+import {
+  X,
+  PlusCircle,
+  XCircle,
+  CheckCircle,
+  CircleEllipsis,
+} from "lucide-react";
 import Tag from "./Tag";
 import Select from "react-select";
 
@@ -57,11 +63,14 @@ export default function NewReviewModal({
         .filter((tag): tag is Tag => tag !== undefined);
       setTags(newTags);
     }
-  };  
+  };
 
   return (
     <>
-      <button className="btn w-1/2 m-auto bg-primary text-white hover:bg-neutral" onClick={() => window.review_modal.showModal()}>
+      <button
+        className="btn m-auto w-1/2 bg-primary text-white hover:bg-neutral"
+        onClick={() => window.review_modal.showModal()}
+      >
         <PlusCircle /> Comment
       </button>
       <dialog id="review_modal" className="modal">
@@ -82,16 +91,20 @@ export default function NewReviewModal({
             {/*TAG SELECTOR*/}
             <Select
               isMulti
-              options={tagslist.map((tag) => ({ value: tag.id, label: tag.name }))}
+              options={tagslist.map((tag) => ({
+                value: tag.id,
+                label: tag.name,
+              }))}
               onChange={handleTagChange}
-              className="w-full max-w-xs text-black max-h-24"
+              className="max-h-24 w-full max-w-xs text-black"
               placeholder="Type a flavor"
-          
             />
 
             {/* Selected TAG DISPLAY CHECK */}
             <div className="my-2 flex flex-row items-center justify-center gap-4">
-              {selectedTags ? selectedTags.map((tag) => <Tag key={tag.id} tag={tag} />) : null}
+              {selectedTags
+                ? selectedTags.map((tag) => <Tag key={tag.id} tag={tag} />)
+                : null}
             </div>
 
             <div className="modal-action">
@@ -102,9 +115,24 @@ export default function NewReviewModal({
           </form>
         </div>
       </dialog>
-      {mutation.isLoading && <div className="m-auto alert alert-info w-3/4"><CircleEllipsis />Posting...</div>}
-      {mutation.isSuccess && <div className="m-auto alert alert-success w-3/4"><CheckCircle />Success!</div>}
-      {mutation.error && <div className="m-auto alert alert-error w-3/4"> <XCircle /> You must be logged in to post a comment!</div>}
+      {mutation.isLoading && (
+        <div className="alert alert-info m-auto w-3/4">
+          <CircleEllipsis />
+          Posting...
+        </div>
+      )}
+      {mutation.isSuccess && (
+        <div className="alert alert-success m-auto w-3/4">
+          <CheckCircle />
+          Success!
+        </div>
+      )}
+      {mutation.error && (
+        <div className="alert alert-error m-auto w-3/4">
+          {" "}
+          <XCircle /> You must be logged in to post a comment!
+        </div>
+      )}
     </>
   );
 }
