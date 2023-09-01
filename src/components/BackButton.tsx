@@ -6,7 +6,7 @@ export const BackButton = () => {
   return (
     <button
       type="button"
-      onClick={() => router.back()}
+      onClick={router.back}
       className="btn-neutral btn mx-8 uppercase"
     >
       <ArrowLeft size={16} />

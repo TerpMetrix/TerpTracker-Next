@@ -46,6 +46,7 @@ export default function Navigation() {
             <div className="navbar-center w-full md:pl-12">
               <SearchBar />
             </div>
+            {/* if user is logged in, show profile button */}
             {session?.user.name && (
               <div className="p-2">
                 <Link href={`/profile/${session.user.name}`}>
@@ -58,7 +59,6 @@ export default function Navigation() {
           </>
         )}
       </div>
-      {/* if user is logged in, show profile button */}
     </div>
   );
 }
