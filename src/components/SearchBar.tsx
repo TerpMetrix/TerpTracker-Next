@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 
@@ -6,25 +6,26 @@ type SearchBarProps = {
   initialState?: string;
 };
 
-//accept input argument that determines initial state of search bar
+/**
+ * Search bar component: searches the entire site for strails & producers
+ * @param initialState -- determines initial state of search bar
+ */
 export const SearchBar = ({ initialState }: SearchBarProps) => {
-  if (!initialState) {
-    initialState = "";
-  }
-  const [searchTerm, setSearchTerm] = useState(initialState);
+  const [searchTerm, setSearchTerm] = useState(initialState || "");
   const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    router
-      .push(`/results?search=${searchTerm}`)
-      .then(() => {
-        // Handle successful navigation
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+  const handleSearch = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      if (!searchTerm) {
+        return;
+      }
+
+      router.push(`/results?search=${searchTerm}`).catch(console.error);
+    },
+    [searchTerm, router]
+  );
 
   return (
     <div className="w-full">
@@ -35,9 +36,7 @@ export const SearchBar = ({ initialState }: SearchBarProps) => {
         <input
           type="text"
           placeholder={
-            initialState
-              ? initialState.toString()
-              : "Search strains and brands..."
+            initialState?.toString() ?? "Search strains and brands..."
           }
           className="input-base-content input w-full border-white shadow-xl shadow-green-700/10"
           onChange={(e) => setSearchTerm(e.target.value)}
