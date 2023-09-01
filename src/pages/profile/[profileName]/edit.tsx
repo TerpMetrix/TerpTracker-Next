@@ -19,19 +19,6 @@ export default function EditProfile() {
     return null;
   };
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const data = new FormData(e.target as HTMLFormElement);
-      const res = editMutation.mutate({
-        originalName: profileName ? profileName : "",
-        updatedName: data.get("updatedName") as string,
-      });
-      console.log(res);
-    },
-    [editMutation, profileName]
-  );
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -48,7 +35,15 @@ export default function EditProfile() {
           </h1>
           <form
             className="mx-auto flex w-11/12 flex-col gap-4 rounded-xl bg-slate-100 p-4 md:w-1/2"
-            onSubmit={handleSubmit}
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              const data = new FormData(e.target as HTMLFormElement);
+              const res = editMutation.mutate({
+                originalName: profileName || "",
+                updatedName: data.get("updatedName") as string,
+              });
+              console.log(res);
+            }}
           >
             <label
               htmlFor="updatedName"
