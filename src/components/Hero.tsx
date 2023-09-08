@@ -9,20 +9,23 @@ export type HeroProps = {
 
 export default function Hero({ title, instagram, link }: HeroProps) {
   return (
-    <div className="bg-base-20">
+    <div className="">
       <div className="text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold">{title}</h1>
+          <h1 className="text-5xl font-bold text-black">{title}</h1>
           <div className="my-4 flex w-full flex-row items-center justify-center gap-8">
             <Link href={link} title={title}>
-              <Globe className="text-2xl" />
+              <Globe className="text-5xl text-black" />
             </Link>
-            <Link
-              href={`https://instagram.com/` + instagram ?? ""}
-              title={title}
-            >
-              <Instagram className="text-2xl" />
-            </Link>
+
+            {instagram && (
+              <Link
+                href={`https://instagram.com/` + instagram ?? ""}
+                title={title}
+              >
+                <Instagram className="text-2xl text-black" />
+              </Link>
+            )}
           </div>
         </div>
       </div>

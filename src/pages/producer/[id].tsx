@@ -51,15 +51,15 @@ export default function Producer({ producer, strains }: ProducerProps) {
         isOpen={isOpen}
         onRequestClose={closeModal}
       ></PopUp> */}
-      <div className="mx-4 mb-4 flex max-h-[4/5] w-fit flex-row overflow-hidden rounded-xl drop-shadow">
+      <div className="sm:items-left mx-4 mb-4 flex flex-col items-center overflow-hidden bg-slate-100 p-4 sm:flex-row">
         <Image
           src={producer.bannerImage}
           alt="Producer Banner Image"
-          width={100}
-          height={100}
-          className="ml-0 w-fit object-cover"
+          width={200}
+          height={200}
+          className="rounded-full"
         />
-        <div className="mb-auto ml-8 mr-8 mt-auto w-full">
+        <div className="mb-auto ml-8 mr-8 mt-auto">
           <Hero
             title={producer.name}
             link={producer.website}
