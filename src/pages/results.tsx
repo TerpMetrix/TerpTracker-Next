@@ -1,27 +1,20 @@
 import { useRouter } from "next/router";
-import {
-  getStrainsBySearchTerm,
-  type StrainWithRelations,
-} from "@/server/database/strains";
-import {
-  convertDatesToStrings,
-  convertStringsToDates,
-} from "@/utils/dateSerialization";
-import type { GetServerSideProps } from "next";
+import { useState, useEffect } from "react";
 import StrainCard from "@/components/StrainCard";
 import Grid from "@/components/Grid";
 import Head from "next/head";
+import StrainFilter from "@/components/SearchFilter";
+import { api } from "@/utils/api";
 
-type ResultsPageProps = {
-  strains: StrainWithRelations[];
-  notFound?: boolean;
-};
-
-function ResultsPage({ strains }: ResultsPageProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  strains = convertDatesToStrings(strains);
+function ResultsPage() {
   const router = useRouter();
   const { search } = router.query;
+  const [filters, setFilters] = useState({});
+
+  // Use tRPC hook to fetch strains based on search and filters
+  const strainsQuery = api.strains.getStrainsByFilteredSearch.useQuery({ search: search?.toString(), ...filters });
+
+  const strains = strainsQuery.data || [];
 
   return (
     <>
@@ -29,6 +22,7 @@ function ResultsPage({ strains }: ResultsPageProps) {
         <title>Results for {search} | TerpTracker</title>
       </Head>
       <div>
+        <StrainFilter onFilterChange={(newFilters) => setFilters(newFilters)} />
         <Grid
           title={`Results for "${search ? search?.toString() : ""}"`}
           data={strains}
@@ -41,28 +35,3 @@ function ResultsPage({ strains }: ResultsPageProps) {
 }
 
 export default ResultsPage;
-
-export const getServerSideProps: GetServerSideProps<ResultsPageProps> = async (
-  context
-) => {
-  //get serach term
-  const search = context.query.search;
-
-  if (!search) {
-    return {
-      notFound: true,
-    };
-  }
-
-  //get strains by search term
-  let strains = await getStrainsBySearchTerm(search.toString());
-  console.log(strains);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  strains = convertStringsToDates(strains);
-
-  return {
-    props: {
-      strains,
-    },
-  };
-};
