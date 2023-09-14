@@ -12,16 +12,15 @@ export type StrainWithRelations = Prisma.StrainGetPayload<{
           include: {
             user: true;
           };
-        }
-        terpTags: true,
-        strain: true,
-      }
-    },
-    terpTags: true,
+        };
+        terpTags: true;
+        strain: true;
+      };
+    };
+    terpTags: true;
     producer: true;
   };
 }>;
-
 
 /**
  * Retrieves a strain by its ID, including its related reviews, tags, and producer.
@@ -45,7 +44,7 @@ export async function getStrainById(
           },
           terpTags: true,
           strain: true,
-        }
+        },
       },
       terpTags: true,
       producer: true,
@@ -73,7 +72,7 @@ export async function getAllStrainsWithRelations(): Promise<
           },
           terpTags: true,
           strain: true,
-        }
+        },
       },
       terpTags: true,
       producer: true,
@@ -104,7 +103,7 @@ export async function getStrainsByProducerId(
           profile: {
             include: {
               user: true,
-            }
+            },
           },
           terpTags: true,
           strain: true,
@@ -115,8 +114,7 @@ export async function getStrainsByProducerId(
   return strains;
 }
 
-
-// Function to get strains by search term 
+// Function to get strains by search term
 
 export async function getStrainsBySearchTerm(
   searchTerm: string
@@ -127,34 +125,34 @@ export async function getStrainsBySearchTerm(
         {
           name: {
             contains: searchTerm,
-          }
+          },
         },
         {
           producer: {
             name: {
               contains: searchTerm,
-            }
-          }
+            },
+          },
         },
         {
           terpTags: {
             some: {
               name: {
                 contains: searchTerm,
-              }
-            }
-          }
+              },
+            },
+          },
         },
         {
           reviews: {
             some: {
               comment: {
                 contains: searchTerm,
-              }
-            }
-          }
-        }
-      ]
+              },
+            },
+          },
+        },
+      ],
     },
     include: {
       terpTags: true,
@@ -164,7 +162,7 @@ export async function getStrainsBySearchTerm(
           profile: {
             include: {
               user: true,
-            }
+            },
           },
           terpTags: true,
           strain: true,
@@ -196,7 +194,7 @@ export async function getStrainsByVotes(
           profile: {
             include: {
               user: true,
-            }
+            },
           },
           terpTags: true,
           strain: true,

@@ -19,7 +19,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["images.unsplash.com", "plus.unsplash.com","i.imgur.com"],
+    domains: ["images.unsplash.com", "plus.unsplash.com","i.imgur.com","cdn.discordapp.com"],
   },
 };
 

@@ -1,17 +1,16 @@
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import {
   getStrainsBySearchTerm,
   type StrainWithRelations,
-}
-  from '@/server/database/strains';
+} from "@/server/database/strains";
 import {
   convertDatesToStrings,
   convertStringsToDates,
 } from "@/utils/dateSerialization";
-import type { GetServerSideProps } from 'next';
-import StrainCard from '@/components/StrainCard';
-import Grid from '@/components/Grid';
-import Head from 'next/head';
+import type { GetServerSideProps } from "next";
+import StrainCard from "@/components/StrainCard";
+import Grid from "@/components/Grid";
+import Head from "next/head";
 
 type ResultsPageProps = {
   strains: StrainWithRelations[];
@@ -26,17 +25,17 @@ function ResultsPage({ strains }: ResultsPageProps) {
 
   return (
     <>
-    <Head>
-      <title>Results for {search} | TerpTracker</title>
-    </Head>
-    <div>
-      <Grid 
-        title={`Results for "${search ? search?.toString() : ""}"`}
-        data={strains}
-        renderItem={(strain) => <StrainCard strain={strain} />}
-        getKey={(strain) => strain.name}
-      />
-    </div>
+      <Head>
+        <title>Results for {search} | TerpTracker</title>
+      </Head>
+      <div>
+        <Grid
+          title={`Results for "${search ? search?.toString() : ""}"`}
+          data={strains}
+          renderItem={(strain) => <StrainCard strain={strain} />}
+          getKey={(strain) => strain.name}
+        />
+      </div>
     </>
   );
 }
@@ -66,6 +65,4 @@ export const getServerSideProps: GetServerSideProps<ResultsPageProps> = async (
       strains,
     },
   };
-}
-
-
+};
