@@ -14,8 +14,8 @@ import {
   convertStringsToDates,
 } from "@/utils/dateSerialization";
 import Image from "next/image";
-import PopUp from "@/components/PopUp";
-import { useState } from "react";
+//import PopUp from "@/components/PopUp";
+//import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import StrainCard from "@/components/StrainCard";
 
@@ -30,47 +30,49 @@ export type ProducerProps = {
 export default function Producer({ producer, strains }: ProducerProps) {
   //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsOpen(true);
+  // };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsOpen(false);
+  // };
 
   return (
     <>
       <Head>
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
-      <button onClick={() => openModal()}>Open {producer.name} Modal</button>
+      {/* <button onClick={() => openModal()}>Open {producer.name} Modal</button>
       <PopUp
         data={producer}
         isOpen={isOpen}
         onRequestClose={closeModal}
-      ></PopUp>
-      <div className="mb-4 flex flex-col items-center">
+      ></PopUp> */}
+      <div className="sm:items-left mx-4 mb-4 flex flex-col items-center overflow-hidden bg-slate-100 p-4 sm:flex-row">
         <Image
           src={producer.bannerImage}
           alt="Producer Banner Image"
-          width={1000}
-          height={300}
-          className="rounded-lg"
+          width={200}
+          height={200}
+          className="rounded-full"
         />
-        <Hero
-          title={producer.name}
-          description="Generic default description of this producer. Should add a database column for an about."
-          link={producer.website}
-        />
-        <Carousel
-          title="🔥 Strains"
-          data={strains}
-          renderItem={(strain) => <StrainCard strain={strain} />}
-          getKey={(strain) => strain.name}
-        />
+        <div className="mb-auto ml-8 mr-8 mt-auto">
+          <Hero
+            title={producer.name}
+            link={producer.website}
+            instagram={producer.instagram}
+          />
+        </div>
       </div>
+      <Carousel
+        title="🔥 Strains"
+        data={strains}
+        renderItem={(strain) => <StrainCard strain={strain} />}
+        getKey={(strain) => strain.name}
+      />
     </>
   );
 }
