@@ -14,7 +14,7 @@ import {
   convertStringsToDates,
 } from "@/utils/dateSerialization";
 import Image from "next/image";
-import PopUp from "@/components/PopUp";
+//import PopUp from "@/components/PopUp";
 import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import StrainCard from "@/components/StrainCard";
@@ -30,15 +30,15 @@ export type ProducerProps = {
 export default function Producer({ producer, strains }: ProducerProps) {
   //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   producer = convertStringsToDates(producer);
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsOpen(true);
+  // };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsOpen(false);
+  // };
 
   return (
     <>
@@ -46,7 +46,7 @@ export default function Producer({ producer, strains }: ProducerProps) {
         <title>{`${producer.name} | TerpTracker`}</title>
       </Head>
       {/* <button onClick={() => openModal()}>Open {producer.name} Modal</button>
-      <PopU
+      <PopUp
         data={producer}
         isOpen={isOpen}
         onRequestClose={closeModal}
