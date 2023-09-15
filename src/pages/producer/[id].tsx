@@ -15,7 +15,7 @@ import {
 } from "@/utils/dateSerialization";
 import Image from "next/image";
 //import PopUp from "@/components/PopUp";
-import { useState } from "react";
+//import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import StrainCard from "@/components/StrainCard";
 
