@@ -1,6 +1,7 @@
-import { map } from "@trpc/server/observable";
+import { ArrowRight } from "lucide-react";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Landing() {
   const brands = [
@@ -21,31 +22,31 @@ export default function Landing() {
       </Head>
 
       <main className="justify-center text-center">
-        <div className="m-auto flex flex-col items-center px-4 py-5 text-4xl font-extrabold sm:text-[4em]">
+        <div className="m-auto flex flex-col items-center px-4 py-8 text-4xl font-extrabold sm:text-[3.5em]">
           <h1 className="">Upgrade your cannabis with</h1>
-          <span className="bg-gradient-to-r from-red-600 via-green-600 to-blue-600 bg-clip-text py-2 text-5xl sm:text-[1.5em] text-transparent">
+          <span className="bg-gradient-to-r from-red-600 via-green-600 to-blue-600 bg-clip-text py-2 text-5xl text-transparent sm:py-4 sm:text-[1.25em]">
             TerpTracker
           </span>
         </div>
         <Image
-          className="m-auto w-11/12 sm:w-3/4 overflow-hidden object-cover object-center"
+          className="m-auto w-11/12 overflow-hidden object-cover object-center sm:w-3/4"
           src="/images/UIMockUp.png"
           width={1000}
           height={500}
           alt={"image of " + "TerpTracker"}
         />
-        <div className="m-auto flex flex-col items-center px-6 py-6 sm:py-12 text-[2em] font-extrabold sm:text-[3rem]">
+        <div className="m-auto flex flex-col items-center px-6 py-6 text-[2em] font-extrabold sm:py-12 sm:text-[3rem]">
           <h1 className="">All of your favorite brands...</h1>
         </div>
         {/* animated rotating carousel of brand images */}
-        <div className="w-9/12 inline-flex flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
-          <ul className="flex items-center justify-center md:justify-start [&_li]:mx-6 [&_img]:max-w-none animate-infinite-scroll">
+        <div className="inline-flex w-9/12 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+          <ul className="flex animate-infinite-scroll items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-6">
             {/* map thru brand images */}
             {brands.map((brand) => {
               return (
                 <li key={brand} className="">
                   <Image
-                    className="w-32 sm:w-48 object-cover object-center"
+                    className="w-32 object-cover object-center sm:w-48"
                     src={"/images/" + brand + ".png"}
                     width={200}
                     height={200}
@@ -55,13 +56,16 @@ export default function Landing() {
               );
             })}
           </ul>
-          <ul className="flex items-center justify-center md:justify-start [&_li]:mx-6 [&_img]:max-w-none animate-infinite-scroll" aria-hidden="true">
+          <ul
+            className="flex animate-infinite-scroll items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-6"
+            aria-hidden="true"
+          >
             {/* map thru brand images */}
             {brands.map((brand) => {
               return (
                 <li key={brand} className="">
                   <Image
-                    className="w-32 sm:w-48 object-cover object-center"
+                    className="w-32 object-cover object-center sm:w-48"
                     src={"/images/" + brand + ".png"}
                     width={200}
                     height={200}
@@ -72,12 +76,20 @@ export default function Landing() {
             })}
           </ul>
         </div>
-        {/* 2x2 desktop - 1x4 mobile (card grid for feature descriptions) */}
-        <div className="m-auto grid w-3/4 grid-cols-2 gap-4 md:grid-cols-4">
+        {/* FEATURE GRID - 2x2 desktop - 1x4 mobile (card grid for feature descriptions) */}
+        {/* <div className="m-auto grid w-3/4 grid-cols-2 gap-4 md:grid-cols-4">
           <div className="card"></div>
           <div className="card"></div>
           <div className="card"></div>
           <div className="card"></div>
+        </div> */}
+        {/* go to home page button */}
+        <div className="m-auto py-12">
+          <Link href="/home">
+          <button className="btn-primary btn text-white text-xl h-16 w-auto font-light hover:bg-secondary">
+            Try The Beta <ArrowRight />
+          </button>
+          </Link>
         </div>
       </main>
     </>
