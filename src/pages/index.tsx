@@ -48,13 +48,13 @@ export default function Home({ strains, producers }: HomeProps) {
         </div>
 
         <Carousel
-          title="Top Strains"
+          title="📈 Strains"
           data={strains}
           renderItem={(strain) => <StrainCard strain={strain} />}
           getKey={(strain) => strain.name}
         />
         <Carousel
-          title="Top Producers"
+          title="📈 Brands"
           data={producers}
           renderItem={(producer) => <ProducerCard producer={producer} />}
           getKey={(producer) => producer.name}

@@ -11,7 +11,7 @@ type Props = {
 
 const StrainCard: React.FC<Props> = (props) => (
   <Link href={`/strain/${props.strain.id}`}>
-    <div className="min-h-96 card flex w-96 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-72">
+    <div className="min-h-96 card flex w-56 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-72">
       {props.strain.image && (
         <Image
           className="h-full w-full overflow-hidden object-cover object-center"
