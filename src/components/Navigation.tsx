@@ -10,23 +10,36 @@ export default function Navigation() {
   const { data: session } = useSession();
   const router = useRouter();
   const isIndex = router.pathname === "/";
+  const isHome = router.pathname === "/home";
   //await profileId response from useSession
 
   return (
     <div className="navbar justify-center bg-base-100">
       <div className="navbar-start w-1/2 md:w-full">
-        <Link href="/" className="btn-ghost btn h-24 w-24 p-4 normal-case">
-          <Image
-            src={"/terptracker-logo.png"}
-            alt="TerpTracker Logo"
-            width={70}
-            height={70}
-          />
-        </Link>
+        {/* if index, display logo */}
+        {isIndex ? (
+          <Link href="/" className="btn-ghost btn h-24 w-24 p-4 normal-case">
+            <Image
+              src={"/terptracker-logo.png"}
+              alt="TerpTracker Logo"
+              width={70}
+              height={70}
+            />
+          </Link>
+        ) : (
+          <Link href="/home" className="btn-ghost btn h-24 w-24 p-4 normal-case">
+            <Image
+              src={"/terptracker-logo.png"}
+              alt="TerpTracker Logo"
+              width={70}
+              height={70}
+            />
+          </Link>
+        )}
       </div>
       {/* if not index, do not display log in button */}
       <div className="navbar-end">
-        {isIndex ? (
+        {isHome || isIndex ? (
           <>
             <div>
               {session?.user.name && (
