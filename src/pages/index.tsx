@@ -31,8 +31,8 @@ export default function Landing() {
         <Image
           className="m-auto w-11/12 overflow-hidden object-cover object-center sm:w-3/4"
           src="/images/UIMockUp.png"
-          width={1000}
-          height={500}
+          width={2302}
+          height={1686}
           alt={"image of " + "TerpTracker"}
         />
         <div className="m-auto flex flex-col items-center px-6 py-6 text-[2em] sm:py-12 sm:text-[3rem]">
