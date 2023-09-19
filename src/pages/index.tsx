@@ -22,7 +22,7 @@ export default function Landing() {
       </Head>
 
       <main className="justify-center text-center">
-        <div className="m-auto flex flex-col items-center px-4 py-8 text-4xl font-extrabold sm:text-[3.5em]">
+        <div className="m-auto flex flex-col items-center px-4 pb-6 sm:py-8 text-4xl font-extrabold sm:text-[3.5em]">
           <h1 className="">Upgrade your cannabis with</h1>
           <span className="bg-gradient-to-r from-red-600 via-green-600 to-blue-600 bg-clip-text py-2 text-5xl text-transparent sm:py-4 sm:text-[1.25em]">
             TerpTracker
@@ -35,8 +35,8 @@ export default function Landing() {
           height={500}
           alt={"image of " + "TerpTracker"}
         />
-        <div className="m-auto flex flex-col items-center px-6 py-6 text-[2em] font-extrabold sm:py-12 sm:text-[3rem]">
-          <h1 className="">All of your favorite brands...</h1>
+        <div className="m-auto flex flex-col items-center px-6 py-6 text-[2em] sm:py-12 sm:text-[3rem]">
+          <h1 className="text-normal">All of your favorite brands...</h1>
         </div>
         {/* animated rotating carousel of brand images */}
         <div className="inline-flex w-9/12 flex-nowrap overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
