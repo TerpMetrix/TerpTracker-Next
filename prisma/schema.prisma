@@ -111,6 +111,19 @@ model Producer {
 
   // relations
   strains Strain[]
+  shops   Shop[]
+}
+
+model Shop {
+  id        Int    @id @default(autoincrement())
+  name       String
+  location   String
+  website    String
+  instagram  String
+  bannerImage String @default("")
+  // relations
+  strains Strain[]
+  producers Producer[]
 }
 
 model Strain {
@@ -130,6 +143,7 @@ model Strain {
   terpTags TerpTag[]
   reviews  Review[]
   profiles Profile[]
+  shops    Shop[]
 
   @@index([producerId])
 }
