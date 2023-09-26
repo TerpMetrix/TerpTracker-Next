@@ -31,6 +31,7 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
         };
         terpTags: true;
         producer: true;
+        shops: true;
       };
     };
   };
@@ -106,6 +107,7 @@ export async function getProfileByName(
           },
           terpTags: true,
           producer: true,
+          shops: true,
         },
       },
     },

@@ -51,10 +51,7 @@ export default function Strain({ strain, allTags }: StrainProps) {
       <PopUp data={strain} isOpen={isOpen} onRequestClose={closeModal}></PopUp>
       <div className="flex flex-col items-center gap-10 rounded-lg p-4 md:mt-4 md:flex-row md:items-start md:justify-center md:p-0">
         <div className="relative">
-          <button
-            onClick={() => openModal()}
-            className="absolute m-4 text-white"
-          >
+          <button onClick={openModal} className="absolute m-4 text-white">
             <InfoIcon />
           </button>
           <div className="absolute right-4 top-3 my-2 flex flex-row items-center justify-center gap-2">
@@ -118,7 +115,6 @@ export default function Strain({ strain, allTags }: StrainProps) {
                 renderItem={(review) => (
                   <CommentCard review={review} forStrain={true} />
                 )}
-                getKey={(review) => review.strain.name}
               />
 
               {/* Add functionality to this component to only let logged-in users comment */}

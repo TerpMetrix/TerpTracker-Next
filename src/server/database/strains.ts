@@ -19,6 +19,7 @@ export type StrainWithRelations = Prisma.StrainGetPayload<{
     };
     terpTags: true;
     producer: true;
+    shops: true;
   };
 }>;
 
@@ -48,6 +49,7 @@ export async function getStrainById(
       },
       terpTags: true,
       producer: true,
+      shops: true,
     },
   });
 
@@ -76,6 +78,7 @@ export async function getAllStrainsWithRelations(): Promise<
       },
       terpTags: true,
       producer: true,
+      shops: true,
     },
   });
   return strains;
@@ -98,6 +101,7 @@ export async function getStrainsByProducerId(
     include: {
       terpTags: true,
       producer: true,
+      shops: true,
       reviews: {
         include: {
           profile: {
@@ -157,6 +161,7 @@ export async function getStrainsBySearchTerm(
     include: {
       terpTags: true,
       producer: true,
+      shops: true,
       reviews: {
         include: {
           profile: {
@@ -189,6 +194,7 @@ export async function getStrainsByVotes(
     include: {
       terpTags: true,
       producer: true,
+      shops: true,
       reviews: {
         include: {
           profile: {
