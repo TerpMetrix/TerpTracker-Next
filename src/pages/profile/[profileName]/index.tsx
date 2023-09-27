@@ -127,7 +127,6 @@ export default function Profile({ profile, notFound }: ProfileProps) {
                       className="max-w-[80vw] md:max-w-md"
                     />
                   )}
-                  getKey={(review) => review.strain.name}
                 />
               </div>
               {/* <button onClick={() => signOut()}>Sign out</button> */}

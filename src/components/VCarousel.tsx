@@ -4,14 +4,12 @@ interface CarouselProps<TData> {
   title?: string;
   data: Array<TData>;
   renderItem: (datum: TData) => React.ReactElement;
-  getKey: (datum: TData) => string;
   className?: string;
 }
 
 const VCarousel = <TData,>({
   title,
   data,
-  getKey,
   renderItem,
   className,
 }: CarouselProps<TData>) => {
@@ -27,8 +25,8 @@ const VCarousel = <TData,>({
         <></>
       )}
       <ul className="flex flex-col items-center overflow-auto motion-safe:scroll-smooth">
-        {data.map((item) => (
-          <li id={getKey(item)} key={getKey(item)} className="w-full shrink-0">
+        {data.map((item, index) => (
+          <li key={index} className="w-full shrink-0">
             {renderItem(item)}
           </li>
         ))}
