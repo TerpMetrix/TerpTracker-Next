@@ -18,6 +18,7 @@ export const strainRouter = createTRPCRouter({
           },
           terpTags: true,
           producer: true,
+          shops: true,
         },
       });
 

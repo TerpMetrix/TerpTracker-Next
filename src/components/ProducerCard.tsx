@@ -16,7 +16,7 @@ const ProducerCard: React.FC<Props> = (props) => {
 
   return (
     <Link href={`/producer/${props.producer.id}`}>
-      <div className="card flex min-h-full w-96 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-72">
+      <div className="card flex min-h-full w-56 flex-col overflow-hidden bg-base-100 shadow-lg shadow-gray-100/5 transition-all hover:-translate-y-2 hover:bg-secondary md:w-72">
         {props.producer.bannerImage && (
           <Image
             className="h-full w-full overflow-hidden object-cover object-center"

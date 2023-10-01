@@ -111,6 +111,19 @@ model Producer {
 
   // relations
   strains Strain[]
+  shops   Shop[]
+}
+
+model Shop {
+  id        Int    @id @default(autoincrement())
+  name       String
+  location   String @default("")
+  website    String @default("")
+  instagram  String @default("")
+  bannerImage String @default("https://i.imgur.com/s79ofAh.jpg")
+  // relations
+  strains Strain[]
+  producers Producer[]
 }
 
 model Strain {
@@ -122,14 +135,15 @@ model Strain {
   thc         Float    @default(0)
   image       String   @default("")
   votes       Int      @default(0) //value to be updated when a user votes on a strain
+  
   // relations
-
   producerId Int
   producer   Producer @relation(fields: [producerId], references: [id], onDelete: Cascade)
 
   terpTags TerpTag[]
   reviews  Review[]
   profiles Profile[]
+  shops    Shop[] 
 
   @@index([producerId])
 }

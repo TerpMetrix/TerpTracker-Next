@@ -15,7 +15,7 @@ const CommentCard: React.FC<Props> = (props) => {
     return (
       <div
         className={`card mx-auto my-4 w-full max-w-3xl border-2 ${
-          props.className ? props.className : ""
+          props.className ?? ""
         }`}
       >
         <div className="card-body p-1 px-4 md:p-8">
