@@ -32,12 +32,12 @@ export const strainRouter = createTRPCRouter({
     .input(
       z.object({
         search: z.string() || z.undefined(),
-        terpTags: z.array(z.string()),
-        productType: z.string(),
-        producer: z.string(),
+        terpTags: z.array(z.string()) || z.undefined(),
+        productType: z.string() || z.undefined(),
+        producer: z.string() || z.undefined(),
         //sort by
-        popularity: z.boolean(),
-        age: z.boolean(),
+        popularity: z.boolean() || z.undefined(),
+        age: z.boolean() || z.undefined(),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -67,6 +67,7 @@ export const strainRouter = createTRPCRouter({
           },
           terpTags: true,
           producer: true,
+          shops: true,
         },
       });
       return { strains };

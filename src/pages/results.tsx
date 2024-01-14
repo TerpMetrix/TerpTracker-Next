@@ -9,10 +9,15 @@ import { api } from "@/utils/api";
 function ResultsPage() {
   const router = useRouter();
   const { search } = router.query;
-  const [filters, setFilters] = useState({});
+  const searchString = search?.toString() || "";
+  const [filters, setFilters] = useState({ search: searchString });
 
+  useEffect(() => {
+    setFilters((prevFilters) => ({ ...prevFilters, search: searchString }));
+  }, [searchString]);
+  
   // Use tRPC hook to fetch strains based on search and filters
-  const strainsQuery = api.strains.getStrainsByFilteredSearch.useQuery({ search: search?.toString(), ...filters });
+  const strainsQuery = api.strains.getStrainsByFilteredSearch.useQuery({...filters });
 
   const strains = strainsQuery.data || [];
 
@@ -21,13 +26,12 @@ function ResultsPage() {
       <Head>
         <title>Results for {search} | TerpTracker</title>
       </Head>
-      <div>
+      <div className="justify-center flex flex-col">
         <StrainFilter onFilterChange={(newFilters) => setFilters(newFilters)} />
         <Grid
           title={`Results for "${search ? search?.toString() : ""}"`}
           data={strains}
           renderItem={(strain) => <StrainCard strain={strain} />}
-          getKey={(strain) => strain.name}
         />
       </div>
     </>

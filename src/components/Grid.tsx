@@ -4,13 +4,11 @@ interface GridProps<TData> {
   title: string;
   data: Array<TData>;
   renderItem: (datum: TData) => React.ReactElement;
-  getKey: (datum: TData) => string;
 }
 
 const Grid = <TData,>({
   title,
   data,
-  getKey,
   renderItem,
 }: GridProps<TData>) => {
   return (
@@ -20,10 +18,9 @@ const Grid = <TData,>({
         {title}
       </h2>{" "}
       <div className="grid grid-cols-3 gap-4">
-        {data.map((item) => (
+        {data.map((item, iterator) => (
           <div
-            id={getKey(item)}
-            key={getKey(item)}
+            key={iterator}
             className="m-5 shrink-0 snap-start snap-always"
           >
             {renderItem(item)}
